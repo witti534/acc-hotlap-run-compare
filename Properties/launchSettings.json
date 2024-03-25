@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "acc-hotlab-private-run-compare": {
+      "commandName": "Project",
+      "workingDirectory": "I:\\Devving\\VisualStudioStuff\\acc-hotlab-private-run-compare\\acc-hotlab-private-run-compare"
+    }
+  }
+}
