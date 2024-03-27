@@ -170,17 +170,5 @@ namespace acc_hotlab_private_run_compare
             return;
         }
 
-        private Label[] TurnRunInformationIntoMultipleLabels(RunInformation runInformation)
-        {
-            List<Label> labels = new List<Label>();
-
-            Label totalRunLengthLabel = new();
-            totalRunLengthLabel.Text = "bla";
-
-            //TODO Finish function
-            return [.. labels];
-        }
-
-
     }
 }
