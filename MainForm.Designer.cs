@@ -50,6 +50,7 @@
             labelCurrentRunLaps = new Label();
             labelCurrentRunSectors = new Label();
             tabPageCompareRuns = new TabPage();
+            buttonDeleteSelectedRuns = new Button();
             sortRunsByComboBox = new ComboBox();
             labelSortBy = new Label();
             panelDisplayRuns = new Panel();
@@ -254,6 +255,7 @@
             // 
             // tabPageCompareRuns
             // 
+            tabPageCompareRuns.Controls.Add(buttonDeleteSelectedRuns);
             tabPageCompareRuns.Controls.Add(sortRunsByComboBox);
             tabPageCompareRuns.Controls.Add(labelSortBy);
             tabPageCompareRuns.Controls.Add(panelDisplayRuns);
@@ -271,6 +273,17 @@
             tabPageCompareRuns.Text = "Compare Runs";
             tabPageCompareRuns.UseVisualStyleBackColor = true;
             // 
+            // buttonDeleteSelectedRuns
+            // 
+            buttonDeleteSelectedRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            buttonDeleteSelectedRuns.Location = new Point(279, 114);
+            buttonDeleteSelectedRuns.Name = "buttonDeleteSelectedRuns";
+            buttonDeleteSelectedRuns.Size = new Size(255, 27);
+            buttonDeleteSelectedRuns.TabIndex = 10;
+            buttonDeleteSelectedRuns.Text = "Delete Selected Runs";
+            buttonDeleteSelectedRuns.UseVisualStyleBackColor = true;
+            buttonDeleteSelectedRuns.Click += buttonDeleteSelectedRuns_Click;
+            // 
             // sortRunsByComboBox
             // 
             sortRunsByComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -278,7 +291,7 @@
             sortRunsByComboBox.FormattingEnabled = true;
             sortRunsByComboBox.Location = new Point(3, 114);
             sortRunsByComboBox.Name = "sortRunsByComboBox";
-            sortRunsByComboBox.Size = new Size(236, 27);
+            sortRunsByComboBox.Size = new Size(270, 27);
             sortRunsByComboBox.TabIndex = 9;
             sortRunsByComboBox.SelectedIndexChanged += comboBoxTimeSelector_SelectedIndexChanged;
             // 
@@ -474,5 +487,6 @@
         private Label labelCurrentRunSectors;
         private Panel panelCurrentRunInfo;
         private Label labelVersion;
+        private Button buttonDeleteSelectedRuns;
     }
 }

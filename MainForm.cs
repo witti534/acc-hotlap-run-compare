@@ -10,7 +10,7 @@ namespace acc_hotlab_private_run_compare
     /// </summary>
     public partial class MainForm : Form
     {
-        public const string VERSION = "0.1.1";
+        public const string VERSION = "0.1.2";
 
 
         public StoredRunContext dbStoredRunsContext = new();
@@ -158,6 +158,11 @@ namespace acc_hotlab_private_run_compare
 
             comboBoxTimeSelector.Items.Clear();
             comboBoxTimeSelector.Enabled = false;
+
+            if (comboBoxCarSelector.Items.Count == 1)
+            {
+                comboBoxCarSelector.SelectedIndex = 0;
+            }
         }
 
         /// <summary>
@@ -174,6 +179,11 @@ namespace acc_hotlab_private_run_compare
             string carName = comboBoxCarSelector.Text;
             tabCompareRuns.PopulateSessionSelector(comboBoxTimeSelector, trackName, carName);
             checkBoxDisplayRunsWIthPenalties.Enabled = true;
+
+            if (comboBoxTimeSelector.Items.Count == 1) 
+            {
+                comboBoxTimeSelector.SelectedIndex = 0;
+            }
 
             //After changing the car populate the session length selector
         }
@@ -199,6 +209,11 @@ namespace acc_hotlab_private_run_compare
                 comboBoxTimeSelector.Enabled = false;
 
                 checkBoxDisplayRunsWIthPenalties.Enabled = false;
+
+                if (comboBoxTrackSelector.Items.Count == 1)
+                {
+                    comboBoxTrackSelector.SelectedIndex = 0;
+                }
             }
         }
 
@@ -250,6 +265,17 @@ namespace acc_hotlab_private_run_compare
         private void labelChooseSessionTime_Click(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// This function calls the function to delete selected runs in the tab "compareRuns". Afterwards it reruns the function to display all new runs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonDeleteSelectedRuns_Click(object sender, EventArgs e)
+        {
+            tabCompareRuns.DeleteSelectedRuns(panelDisplayRuns);
+            comboBoxTimeSelector_SelectedIndexChanged(null, null);
         }
     }
 }

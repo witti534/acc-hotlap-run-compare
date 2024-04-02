@@ -133,8 +133,10 @@ namespace acc_hotlab_private_run_compare
             // Sort list
             selectedRunsWithoutSectors.Sort(comparer);
 
-            int indexForDrawingOffset = 0;
-            int amountPixelOffset = 40;
+            int indexForDrawingYOffset = 0;
+            int amountPixelYOffset = 40;
+            int amountPixelXOffset = 30;
+
 
             // Add each run to the panel
             foreach (var run in selectedRunsWithoutSectors)
@@ -155,20 +157,87 @@ namespace acc_hotlab_private_run_compare
                         Text = ("Total time: " + TimeFormatter.FormatMilisecondsToHourString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.FormatMilisecondsToMinutesString(run.FastestLap) + 
                         " | Created at: " + run.RunCreatedDateTime.ToString() + " | No. of laps: " + amountOfLaps.ToString() + "\r\n" + 
                         "Info: "),
-                        Location = new Point(0, 0 + indexForDrawingOffset * amountPixelOffset),
+                        Location = new Point(amountPixelXOffset, 0 + indexForDrawingYOffset * amountPixelYOffset),
                         Size = new Size(1030, 40),
                         BorderStyle = BorderStyle.FixedSingle,
                         Name = run.RunID.ToString()
                     };
 
-                    panel.Controls.Add(runInformationLabel);
+                    CheckBox runSelectorCheckBox = new()
+                    {
+                        Name = "checkboxrun|" + run.RunID.ToString(),
+                        Location = new Point(0, 0 + indexForDrawingYOffset * amountPixelYOffset)
+                    };
 
-                    indexForDrawingOffset++;
+                    panel.Controls.Add(runInformationLabel);
+                    panel.Controls.Add(runSelectorCheckBox);
+
+                    indexForDrawingYOffset++;
                 }
             }
 
             return;
         }
 
+        /// <summary>
+        /// This function is used to get all selected runs and delete each of the 
+        /// </summary>
+        /// <param name="panelWithRuns"></param>
+        public void DeleteSelectedRuns(Panel panelWithRuns)
+        {
+            List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+
+            foreach (int runID in selectedRunIDs)
+            {
+                //Remove the run with the RunID from the RunInformationSet
+                var runToBeDeleted = StoredRunContext.RunInformationSet.Where(run => run.RunID == runID)
+                    .First();
+
+                StoredRunContext.RunInformationSet.Remove(runToBeDeleted);
+
+                //Remove the sectors with the RunID from the SectorInformationSet
+
+                var sectorsToBeDeleted = StoredRunContext.SectorInformationSet.Where(sector => sector.RunID == runID)
+                    .ToList();
+
+                foreach (var sector in sectorsToBeDeleted)
+                {
+                    StoredRunContext.SectorInformationSet.Remove(sector);
+                }
+
+                StoredRunContext.SaveChanges();
+
+            }
+        }
+
+        /// <summary>
+        /// A helper function to get all currently selected checkboxes and runs
+        /// </summary>
+        /// <param name="panelWithRuns">The panel for </param>
+        /// <returns></returns>
+        private List<int> GetSelectedRunIDs(Panel panelWithRuns)
+        {
+            List<int> resultList = [];
+
+            //Get all controls in the panel)
+            foreach (Control control in panelWithRuns.Controls)
+            {
+                //all checkboxes we need starts with "checkboxrun|"
+                if (control.Name.StartsWith("checkboxrun|"))
+                {
+                    CheckBox tempCheckBox = (CheckBox) control;
+
+                    //Get only checked checkboxes
+                    if (tempCheckBox.Checked) 
+                    {
+                        //Extract the runID
+                        string[] controlNameElements = control.Name.Split('|');
+                        resultList.Add(Int32.Parse(controlNameElements[1]));
+                    }
+                }
+            }
+
+            return resultList;
+        }
     }
 }
