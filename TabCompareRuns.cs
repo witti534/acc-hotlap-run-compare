@@ -156,7 +156,7 @@ namespace acc_hotlab_private_run_compare
                     {
                         Text = ("Total time: " + TimeFormatter.FormatMilisecondsToHourString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.FormatMilisecondsToMinutesString(run.FastestLap) + 
                         " | Created at: " + run.RunCreatedDateTime.ToString() + " | No. of laps: " + amountOfLaps.ToString() + "\r\n" + 
-                        "Info: "),
+                        "Description: " + run.RunDescription),
                         Location = new Point(amountPixelXOffset, 0 + indexForDrawingYOffset * amountPixelYOffset),
                         Size = new Size(1030, 40),
                         BorderStyle = BorderStyle.FixedSingle,

@@ -63,6 +63,7 @@
             comboBoxTrackSelector = new ComboBox();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
+            ButtonCompareRuns = new Button();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -255,6 +256,7 @@
             // 
             // tabPageCompareRuns
             // 
+            tabPageCompareRuns.Controls.Add(ButtonCompareRuns);
             tabPageCompareRuns.Controls.Add(buttonDeleteSelectedRuns);
             tabPageCompareRuns.Controls.Add(sortRunsByComboBox);
             tabPageCompareRuns.Controls.Add(labelSortBy);
@@ -276,7 +278,7 @@
             // buttonDeleteSelectedRuns
             // 
             buttonDeleteSelectedRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonDeleteSelectedRuns.Location = new Point(279, 114);
+            buttonDeleteSelectedRuns.Location = new Point(540, 113);
             buttonDeleteSelectedRuns.Name = "buttonDeleteSelectedRuns";
             buttonDeleteSelectedRuns.Size = new Size(255, 27);
             buttonDeleteSelectedRuns.TabIndex = 10;
@@ -410,6 +412,17 @@
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
             // 
+            // ButtonCompareRuns
+            // 
+            ButtonCompareRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ButtonCompareRuns.Location = new Point(279, 113);
+            ButtonCompareRuns.Name = "ButtonCompareRuns";
+            ButtonCompareRuns.Size = new Size(255, 27);
+            ButtonCompareRuns.TabIndex = 11;
+            ButtonCompareRuns.Text = "Show Selected Run(s)";
+            ButtonCompareRuns.UseVisualStyleBackColor = true;
+            ButtonCompareRuns.Click += ButtonCompareRuns_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -488,5 +501,6 @@
         private Panel panelCurrentRunInfo;
         private Label labelVersion;
         private Button buttonDeleteSelectedRuns;
+        private Button ButtonCompareRuns;
     }
 }
