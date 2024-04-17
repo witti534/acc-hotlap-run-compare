@@ -24,6 +24,7 @@ namespace acc_hotlab_private_run_compare.DBClasses
         public bool PenaltyOccured { get; set; }
         public long RunID { get; set; }
         public DateTime RunCreatedDateTime { get; set; }
+        public string RunDescription { get; set; }
 
 
 
@@ -42,6 +43,7 @@ namespace acc_hotlab_private_run_compare.DBClasses
                 tempDrivenTime += item.DrivenSectorTime;
             }
             DrivenTime = tempDrivenTime;
+            RunDescription = "";
         }
 
         public RunInformation(string trackName, string carName, int drivenTime, int fastestLap, int sessionTime, bool penaltyOccured, IList<SectorInformation> sectorList)
@@ -54,6 +56,7 @@ namespace acc_hotlab_private_run_compare.DBClasses
             PenaltyOccured = penaltyOccured;
             SectorList = sectorList;
             RunCreatedDateTime = DateTime.Now;
+            RunDescription = "";
         }
 
         public RunInformation(string trackName, string carName, int drivenTime, int fastestLap, int sessionTime, bool penaltyOccured)
@@ -65,6 +68,7 @@ namespace acc_hotlab_private_run_compare.DBClasses
             SessionTime = sessionTime;
             PenaltyOccured = penaltyOccured;
             SectorList = [];
+            RunDescription = "";
         }
     }
 

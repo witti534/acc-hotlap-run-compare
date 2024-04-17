@@ -10,7 +10,7 @@ namespace acc_hotlab_private_run_compare
     /// </summary>
     public partial class MainForm : Form
     {
-        public const string VERSION = "0.1.2";
+        public const string VERSION = "0.1.3";
 
 
         public StoredRunContext dbStoredRunsContext = new();
@@ -180,7 +180,7 @@ namespace acc_hotlab_private_run_compare
             tabCompareRuns.PopulateSessionSelector(comboBoxTimeSelector, trackName, carName);
             checkBoxDisplayRunsWIthPenalties.Enabled = true;
 
-            if (comboBoxTimeSelector.Items.Count == 1) 
+            if (comboBoxTimeSelector.Items.Count == 1)
             {
                 comboBoxTimeSelector.SelectedIndex = 0;
             }
@@ -276,6 +276,16 @@ namespace acc_hotlab_private_run_compare
         {
             tabCompareRuns.DeleteSelectedRuns(panelDisplayRuns);
             comboBoxTimeSelector_SelectedIndexChanged(null, null);
+        }
+
+        /// <summary>
+        /// This function calls the function to show selected runs in the tab "compareRuns".
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonCompareRuns_Click(object sender, EventArgs e)
+        {
+            tabCompareRuns.ShowRuns(panelDisplayRuns);
         }
     }
 }

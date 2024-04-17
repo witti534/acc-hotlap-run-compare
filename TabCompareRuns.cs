@@ -156,7 +156,7 @@ namespace acc_hotlab_private_run_compare
                     {
                         Text = ("Total time: " + TimeFormatter.FormatMilisecondsToHourString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.FormatMilisecondsToMinutesString(run.FastestLap) + 
                         " | Created at: " + run.RunCreatedDateTime.ToString() + " | No. of laps: " + amountOfLaps.ToString() + "\r\n" + 
-                        "Info: "),
+                        "Description: " + run.RunDescription),
                         Location = new Point(amountPixelXOffset, 0 + indexForDrawingYOffset * amountPixelYOffset),
                         Size = new Size(1030, 40),
                         BorderStyle = BorderStyle.FixedSingle,
@@ -238,6 +238,37 @@ namespace acc_hotlab_private_run_compare
             }
 
             return resultList;
+        }
+
+        /// <summary>
+        /// This function is being called from the main form.
+        /// It reads the selected checkboxes from the 
+        /// </summary>
+        /// <param name="panelWithRuns"></param>
+        public void ShowRuns(Panel panelWithRuns)
+        {
+            List<int> selectedRuns = GetSelectedRunIDs(panelWithRuns);
+
+            
+            if (selectedRuns.Count == 0) 
+            {
+                //Zero runs selected
+                return;
+            }
+            if (selectedRuns.Count == 1)
+            {
+                //One run selected, show details of one run
+
+                RunInformation run = StoredRunContext.RunInformationSet.First(r => r.RunID == selectedRuns[0]);
+                //Get a single run where the runID of the selected checkbox is being used to find the run in the StoredRunContext
+
+                Form singleRunForm = new FormSingleRun(run, StoredRunContext);
+                singleRunForm.Show();
+            }
+            else
+            {
+                //TODO Implement for comparing multiple different runs
+            }
         }
     }
 }
