@@ -285,7 +285,7 @@ namespace acc_hotlab_private_run_compare
         /// <param name="e"></param>
         private void ButtonCompareRuns_Click(object sender, EventArgs e)
         {
-            //TODO Add function to open new form to show run(s)
+            tabCompareRuns.ShowRuns(panelDisplayRuns);
         }
     }
 }
