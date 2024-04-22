@@ -60,8 +60,7 @@ namespace acc_hotlab_private_run_compare
             isAnInteger = int.TryParse(tmpLapAmountRaw, out int tmpLapAmount);
 
             int totalDrivenTime = 0;
-            int fastestLap = RandomNumberGenerator.Next(120000);
-
+            int fastestLap = int.MaxValue;
             List<SectorInformation> sectorList = [];
 
             if (isAnInteger)
@@ -69,13 +68,18 @@ namespace acc_hotlab_private_run_compare
                 if (tmpLapAmount > 0)
                 {
 
-
                     debugTextBox.Text = "\r\nLap amount: " + tmpLapAmount.ToString() + debugTextBox.Text;
 
                     //Create Sector information
 
+                    
+
                     for (int lapIndex = 0; lapIndex < tmpLapAmount; lapIndex++)
                     {
+                        int sector0Time = int.MaxValue;
+                        int sector1Time = int.MaxValue;
+                        int sector2Time = int.MaxValue;
+
                         for (int sectorIndex = 0; sectorIndex <= 2; sectorIndex++)
                         {
                             int sectorTime = RandomNumberGenerator.Next(60000); //give a sector time which is less than sixty seconds
@@ -83,6 +87,27 @@ namespace acc_hotlab_private_run_compare
                             sectorList.Add(secInf);
                             totalDrivenTime += sectorTime;
 
+                            //Set sectorTimes for fastest lap calculation
+                            if (sectorIndex == 0)
+                            {
+                                sector0Time = sectorTime;
+                            }
+                            if (sectorIndex == 1)
+                            {
+                                sector1Time = sectorTime;
+                            }
+                            if (sectorIndex == 2)
+                            {
+                                sector2Time = sectorTime;
+                            }
+                        }
+
+                        int lapTime = sector0Time + sector1Time + sector2Time;
+
+                        //Check for new fastest lap
+                        if (lapTime < fastestLap)
+                        {
+                            fastestLap = lapTime;
                         }
                     }
 
