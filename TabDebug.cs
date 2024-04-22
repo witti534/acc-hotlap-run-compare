@@ -117,6 +117,7 @@ namespace acc_hotlab_private_run_compare
 
                 }
 
+                //Debug information
                 foreach (SectorInformation secInf in sectorList)
                 {
                     debugTextBox.Text = "\r\nNew Record added:\r\n--Lap: " + secInf.LapNumber + "\r\n--Sector: "
@@ -128,7 +129,7 @@ namespace acc_hotlab_private_run_compare
                 return randomRunInformation;
             }
 
-            return null;
+            return null; //return if something went wrong
 
         }
 
