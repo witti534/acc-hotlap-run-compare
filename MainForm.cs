@@ -10,7 +10,7 @@ namespace acc_hotlab_private_run_compare
     /// </summary>
     public partial class MainForm : Form
     {
-        public const string VERSION = "0.1.3";
+        public const string VERSION = "0.1.4";
 
 
         public StoredRunContext dbStoredRunsContext = new();
