@@ -61,7 +61,7 @@ namespace acc_hotlab_private_run_compare
         {
             labelRunInfoStatic.Text = "Track: " + providedRun.TrackName +
                 "\r\nCar: " + providedRun.CarName +
-                "\r\nSession length: " + providedRun.SessionTime.ToString();
+                "\r\nSession length: " + (providedRun.SessionTime / 60000).ToString() + " min";
             TextBoxRunDescription.Text = providedRun.RunDescription;
             labelRunTotalTime.Text = "Total Run Time: " + TimeFormatter.FormatMilisecondsToHourString(providedRun.DrivenTime);
         }
