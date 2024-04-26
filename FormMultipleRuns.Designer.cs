@@ -161,7 +161,7 @@
             label1.Name = "label1";
             label1.Size = new Size(79, 19);
             label1.TabIndex = 18;
-            label1.Text = "Lap   1";
+            label1.Text = "Lap 1  ";
             // 
             // label9
             // 
@@ -170,9 +170,9 @@
             label9.Location = new Point(13, 251);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(79, 19);
+            label9.Size = new Size(59, 19);
             label9.TabIndex = 27;
-            label9.Text = "Lap   2";
+            label9.Text = "Lap 2";
             // 
             // checkBox1
             // 
@@ -191,9 +191,9 @@
             label25.Location = new Point(13, 327);
             label25.Margin = new Padding(4, 0, 4, 0);
             label25.Name = "label25";
-            label25.Size = new Size(79, 19);
+            label25.Size = new Size(59, 19);
             label25.TabIndex = 45;
-            label25.Text = "Lap   3";
+            label25.Text = "Lap 3";
             // 
             // label30
             // 
@@ -202,9 +202,9 @@
             label30.Location = new Point(13, 403);
             label30.Margin = new Padding(4, 0, 4, 0);
             label30.Name = "label30";
-            label30.Size = new Size(79, 19);
+            label30.Size = new Size(59, 19);
             label30.TabIndex = 50;
-            label30.Text = "Lap   4";
+            label30.Text = "Lap 4";
             // 
             // label32
             // 
@@ -780,15 +780,16 @@
             // 
             // label38
             // 
+            label38.Anchor = AnchorStyles.Right;
             label38.AutoSize = true;
             label38.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label38.ForeColor = SystemColors.ActiveCaptionText;
-            label38.Location = new Point(207, 318);
+            label38.Location = new Point(197, 318);
             label38.Margin = new Padding(4, 0, 4, 0);
             label38.Name = "label38";
-            label38.Size = new Size(89, 19);
+            label38.Size = new Size(99, 19);
             label38.TabIndex = 78;
-            label38.Text = "6:02:095";
+            label38.Text = " 6:02:095";
             // 
             // label33
             // 
@@ -888,9 +889,9 @@
             label35.Location = new Point(4, 242);
             label35.Margin = new Padding(4, 0, 4, 0);
             label35.Name = "label35";
-            label35.Size = new Size(89, 19);
+            label35.Size = new Size(99, 19);
             label35.TabIndex = 74;
-            label35.Text = "1:30:095";
+            label35.Text = "1:30:095 ";
             // 
             // label36
             // 
@@ -1283,7 +1284,7 @@
             // 
             label70.AutoSize = true;
             label70.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label70.ForeColor = SystemColors.AppWorkspace;
+            label70.ForeColor = Color.Silver;
             label70.Location = new Point(23, 195);
             label70.Margin = new Padding(4, 0, 4, 0);
             label70.Name = "label70";
@@ -1295,7 +1296,7 @@
             // 
             label81.AutoSize = true;
             label81.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label81.ForeColor = SystemColors.AppWorkspace;
+            label81.ForeColor = Color.Silver;
             label81.Location = new Point(23, 214);
             label81.Margin = new Padding(4, 0, 4, 0);
             label81.Name = "label81";
@@ -1307,7 +1308,7 @@
             // 
             label82.AutoSize = true;
             label82.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label82.ForeColor = SystemColors.AppWorkspace;
+            label82.ForeColor = Color.Silver;
             label82.Location = new Point(23, 233);
             label82.Margin = new Padding(4, 0, 4, 0);
             label82.Name = "label82";
@@ -1319,7 +1320,7 @@
             // 
             label83.AutoSize = true;
             label83.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label83.ForeColor = SystemColors.AppWorkspace;
+            label83.ForeColor = Color.Silver;
             label83.Location = new Point(23, 308);
             label83.Margin = new Padding(4, 0, 4, 0);
             label83.Name = "label83";
@@ -1331,7 +1332,7 @@
             // 
             label84.AutoSize = true;
             label84.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label84.ForeColor = SystemColors.AppWorkspace;
+            label84.ForeColor = Color.Silver;
             label84.Location = new Point(23, 289);
             label84.Margin = new Padding(4, 0, 4, 0);
             label84.Name = "label84";
@@ -1343,7 +1344,7 @@
             // 
             label85.AutoSize = true;
             label85.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label85.ForeColor = SystemColors.AppWorkspace;
+            label85.ForeColor = Color.Silver;
             label85.Location = new Point(23, 270);
             label85.Margin = new Padding(4, 0, 4, 0);
             label85.Name = "label85";
@@ -1355,7 +1356,7 @@
             // 
             label96.AutoSize = true;
             label96.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label96.ForeColor = SystemColors.AppWorkspace;
+            label96.ForeColor = Color.Silver;
             label96.Location = new Point(23, 384);
             label96.Margin = new Padding(4, 0, 4, 0);
             label96.Name = "label96";
@@ -1367,7 +1368,7 @@
             // 
             label97.AutoSize = true;
             label97.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label97.ForeColor = SystemColors.AppWorkspace;
+            label97.ForeColor = Color.Silver;
             label97.Location = new Point(23, 365);
             label97.Margin = new Padding(4, 0, 4, 0);
             label97.Name = "label97";
@@ -1379,7 +1380,7 @@
             // 
             label98.AutoSize = true;
             label98.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label98.ForeColor = SystemColors.AppWorkspace;
+            label98.ForeColor = Color.Silver;
             label98.Location = new Point(23, 346);
             label98.Margin = new Padding(4, 0, 4, 0);
             label98.Name = "label98";
@@ -1391,7 +1392,7 @@
             // 
             label99.AutoSize = true;
             label99.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label99.ForeColor = SystemColors.AppWorkspace;
+            label99.ForeColor = Color.Silver;
             label99.Location = new Point(23, 460);
             label99.Margin = new Padding(4, 0, 4, 0);
             label99.Name = "label99";
@@ -1403,7 +1404,7 @@
             // 
             label100.AutoSize = true;
             label100.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label100.ForeColor = SystemColors.AppWorkspace;
+            label100.ForeColor = Color.Silver;
             label100.Location = new Point(23, 441);
             label100.Margin = new Padding(4, 0, 4, 0);
             label100.Name = "label100";
@@ -1415,7 +1416,7 @@
             // 
             label101.AutoSize = true;
             label101.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label101.ForeColor = SystemColors.AppWorkspace;
+            label101.ForeColor = Color.Silver;
             label101.Location = new Point(23, 422);
             label101.Margin = new Padding(4, 0, 4, 0);
             label101.Name = "label101";
@@ -1427,6 +1428,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(1427, 582);
             Controls.Add(label99);
             Controls.Add(label100);
