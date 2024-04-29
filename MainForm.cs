@@ -254,6 +254,7 @@ namespace acc_hotlab_private_run_compare
         private void ResetDatabase_Click(object sender, EventArgs e)
         {
             dbStoredRunsContext.Database.EnsureDeleted();
+            dbStoredRunsContext.ChangeTracker.Clear();
             dbStoredRunsContext.Database.EnsureCreated();
             dbStoredRunsContext.SaveChanges();
         }
