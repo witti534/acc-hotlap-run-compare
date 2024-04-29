@@ -39,11 +39,14 @@ namespace acc_hotlab_private_run_compare
         private readonly int OFFSET_X_FIRST_LAPTIME = 4;
         private readonly int OFFSET_Y_FIRST_LAPTIME = 91;
         private readonly int OFFSET_X_FIRST_CUMLAPTIME = 197;
+        private readonly int OFFSET_X_FIRST_TIMEDIFFERENCE = 132;
+        private readonly int OFFSET_Y_FIRST_TIMEDIFFERENCE = 91;
 
 
         // Section for all sizes 
         private readonly int SIZE_Y_SINGLELINE = 19;
         private readonly int SIZE_Y_TWOLINES = 38;
+        private readonly int SIZE_Y_THREELINES = 57;
         private readonly int SIZE_X_ONCE_GENERAL = 270;
         private readonly int SIZE_X_LAPNUMBER = 79;
         private readonly int SIZE_X_SECTORS = 39;
@@ -53,6 +56,7 @@ namespace acc_hotlab_private_run_compare
         private readonly int SIZE_X_SECTORTIME = 79;
         private readonly int SIZE_X_LAPTIME = 89;
         private readonly int SIZE_X_CUMLAPTIME = 99;
+        private readonly int SIZE_X_TIMEDIFFERENCE = 109;
 
 
         // Creating a list for comparisons 
@@ -120,7 +124,7 @@ namespace acc_hotlab_private_run_compare
         private void CreateElementsForASingleRun(int position, RunInformation providedRun)
         {
             Panel box = CreateBox(position);
-
+            CreateRunInformationLabel(box, providedRun);
             bool isFastestRun = (position == 0); //True for fastest run, false for all other runs
             CreateLabelsForLapAndSectorTimes(box, providedRun, isFastestRun);
 
@@ -207,7 +211,7 @@ namespace acc_hotlab_private_run_compare
         private void CreateLabelsForLapAndSectorTimes(Panel box, RunInformation providedRun, bool isFastestRun)
         {
             int[] lapTimes = new int[providedRun.SectorList.Count / 3];
-            int[] cumulativeLapTimes = new int[providedRun.SectorList.Count / 3];
+            int[] cumulativeLapTimesCurrentRun = new int[providedRun.SectorList.Count / 3];
 
             //First go through each sector, afterwards create laps
             foreach (SectorInformation sector in providedRun.SectorList)
@@ -239,20 +243,20 @@ namespace acc_hotlab_private_run_compare
             }
 
             //Calculate cumulative lap times
-            cumulativeLapTimes[0] = lapTimes[0];
+            cumulativeLapTimesCurrentRun[0] = lapTimes[0];
             for (int i = 1; i < lapTimes.Length; i++) 
             {
-                cumulativeLapTimes[i] = cumulativeLapTimes[i - 1] + lapTimes[i];
+                cumulativeLapTimesCurrentRun[i] = cumulativeLapTimesCurrentRun[i - 1] + lapTimes[i];
             }
 
 
             //Add labels for cumulative times if it's the fastest run
             if (isFastestRun)
             {
-                for (int i = 0; i < cumulativeLapTimes.Length; i++)
+                for (int i = 0; i < cumulativeLapTimesCurrentRun.Length; i++)
                 {
-                    string timeString = TimeFormatter.ConvertMilisecondsToMinutesString(cumulativeLapTimes[i]);
-                    string formattedTimeString = (cumulativeLapTimes[i] < 600000)? " " + timeString : timeString;
+                    string timeString = TimeFormatter.ConvertMilisecondsToMinutesString(cumulativeLapTimesCurrentRun[i]);
+                    string formattedTimeString = (cumulativeLapTimesCurrentRun[i] < 600000)? " " + timeString : timeString;
                     Label cumulativeLapTimeLabel = new()
                     {
                         Text = formattedTimeString,
@@ -266,7 +270,33 @@ namespace acc_hotlab_private_run_compare
             } 
             else //Add labels for comparing to cumulative times of the fastest run
             {
+                for (int i = 0; i < cumulativeLapTimesCurrentRun.Length; i++)
+                {
+                    int timeDifferenceValue = cumulativeLapTimesCurrentRun[i] - CumulativeLapTimesFastestRun[i];
+                    Color color = Color.Black;
+                    if (timeDifferenceValue > 0)
+                    {
+                        color = Color.DarkRed;
+                    }
 
+                    if (timeDifferenceValue < 0)
+                    {
+                        color = Color.DarkGreen;
+                    }
+
+                    string timeDifferenceString = CreateTimeDifferenceString(timeDifferenceValue);
+
+                    Label timeDifferenceLabel = new()
+                    {
+                        Text = timeDifferenceString,
+                        ForeColor = color,
+                        Visible = true,
+                        Location = new Point(OFFSET_X_FIRST_TIMEDIFFERENCE, OFFSET_Y_FIRST_TIMEDIFFERENCE + i * OFFSET_Y_LAP),
+                        Size = new Size(SIZE_X_TIMEDIFFERENCE, SIZE_Y_SINGLELINE)
+                    };
+                    
+                    box.Controls.Add(timeDifferenceLabel);
+                }
             }
         }
 
@@ -296,6 +326,64 @@ namespace acc_hotlab_private_run_compare
             }
         }
 
+        /// <summary>
+        /// Creates a string representation of a time difference value.
+        /// -50 -> -0.050
+        /// 1040 -> +1.040
+        /// 0 -> ±0.000
+        /// </summary>
+        /// <param name="timeDifferenceValue">Time in ms</param>
+        /// <returns>A string with a representation of the time difference</returns>
+        private string CreateTimeDifferenceString(int timeDifferenceValue)
+        {
+            int absoluteTimeDifferenceValue = Math.Abs(timeDifferenceValue);
+            bool isNegativeValue = (timeDifferenceValue < 0);
+            if (absoluteTimeDifferenceValue == 0)
+            {
+                return "±0.000";
+            }
+            string milisecondsString;
+            string secondsString;
+            int milisecondsValue = absoluteTimeDifferenceValue % 1000;  
+            int secondsValue = absoluteTimeDifferenceValue / 1000;
 
+            string signString;
+            if (isNegativeValue)
+            {
+                signString = "-";
+            } else
+            {
+                signString = "+";
+            }
+
+            if (milisecondsValue >= 0 && milisecondsValue <= 9)
+            {
+                milisecondsString = "00" + milisecondsValue.ToString();
+            } else if (milisecondsValue >= 10 && milisecondsValue <= 99)
+            {
+                milisecondsString = "0" + milisecondsValue.ToString();
+            } else
+            {
+                milisecondsString = milisecondsValue.ToString();
+            }
+
+            secondsString = secondsValue.ToString();
+
+            return signString + secondsString + "." + milisecondsString;
+        }
+
+        private void CreateRunInformationLabel(Panel box, RunInformation providedRun)
+        {
+            Label runInformationLabel = new()
+            {
+                Location = new Point(0, 0),
+                Size = new Size(box.Width, SIZE_Y_THREELINES),
+                Visible = true,
+                Text = providedRun.CarName 
+                + "\r\nTotal time: " + TimeFormatter.FormatMilisecondsToHourString(providedRun.DrivenTime)
+                + "\r\n" + providedRun.RunCreatedDateTime.ToString()
+            };
+            box.Controls.Add(runInformationLabel);
+        }
     }
 }

@@ -456,9 +456,9 @@
             label58.Location = new Point(132, 91);
             label58.Margin = new Padding(4, 0, 4, 0);
             label58.Name = "label58";
-            label58.Size = new Size(69, 19);
+            label58.Size = new Size(109, 19);
             label58.TabIndex = 69;
-            label58.Text = "+0.451";
+            label58.Text = "+0.451    ";
             // 
             // label75
             // 
