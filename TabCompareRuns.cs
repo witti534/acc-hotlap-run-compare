@@ -267,7 +267,18 @@ namespace acc_hotlab_private_run_compare
             }
             else
             {
-                //TODO Implement for comparing multiple different runs
+                //Mutiple runs selected, compare different runs with eachother
+                List<RunInformation> runs = [];
+
+                //Get the run for each provided runID and add it to the list to be used in the FormMultipleRuns
+                foreach (int runID in selectedRuns)
+                {
+                    RunInformation singleRun = StoredRunContext.RunInformationSet.First(r => r.RunID ==  runID);
+                    runs.Add(singleRun);
+                }
+
+                Form multipleRunsForm = new FormMultipleRuns(runs, StoredRunContext);
+                multipleRunsForm.Show();
             }
         }
     }

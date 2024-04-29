@@ -52,12 +52,14 @@ namespace acc_hotlab_private_run_compare
             }
             TextBox debugTextBox = (TextBox) controlsDebugTextBoxes[0];
 
+            //begin get user input
             string tmpLapAmountRaw = controlsLaps[0].Text;
             string tmpCarNameRaw = controlsCarNames[0].Text;
             string tmpTrackNameRaw = controlsTrackNames[0].Text;
 
             bool isAnInteger;
             isAnInteger = int.TryParse(tmpLapAmountRaw, out int tmpLapAmount);
+            //end get user input
 
             int totalDrivenTime = 0;
             int fastestLap = int.MaxValue;
@@ -72,17 +74,17 @@ namespace acc_hotlab_private_run_compare
 
                     //Create Sector information
 
-                    
-
+                    //Create specified amount of laps
                     for (int lapIndex = 0; lapIndex < tmpLapAmount; lapIndex++)
                     {
                         int sector0Time = int.MaxValue;
                         int sector1Time = int.MaxValue;
                         int sector2Time = int.MaxValue;
 
+                        //Create 3 sectors for each lap
                         for (int sectorIndex = 0; sectorIndex <= 2; sectorIndex++)
                         {
-                            int sectorTime = RandomNumberGenerator.Next(60000); //give a sector time which is less than sixty seconds
+                            int sectorTime = RandomNumberGenerator.Next(20000) + 40000; //give a sector time which is between 40 and 60 seconds
                             SectorInformation secInf = new(lapIndex, sectorIndex, sectorTime);
                             sectorList.Add(secInf);
                             totalDrivenTime += sectorTime;
@@ -115,18 +117,19 @@ namespace acc_hotlab_private_run_compare
 
                 }
 
+                //Debug information
                 foreach (SectorInformation secInf in sectorList)
                 {
                     debugTextBox.Text = "\r\nNew Record added:\r\n--Lap: " + secInf.LapNumber + "\r\n--Sector: "
                         + secInf.SectorIndex + "\r\n--Time: " + secInf.DrivenSectorTime + debugTextBox.Text;
                 }
 
-                RunInformation randomRunInformation = new RunInformation(tmpTrackNameRaw, tmpCarNameRaw, totalDrivenTime, fastestLap, (15 * 60 * 1000), true, sectorList);
+                RunInformation randomRunInformation = new (tmpTrackNameRaw, tmpCarNameRaw, totalDrivenTime, fastestLap, (15 * 60 * 1000), true, sectorList);
 
                 return randomRunInformation;
             }
 
-            return null;
+            return null; //return if something went wrong
 
         }
 

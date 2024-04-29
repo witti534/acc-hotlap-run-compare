@@ -10,7 +10,7 @@ namespace acc_hotlab_private_run_compare
     /// </summary>
     public partial class MainForm : Form
     {
-        public const string VERSION = "0.1.3";
+        public const string VERSION = "0.1.4";
 
 
         public StoredRunContext dbStoredRunsContext = new();
@@ -65,7 +65,11 @@ namespace acc_hotlab_private_run_compare
             if (debugRun != null)
             {
                 addFinishedRunToFormContext(debugRun);
+            } else
+            {
+                debugTextbox1.Text = "Could not create run. Most likely the lap number was not input correctly.\r\n" + debugTextbox1.Text;
             }
+            
         }
 
         /// <summary>
@@ -250,6 +254,7 @@ namespace acc_hotlab_private_run_compare
         private void ResetDatabase_Click(object sender, EventArgs e)
         {
             dbStoredRunsContext.Database.EnsureDeleted();
+            dbStoredRunsContext.ChangeTracker.Clear();
             dbStoredRunsContext.Database.EnsureCreated();
             dbStoredRunsContext.SaveChanges();
         }
