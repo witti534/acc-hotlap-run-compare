@@ -19,9 +19,11 @@ This tool is used to record and compare the own runs from the Hotlap gamemode in
   - Add information to finished runs: Add a description to the run (e.g. setup name, weather conditions, ... )
   - Display single sector times
   - Direct comparison between sector times of two (or more) distinct runs
+- Live position during a run: Be able to see your current run compared to the other runs (same track, same car, same session length)
   
 
 ## Planned for the future
 
-- Live position during a run: Be able to see your current run compared to the other runs (same track, same car, same session length)
-
+- Import/Export runs
+- Adding graphs to run comparison
+- 
