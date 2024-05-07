@@ -232,7 +232,7 @@ namespace acc_hotlab_private_run_compare
             {
                 if (analyzedSectors < cumulativeSectorsArray.Length)
                 {
-                    if (cumulativeRunTime < cumulativeSectorsArray[analyzedSectors])
+                    if (cumulativeRunTime > cumulativeSectorsArray[analyzedSectors])
                     {
                         counterForFasterRuns++;
                     }
