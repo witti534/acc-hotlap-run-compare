@@ -50,6 +50,7 @@
             labelCurrentRunLaps = new Label();
             labelCurrentRunSectors = new Label();
             tabPageCompareRuns = new TabPage();
+            ButtonCompareRuns = new Button();
             buttonDeleteSelectedRuns = new Button();
             sortRunsByComboBox = new ComboBox();
             labelSortBy = new Label();
@@ -63,7 +64,7 @@
             comboBoxTrackSelector = new ComboBox();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
-            ButtonCompareRuns = new Button();
+            labelPosition = new Label();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -203,6 +204,7 @@
             // 
             // panelCurrentRunInfo
             // 
+            panelCurrentRunInfo.Controls.Add(labelPosition);
             panelCurrentRunInfo.Controls.Add(labelRunData);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunInfo);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunLaps);
@@ -274,6 +276,17 @@
             tabPageCompareRuns.TabIndex = 2;
             tabPageCompareRuns.Text = "Compare Runs";
             tabPageCompareRuns.UseVisualStyleBackColor = true;
+            // 
+            // ButtonCompareRuns
+            // 
+            ButtonCompareRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ButtonCompareRuns.Location = new Point(279, 113);
+            ButtonCompareRuns.Name = "ButtonCompareRuns";
+            ButtonCompareRuns.Size = new Size(255, 27);
+            ButtonCompareRuns.TabIndex = 11;
+            ButtonCompareRuns.Text = "Show Selected Run(s)";
+            ButtonCompareRuns.UseVisualStyleBackColor = true;
+            ButtonCompareRuns.Click += ButtonCompareRuns_Click;
             // 
             // buttonDeleteSelectedRuns
             // 
@@ -412,16 +425,15 @@
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
             // 
-            // ButtonCompareRuns
+            // labelPosition
             // 
-            ButtonCompareRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ButtonCompareRuns.Location = new Point(279, 113);
-            ButtonCompareRuns.Name = "ButtonCompareRuns";
-            ButtonCompareRuns.Size = new Size(255, 27);
-            ButtonCompareRuns.TabIndex = 11;
-            ButtonCompareRuns.Text = "Show Selected Run(s)";
-            ButtonCompareRuns.UseVisualStyleBackColor = true;
-            ButtonCompareRuns.Click += ButtonCompareRuns_Click;
+            labelPosition.AutoSize = true;
+            labelPosition.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelPosition.Location = new Point(3, 89);
+            labelPosition.Name = "labelPosition";
+            labelPosition.Size = new Size(159, 19);
+            labelPosition.TabIndex = 13;
+            labelPosition.Text = "Position: 12/24";
             // 
             // MainForm
             // 
@@ -502,5 +514,6 @@
         private Label labelVersion;
         private Button buttonDeleteSelectedRuns;
         private Button ButtonCompareRuns;
+        private Label labelPosition;
     }
 }

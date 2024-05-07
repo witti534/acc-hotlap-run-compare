@@ -311,7 +311,7 @@ namespace acc_hotlab_private_run_compare.GameListener
                     RefreshDebugTextbox();
                 }
 
-                GetLapDataAndSendToMainForm(lastLapTime, wasLastLap, lastLapNumber);
+                GetLapDataAndSendToMainForm(lastLapTime, wasLastLap, lastLapNumber + 1);
             }
         }
 
@@ -375,7 +375,7 @@ namespace acc_hotlab_private_run_compare.GameListener
         /// <param name="sectorIndex">The sector index (either 0, 1 or 2)</param>
         private void GetSectorDataAndSendToMainForm(int sectorTime, int sectorIndex)
         {
-            string formattedSectorTime = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sectorTime);
+            string formattedSectorTime = sectorTime.ToString();
             string formattedSectorIndex;
 
             if (sectorIndex == 0)

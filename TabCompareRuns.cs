@@ -50,6 +50,8 @@ namespace acc_hotlab_private_run_compare
         {
             comboBoxCarSelector.Items.Clear();
 
+            comboBoxCarSelector.Items.Add("all cars");
+
             //Retrieve all unique car names for a chosen track
             var carNames = StoredRunContext.RunInformationSet
                 .Where(s => s.TrackName == trackName)
@@ -74,14 +76,26 @@ namespace acc_hotlab_private_run_compare
         public void PopulateSessionSelector(ComboBox comboBoxSessionSelector, string trackName, string carName)
         {
             comboBoxSessionSelector.Items.Clear();
-            
-            //Select all disctint session times depending on the supplied trackname and carname
-            var sessionLengths = StoredRunContext.RunInformationSet
-                .Where(r => r.TrackName == trackName && r.CarName == carName)
-                .Select(r => r.SessionTime)
-                .Distinct()
-                .ToList();
 
+            List<int> sessionLengths;
+
+            //Select all disctint session times depending on the supplied trackname and carname
+            if (carName == "all cars")
+            {
+                sessionLengths = StoredRunContext.RunInformationSet
+                    .Where(r => r.TrackName == trackName)
+                    .Select(r => r.SessionTime)
+                    .Distinct()
+                    .ToList();
+            }
+            else
+            {
+                sessionLengths = StoredRunContext.RunInformationSet
+                    .Where(r => r.TrackName == trackName && r.CarName == carName)
+                    .Select(r => r.SessionTime)
+                    .Distinct()
+                    .ToList();
+            }
             //Add all session lenghts to the comboBox
             foreach (int sessionLenght in sessionLengths)
             {
@@ -112,15 +126,26 @@ namespace acc_hotlab_private_run_compare
                 FormStrings.SortByDateOldestLast => new RunInformationComparerOldestDateLast(),
                 _ => new RunInformationComparerFastestRunFirst(),
             };
-
+            List<RunInformation> selectedRunsWithoutSectors;
             //Select runs based on trackname, carname and session length
-            var selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
+            if (carName == "all cars")
+            {
+                selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
+               .Where(r => r.TrackName == trackName && r.SessionTime == sessionLength)
+               .Select(r => r)
+               .ToList();
+            } else
+            {
+                selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
                 .Where(r => r.TrackName == trackName && r.CarName == carName && r.SessionTime == sessionLength)
                 .Select(r => r)
                 .ToList();
+            }
+
+           
 
             //Add sector information lists to runs to be able to compare runs with different amounts of laps
-            foreach (var runWithoutSectors in  selectedRunsWithoutSectors)
+            foreach (RunInformation runWithoutSectors in  selectedRunsWithoutSectors)
             {
                 var sectorList = StoredRunContext.SectorInformationSet
                     .Select(s => s)
@@ -134,7 +159,7 @@ namespace acc_hotlab_private_run_compare
             selectedRunsWithoutSectors.Sort(comparer);
 
             int indexForDrawingYOffset = 0;
-            int amountPixelYOffset = 40;
+            int amountPixelYOffset = 79;
             int amountPixelXOffset = 30;
 
 
@@ -154,11 +179,12 @@ namespace acc_hotlab_private_run_compare
                     // Create the label with the run information
                     Label runInformationLabel = new()
                     {
-                        Text = ("Total time: " + TimeFormatter.FormatMilisecondsToHourString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.FormatMilisecondsToMinutesString(run.FastestLap) + 
-                        " | Created at: " + run.RunCreatedDateTime.ToString() + " | No. of laps: " + amountOfLaps.ToString() + "\r\n" + 
-                        "Description: " + run.RunDescription),
+                        Text = ("Total time: " + TimeFormatter.FormatMilisecondsToHourString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.FormatMilisecondsToMinutesString(run.FastestLap) + " | No. of laps: " + amountOfLaps.ToString() + "\r\n" 
+                        + "Description: " + run.RunDescription + "\r\n"
+                        + "Car: " + run.CarName +"\r\n"
+                        + "Created at: " + run.RunCreatedDateTime.ToString()),
                         Location = new Point(amountPixelXOffset, 0 + indexForDrawingYOffset * amountPixelYOffset),
-                        Size = new Size(1030, 40),
+                        Size = new Size(1030, amountPixelYOffset),
                         BorderStyle = BorderStyle.FixedSingle,
                         Name = run.RunID.ToString()
                     };

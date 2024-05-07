@@ -65,6 +65,7 @@ namespace acc_hotlab_private_run_compare
             int fastestLap = int.MaxValue;
             List<SectorInformation> sectorList = [];
 
+            //Ensure only valid numbers get accepted
             if (isAnInteger)
             {
                 if (tmpLapAmount > 0)
