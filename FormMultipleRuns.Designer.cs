@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMultipleRuns));
             labelRunInfoStatic = new Label();
             label1 = new Label();
             label9 = new Label();
@@ -1454,9 +1455,10 @@
             Controls.Add(label1);
             Controls.Add(labelRunInfoStatic);
             Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4);
             Name = "FormMultipleRuns";
-            Text = "FormMultipleRuns";
+            Text = "Compare Multiple Runs";
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             panel4.ResumeLayout(false);
