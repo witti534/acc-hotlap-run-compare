@@ -45,6 +45,7 @@
             tabControl1 = new TabControl();
             tabPageMainAddRun = new TabPage();
             panelCurrentRunInfo = new Panel();
+            labelPosition = new Label();
             labelRunData = new Label();
             labelCurrentRunInfo = new Label();
             labelCurrentRunLaps = new Label();
@@ -64,7 +65,6 @@
             comboBoxTrackSelector = new ComboBox();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
-            labelPosition = new Label();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -215,6 +215,16 @@
             panelCurrentRunInfo.Name = "panelCurrentRunInfo";
             panelCurrentRunInfo.Size = new Size(1202, 537);
             panelCurrentRunInfo.TabIndex = 13;
+            // 
+            // labelPosition
+            // 
+            labelPosition.AutoSize = true;
+            labelPosition.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelPosition.Location = new Point(3, 89);
+            labelPosition.Name = "labelPosition";
+            labelPosition.Size = new Size(389, 19);
+            labelPosition.TabIndex = 13;
+            labelPosition.Text = "Position: Waiting for run to start ...";
             // 
             // labelRunData
             // 
@@ -425,24 +435,15 @@
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
             // 
-            // labelPosition
-            // 
-            labelPosition.AutoSize = true;
-            labelPosition.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelPosition.Location = new Point(3, 89);
-            labelPosition.Name = "labelPosition";
-            labelPosition.Size = new Size(159, 19);
-            labelPosition.TabIndex = 13;
-            labelPosition.Text = "Position: 12/24";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1240, 594);
             Controls.Add(tabControl1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
-            Text = "Form1";
+            Text = "ACC Hotrun Compare";
             FormClosing += Form1_FormClosing;
             debugBox.ResumeLayout(false);
             debugBox.PerformLayout();
