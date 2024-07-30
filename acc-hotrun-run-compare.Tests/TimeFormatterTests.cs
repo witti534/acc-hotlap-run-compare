@@ -1,6 +1,6 @@
 ﻿using acc_hotrun_run_compare;
 
-namespace acc_hotrun_run_compare_test
+namespace acc-hotrun-run-compare.Tests
 {
     /// <summary>
     /// The class containing tests for the TimeFormatter class

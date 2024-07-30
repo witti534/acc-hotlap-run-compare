@@ -19,6 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="acc-hotrun-run-compare">
+      <HintPath>..\acc-hotrun-run-compare\bin\Debug\net8.0-windows\acc-hotrun-run-compare.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
