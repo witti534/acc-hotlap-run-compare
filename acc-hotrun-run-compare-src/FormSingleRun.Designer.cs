@@ -1,4 +1,4 @@
-﻿namespace acc_hotlab_private_run_compare
+﻿namespace acc_hotrun_run_compare
 {
     partial class FormSingleRun
     {

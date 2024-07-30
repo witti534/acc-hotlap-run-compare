@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace acc_hotlab_private_run_compare.DBClasses;
+namespace acc_hotrun_run_compare.DBClasses;
 
 public partial class StoredRunContext : DbContext
 {

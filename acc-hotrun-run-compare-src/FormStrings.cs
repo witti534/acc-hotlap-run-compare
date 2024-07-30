@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace acc_hotlab_private_run_compare
+namespace acc_hotrun_run_compare
 {
     /// <summary>
     /// Class to keep strings to be used in the forms.

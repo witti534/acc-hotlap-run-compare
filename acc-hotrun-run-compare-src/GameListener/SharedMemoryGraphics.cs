@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace acc_hotlab_private_run_compare.GameListener
+namespace acc_hotrun_run_compare.GameListener
 {
     /// <summary>
     /// Used https://github.com/mdjarv/assettocorsasharedmemory as reference (including variable names)

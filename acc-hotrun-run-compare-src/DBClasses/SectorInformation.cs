@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace acc_hotlab_private_run_compare.DBClasses
+namespace acc_hotrun_run_compare.DBClasses
 {
     /// <summary>
     /// A class to hold information about a sector (lap number, sector index, driven time and runID)

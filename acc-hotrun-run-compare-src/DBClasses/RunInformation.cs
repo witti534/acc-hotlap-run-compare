@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace acc_hotlab_private_run_compare.DBClasses
+namespace acc_hotrun_run_compare.DBClasses
 {
     /// <summary>
     /// This class is to create objects for completed runs. 

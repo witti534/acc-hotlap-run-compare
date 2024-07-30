@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.IO.MemoryMappedFiles;
 using System.Xml.Serialization;
-using acc_hotlab_private_run_compare.DBClasses;
+using acc_hotrun_run_compare.DBClasses;
 
-namespace acc_hotlab_private_run_compare.GameListener
+namespace acc_hotrun_run_compare.GameListener
 {
 
     /// <summary>

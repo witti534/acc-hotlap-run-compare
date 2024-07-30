@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace acc_hotlab_private_run_compare.Migrations
+namespace acc_hotrun_run_compare.Migrations
 {
     /// <inheritdoc />
     public partial class db_v0 : Migration

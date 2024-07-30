@@ -1,4 +1,4 @@
-﻿using acc_hotlab_private_run_compare.DBClasses;
+﻿using acc_hotrun_run_compare.DBClasses;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace acc_hotlab_private_run_compare
+namespace acc_hotrun_run_compare
 {
     public partial class FormSingleRun : Form
     {

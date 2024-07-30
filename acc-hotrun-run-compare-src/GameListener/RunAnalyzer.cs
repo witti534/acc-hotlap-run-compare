@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
-using acc_hotlab_private_run_compare.DBClasses;
+using acc_hotrun_run_compare.DBClasses;
 
-namespace acc_hotlab_private_run_compare.GameListener
+namespace acc_hotrun_run_compare.GameListener
 {
     /// <summary>
     /// In this class information from ACC is being analyzed. It has different flags to be read for different stages/events of a run. 

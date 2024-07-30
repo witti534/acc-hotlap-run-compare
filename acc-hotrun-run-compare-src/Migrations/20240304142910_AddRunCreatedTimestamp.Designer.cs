@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using acc_hotlab_private_run_compare.DBClasses;
+using acc_hotrun_run_compare.DBClasses;
 
 #nullable disable
 
-namespace acc_hotlab_private_run_compare.Migrations
+namespace acc_hotrun_run_compare.Migrations
 {
     [DbContext(typeof(StoredRunContext))]
     [Migration("20240304142910_AddRunCreatedTimestamp")]
