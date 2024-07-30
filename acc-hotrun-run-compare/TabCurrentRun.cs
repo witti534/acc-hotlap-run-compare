@@ -11,7 +11,7 @@ namespace acc_hotrun_run_compare
     /// <summary>
     /// This class contains functions for the current run tab. 
     /// </summary>
-    internal class TabCurrentRun (StoredRunContext storedRunContext)
+    internal class TabCurrentRun(StoredRunContext storedRunContext)
     {
         readonly StoredRunContext StoredRunContext = storedRunContext;
 
@@ -36,12 +36,12 @@ namespace acc_hotrun_run_compare
         {
             // Find Label in the panel and make them accessible 
             var controlsLabelRunInfo = panel.Controls.Find("labelCurrentRunInfo", true);
-            Label labelCurrentRunInfo = (Label) controlsLabelRunInfo[0];
+            Label labelCurrentRunInfo = (Label)controlsLabelRunInfo[0];
 
             var controlsLabelRunLaps = panel.Controls.Find("labelCurrentRunLaps", true);
-            Label labelCurrentRunLaps = (Label) controlsLabelRunLaps[0];
+            Label labelCurrentRunLaps = (Label)controlsLabelRunLaps[0];
 
-            var controlsLabelRunSectors = panel.Controls.Find("labelCurrentRunSectors", true); 
+            var controlsLabelRunSectors = panel.Controls.Find("labelCurrentRunSectors", true);
             Label labelCurrentRunSectors = (Label)controlsLabelRunSectors[0];
 
             //work until queue is empty
@@ -128,7 +128,7 @@ namespace acc_hotrun_run_compare
                             accRunInfoQueue.Enqueue(currentMsg);
                         }
                         int sectorTimeValue = Int32.Parse(stringTokens[2]);
-                        string sectorTimeString = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sectorTimeValue);
+                        string sectorTimeString = TimeFormatter.CreateThreeFixedDigitsSecondsString(sectorTimeValue);
                         UpdateCurrentRunPosition(sectorTimeValue, panel);
                         if (stringTokens[1].Equals("s0"))
                         {
@@ -139,7 +139,7 @@ namespace acc_hotrun_run_compare
                         if (stringTokens[1].Equals("s1"))
                         {
                             labelCurrentRunSectors.Text += sectorTimeString;
-                            labelCurrentRunSectors.Text += " "; 
+                            labelCurrentRunSectors.Text += " ";
                             continue;
                         }
                         if (stringTokens[1].Equals("s2"))
@@ -182,10 +182,10 @@ namespace acc_hotrun_run_compare
                 SectorInformation sector2 = (SectorInformation)finishedRun.SectorList[3 * i + 2];
 
                 int lapTimeInt = sector0.DrivenSectorTime + sector1.DrivenSectorTime + sector2.DrivenSectorTime;
-                string lapTimeFormated = TimeFormatter.ConvertMilisecondsToMinutesString(lapTimeInt);
-                string sector0TimeFormated = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sector0.DrivenSectorTime);
-                string sector1TimeFormated = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sector1.DrivenSectorTime);
-                string sector2TimeFormated = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sector2.DrivenSectorTime);
+                string lapTimeFormated = TimeFormatter.CreateMinutesString(lapTimeInt);
+                string sector0TimeFormated = TimeFormatter.CreateThreeFixedDigitsSecondsString(sector0.DrivenSectorTime);
+                string sector1TimeFormated = TimeFormatter.CreateThreeFixedDigitsSecondsString(sector1.DrivenSectorTime);
+                string sector2TimeFormated = TimeFormatter.CreateThreeFixedDigitsSecondsString(sector2.DrivenSectorTime);
 
                 sb.Append("Lap ");
                 sb.Append(i + 1);
@@ -220,7 +220,7 @@ namespace acc_hotrun_run_compare
         }
 
         /// <summary>
-        /// 
+        /// Run this function after finishing a sector. Update variables for tracking and sector times. Set labels for current sector times.
         /// </summary>
         /// <param name="lastSectorTime">The sector time of exactly the last driven sector in ms</param>
         /// <param name="currentRunPanel">The panel which contains labels for the current run position</param>
@@ -228,20 +228,62 @@ namespace acc_hotrun_run_compare
         {
             cumulativeRunTime += lastSectorTime;
             int counterForFasterRuns = 0;
+            int smallestDifferenceInTime = Int32.MaxValue; //Difference to one faster position
+            int biggestDifferenceInTime = Int32.MinValue; //Difference to first position
             foreach (int[] cumulativeSectorsArray in cumulativeSectorTimes)
             {
-                if (analyzedSectors < cumulativeSectorsArray.Length)
+                if (analyzedSectors < cumulativeSectorsArray.Length) //Only count runs with 
                 {
-                    if (cumulativeRunTime > cumulativeSectorsArray[analyzedSectors])
+                    int differenceBetweenCurrentRunAndCummulativeTime = cumulativeRunTime - cumulativeSectorsArray[analyzedSectors];
+                    if (differenceBetweenCurrentRunAndCummulativeTime > 0) //There has been a faster run in the recorded runs
                     {
                         counterForFasterRuns++;
+
+                        if (differenceBetweenCurrentRunAndCummulativeTime > biggestDifferenceInTime) //Update value to display distance to fastest run
+                        {
+                            biggestDifferenceInTime = differenceBetweenCurrentRunAndCummulativeTime;
+                        }
+
+                        if (differenceBetweenCurrentRunAndCummulativeTime < smallestDifferenceInTime) //Update value to display distance to one faster run
+                        {
+                            smallestDifferenceInTime = differenceBetweenCurrentRunAndCummulativeTime;
+                        }
                     }
                 }
             }
             analyzedSectors++;
-            var searchForPositionLabelResult = currentRunPanel.Controls.Find("labelPosition", true);
+
+            //Search all labels needed for manipulation
+            var searchForPositionLabelResult = currentRunPanel.Controls.Find("labelPositionValue", true);
             Label currentPositionLabel = (Label)searchForPositionLabelResult[0];
-            currentPositionLabel.Text = "Position " + (counterForFasterRuns + 1).ToString() + "/" + (totalNumberOfComparableRuns + 1).ToString();
+            var searchForFastestTimeValueLabelResult = currentRunPanel.Controls.Find("labelTimeDifferenceFastestValue", true);
+            Label timeDifferenceFastestValueLabel = (Label)searchForFastestTimeValueLabelResult[0];
+            var searchForFasterTimeValueLabelResult = currentRunPanel.Controls.Find("labelTimeDifferenceFasterValue", true);
+            Label timeDifferenceFasterValueLabel = (Label)searchForFasterTimeValueLabelResult[0];
+
+            currentPositionLabel.Text = (counterForFasterRuns + 1).ToString() + "/" + (totalNumberOfComparableRuns + 1).ToString();
+
+            if (counterForFasterRuns > 0)
+            {
+                //Set the labels for times
+
+                //Set the label for comparison to fastest run time
+                timeDifferenceFastestValueLabel.Text = "+" + TimeFormatter.CreateThreeFixedDigitsSecondsString(biggestDifferenceInTime) + "s";
+                timeDifferenceFastestValueLabel.ForeColor = Color.DarkRed;
+
+                //Set the label for comparison to one faster run time
+                timeDifferenceFasterValueLabel.Text = "+" + TimeFormatter.CreateThreeFixedDigitsSecondsString(smallestDifferenceInTime) + "s";
+                timeDifferenceFasterValueLabel.ForeColor = Color.DarkRed;
+
+            }
+            else //No faster run was found
+            {
+                timeDifferenceFasterValueLabel.Text = "-.---";
+                timeDifferenceFasterValueLabel.ForeColor = Color.DarkGreen;
+
+                timeDifferenceFastestValueLabel.Text = "-.---";
+                timeDifferenceFastestValueLabel.ForeColor = Color.DarkGreen;
+            }
         }
 
         /// <summary>
@@ -270,11 +312,11 @@ namespace acc_hotrun_run_compare
         /// </summary>
         private void CalculateCumulativeSectorTimes()
         {
-            
+
             //get runs with matching carname, trackname and sessionlength
             List<RunInformation> listOfSelectedRuns = StoredRunContext.RunInformationSet
-                .Where(run => run.TrackName == trackName 
-                && run.SessionTime == sessionLength 
+                .Where(run => run.TrackName == trackName
+                && run.SessionTime == sessionLength
                 && run.CarName == carName)
                 .ToList();
 
@@ -311,7 +353,8 @@ namespace acc_hotrun_run_compare
 
         private int ParseSessionLength(string inputString)
         {
-            switch (inputString){
+            switch (inputString)
+            {
                 case "5 Minutes":
                     return 5 * 60 * 1000;
                 case "10 Minutes":

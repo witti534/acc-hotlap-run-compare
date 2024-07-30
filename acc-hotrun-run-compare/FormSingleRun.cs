@@ -63,7 +63,7 @@ namespace acc_hotrun_run_compare
                 "\r\nCar: " + providedRun.CarName +
                 "\r\nSession length: " + (providedRun.SessionTime / 60000).ToString() + " min";
             TextBoxRunDescription.Text = providedRun.RunDescription;
-            labelRunTotalTime.Text = "Total Run Time: " + TimeFormatter.FormatMilisecondsToHourString(providedRun.DrivenTime);
+            labelRunTotalTime.Text = "Total Run Time: " + TimeFormatter.CreateHoursString(providedRun.DrivenTime);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace acc_hotrun_run_compare
             {
                 //Add curent sector time to lap time
                 laptimes[sector.LapNumber] = laptimes[sector.LapNumber] + sector.DrivenSectorTime;
-                
+
                 Label sectorTimeLabel = new();
 
                 if (sector.SectorIndex == 0)
@@ -103,7 +103,8 @@ namespace acc_hotrun_run_compare
                     };
                     Controls.Add(limiterLabelSector0);
 
-                } else if (sector.SectorIndex == 1)
+                }
+                else if (sector.SectorIndex == 1)
                 {
 
                     sectorTimeLabel.Location = new Point(XOFFSETSSECTOR1, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP);
@@ -118,7 +119,8 @@ namespace acc_hotrun_run_compare
                         Visible = true
                     };
                     Controls.Add(limiterLabelSector1);
-                } else
+                }
+                else
                 {
 
                     sectorTimeLabel.Location = new Point(XOFFSETSSECTOR2, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP);
@@ -126,7 +128,7 @@ namespace acc_hotrun_run_compare
                 }
 
                 sectorTimeLabel.Name = "sectortimelabel|" + sector.LapNumber + "|" + sector.SectorIndex;
-                sectorTimeLabel.Text = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sector.DrivenSectorTime);
+                sectorTimeLabel.Text = TimeFormatter.CreateThreeFixedDigitsSecondsString(sector.DrivenSectorTime);
                 sectorTimeLabel.Size = new Size(SIZEXLABELTIME, SIZEYLABEL);
                 sectorTimeLabel.Visible = true;
                 Controls.Add(sectorTimeLabel);
@@ -134,7 +136,7 @@ namespace acc_hotrun_run_compare
             }
 
             //Add laps labels to form
-            for(int lap = 0; lap < laptimes.Length; lap++)
+            for (int lap = 0; lap < laptimes.Length; lap++)
             {
                 Label lapNumberLabel = new()
                 {
@@ -149,7 +151,7 @@ namespace acc_hotrun_run_compare
                 Label lapTimeLabel = new()
                 {
                     Size = new Size(SIZEXLABELLAPTIME, SIZEYLABEL),
-                    Text = TimeFormatter.FormatMilisecondsToMinutesString(laptimes[lap]),
+                    Text = TimeFormatter.CreateMinutesString(laptimes[lap]),
                     Location = new Point(XOFFSETLAPTIME, YOFFSETSTATIC + lap * YOFFSETEACHLAP),
                     Visible = true
                 };

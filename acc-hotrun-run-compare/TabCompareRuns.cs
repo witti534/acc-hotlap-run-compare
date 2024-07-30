@@ -24,13 +24,13 @@ namespace acc_hotrun_run_compare
         /// <param name="comboBoxTrackSelector">Accesses the comboBoxTrackSelector to fill in the names of the found tracks</param>
         public void PopulateTrackSelector(ComboBox comboBoxTrackSelector)
         {
-            
+
             comboBoxTrackSelector.Items.Clear();
 
             //Retrieve all unique tracknames
             var trackNames = StoredRunContext.RunInformationSet
                 .Select(r => r.TrackName)
-                .Distinct()                
+                .Distinct()
                 .ToList();
 
             //Add tracknames to comboBoxTrackSelector
@@ -102,7 +102,7 @@ namespace acc_hotrun_run_compare
                 comboBoxSessionSelector.Items.Add(sessionLenght.ToString());
             }
         }
-        
+
         /// <summary>
         /// This function takes the information from the comboboxes and fills up the panel with information about different runs.
         /// It sorts runs depending on the comparer.
@@ -134,7 +134,8 @@ namespace acc_hotrun_run_compare
                .Where(r => r.TrackName == trackName && r.SessionTime == sessionLength)
                .Select(r => r)
                .ToList();
-            } else
+            }
+            else
             {
                 selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
                 .Where(r => r.TrackName == trackName && r.CarName == carName && r.SessionTime == sessionLength)
@@ -142,10 +143,10 @@ namespace acc_hotrun_run_compare
                 .ToList();
             }
 
-           
+
 
             //Add sector information lists to runs to be able to compare runs with different amounts of laps
-            foreach (RunInformation runWithoutSectors in  selectedRunsWithoutSectors)
+            foreach (RunInformation runWithoutSectors in selectedRunsWithoutSectors)
             {
                 var sectorList = StoredRunContext.SectorInformationSet
                     .Select(s => s)
@@ -179,9 +180,9 @@ namespace acc_hotrun_run_compare
                     // Create the label with the run information
                     Label runInformationLabel = new()
                     {
-                        Text = ("Total time: " + TimeFormatter.FormatMilisecondsToHourString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.FormatMilisecondsToMinutesString(run.FastestLap) + " | No. of laps: " + amountOfLaps.ToString() + "\r\n" 
+                        Text = ("Total time: " + TimeFormatter.CreateHoursString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.CreateMinutesString(run.FastestLap) + " | No. of laps: " + amountOfLaps.ToString() + "\r\n"
                         + "Description: " + run.RunDescription + "\r\n"
-                        + "Car: " + run.CarName +"\r\n"
+                        + "Car: " + run.CarName + "\r\n"
                         + "Created at: " + run.RunCreatedDateTime.ToString()),
                         Location = new Point(amountPixelXOffset, 0 + indexForDrawingYOffset * amountPixelYOffset),
                         Size = new Size(1030, amountPixelYOffset),
@@ -251,10 +252,10 @@ namespace acc_hotrun_run_compare
                 //all checkboxes we need starts with "checkboxrun|"
                 if (control.Name.StartsWith("checkboxrun|"))
                 {
-                    CheckBox tempCheckBox = (CheckBox) control;
+                    CheckBox tempCheckBox = (CheckBox)control;
 
                     //Get only checked checkboxes
-                    if (tempCheckBox.Checked) 
+                    if (tempCheckBox.Checked)
                     {
                         //Extract the runID
                         string[] controlNameElements = control.Name.Split('|');
@@ -275,8 +276,8 @@ namespace acc_hotrun_run_compare
         {
             List<int> selectedRuns = GetSelectedRunIDs(panelWithRuns);
 
-            
-            if (selectedRuns.Count == 0) 
+
+            if (selectedRuns.Count == 0)
             {
                 //Zero runs selected
                 return;
@@ -299,7 +300,7 @@ namespace acc_hotrun_run_compare
                 //Get the run for each provided runID and add it to the list to be used in the FormMultipleRuns
                 foreach (int runID in selectedRuns)
                 {
-                    RunInformation singleRun = StoredRunContext.RunInformationSet.First(r => r.RunID ==  runID);
+                    RunInformation singleRun = StoredRunContext.RunInformationSet.First(r => r.RunID == runID);
                     runs.Add(singleRun);
                 }
 

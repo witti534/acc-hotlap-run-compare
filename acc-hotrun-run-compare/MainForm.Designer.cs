@@ -45,7 +45,12 @@
             tabControl1 = new TabControl();
             tabPageMainAddRun = new TabPage();
             panelCurrentRunInfo = new Panel();
-            labelPosition = new Label();
+            labelTimeDifferenceFastestValue = new Label();
+            labelTimeDifferenceFasterValue = new Label();
+            label2 = new Label();
+            labelTimeDifferenceFastestText = new Label();
+            labelTimeDifferenceFasterText = new Label();
+            labelPositionValue = new Label();
             labelRunData = new Label();
             labelCurrentRunInfo = new Label();
             labelCurrentRunLaps = new Label();
@@ -169,7 +174,7 @@
             // 
             labelStaticLastSavedRun.AutoSize = true;
             labelStaticLastSavedRun.Font = new Font("Noto Mono", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelStaticLastSavedRun.Location = new Point(561, 9);
+            labelStaticLastSavedRun.Location = new Point(561, 89);
             labelStaticLastSavedRun.Name = "labelStaticLastSavedRun";
             labelStaticLastSavedRun.Size = new Size(164, 23);
             labelStaticLastSavedRun.TabIndex = 8;
@@ -204,7 +209,12 @@
             // 
             // panelCurrentRunInfo
             // 
-            panelCurrentRunInfo.Controls.Add(labelPosition);
+            panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFastestValue);
+            panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFasterValue);
+            panelCurrentRunInfo.Controls.Add(label2);
+            panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFastestText);
+            panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFasterText);
+            panelCurrentRunInfo.Controls.Add(labelPositionValue);
             panelCurrentRunInfo.Controls.Add(labelRunData);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunInfo);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunLaps);
@@ -216,21 +226,77 @@
             panelCurrentRunInfo.Size = new Size(1202, 537);
             panelCurrentRunInfo.TabIndex = 13;
             // 
-            // labelPosition
+            // labelTimeDifferenceFastestValue
             // 
-            labelPosition.AutoSize = true;
-            labelPosition.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelPosition.Location = new Point(3, 89);
-            labelPosition.Name = "labelPosition";
-            labelPosition.Size = new Size(389, 19);
-            labelPosition.TabIndex = 13;
-            labelPosition.Text = "Position: Waiting for run to start ...";
+            labelTimeDifferenceFastestValue.AutoSize = true;
+            labelTimeDifferenceFastestValue.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelTimeDifferenceFastestValue.Location = new Point(880, 32);
+            labelTimeDifferenceFastestValue.Margin = new Padding(0);
+            labelTimeDifferenceFastestValue.Name = "labelTimeDifferenceFastestValue";
+            labelTimeDifferenceFastestValue.Size = new Size(79, 19);
+            labelTimeDifferenceFastestValue.TabIndex = 18;
+            labelTimeDifferenceFastestValue.Text = "23.456s";
+            // 
+            // labelTimeDifferenceFasterValue
+            // 
+            labelTimeDifferenceFasterValue.AutoSize = true;
+            labelTimeDifferenceFasterValue.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelTimeDifferenceFasterValue.Location = new Point(881, 9);
+            labelTimeDifferenceFasterValue.Margin = new Padding(0);
+            labelTimeDifferenceFasterValue.Name = "labelTimeDifferenceFasterValue";
+            labelTimeDifferenceFasterValue.Size = new Size(79, 19);
+            labelTimeDifferenceFasterValue.TabIndex = 17;
+            labelTimeDifferenceFasterValue.Text = "12.345s";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(1020, 13);
+            label2.Margin = new Padding(3, 0, 0, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(99, 19);
+            label2.TabIndex = 16;
+            label2.Text = "Position:";
+            // 
+            // labelTimeDifferenceFastestText
+            // 
+            labelTimeDifferenceFastestText.AutoSize = true;
+            labelTimeDifferenceFastestText.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelTimeDifferenceFastestText.Location = new Point(561, 32);
+            labelTimeDifferenceFastestText.Margin = new Padding(0);
+            labelTimeDifferenceFastestText.Name = "labelTimeDifferenceFastestText";
+            labelTimeDifferenceFastestText.Size = new Size(319, 19);
+            labelTimeDifferenceFastestText.TabIndex = 15;
+            labelTimeDifferenceFastestText.Text = "Time Difference To Fastest Run:";
+            // 
+            // labelTimeDifferenceFasterText
+            // 
+            labelTimeDifferenceFasterText.AutoSize = true;
+            labelTimeDifferenceFasterText.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelTimeDifferenceFasterText.Location = new Point(561, 9);
+            labelTimeDifferenceFasterText.Margin = new Padding(0);
+            labelTimeDifferenceFasterText.Name = "labelTimeDifferenceFasterText";
+            labelTimeDifferenceFasterText.Size = new Size(309, 19);
+            labelTimeDifferenceFasterText.TabIndex = 14;
+            labelTimeDifferenceFasterText.Text = "Time Difference To Faster Run:";
+            // 
+            // labelPositionValue
+            // 
+            labelPositionValue.AutoSize = true;
+            labelPositionValue.Font = new Font("Noto Mono", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelPositionValue.Location = new Point(1042, 32);
+            labelPositionValue.Margin = new Padding(0, 0, 3, 0);
+            labelPositionValue.Name = "labelPositionValue";
+            labelPositionValue.Size = new Size(62, 24);
+            labelPositionValue.TabIndex = 13;
+            labelPositionValue.Text = "6/12";
             // 
             // labelRunData
             // 
             labelRunData.AutoSize = true;
             labelRunData.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelRunData.Location = new Point(561, 32);
+            labelRunData.Location = new Point(561, 126);
             labelRunData.Name = "labelRunData";
             labelRunData.Size = new Size(399, 57);
             labelRunData.TabIndex = 9;
@@ -515,6 +581,11 @@
         private Label labelVersion;
         private Button buttonDeleteSelectedRuns;
         private Button ButtonCompareRuns;
-        private Label labelPosition;
+        private Label labelPositionValue;
+        private Label labelTimeDifferenceFastestText;
+        private Label labelTimeDifferenceFasterText;
+        private Label labelTimeDifferenceFastestValue;
+        private Label labelTimeDifferenceFasterValue;
+        private Label label2;
     }
 }

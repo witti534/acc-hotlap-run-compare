@@ -65,11 +65,12 @@ namespace acc_hotrun_run_compare
             if (debugRun != null)
             {
                 addFinishedRunToFormContext(debugRun);
-            } else
+            }
+            else
             {
                 debugTextbox1.Text = "Could not create run. Most likely the lap number was not input correctly.\r\n" + debugTextbox1.Text;
             }
-            
+
         }
 
         /// <summary>

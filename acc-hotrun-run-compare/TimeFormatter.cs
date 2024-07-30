@@ -23,8 +23,12 @@ namespace acc_hotrun_run_compare
         /// </summary>
         /// <param name="timeInMs">The run lenght in miliseconds.</param>
         /// <returns>A string with a human readable representation for the run length.</returns>
-        public static string FormatMilisecondsToHourString(int timeInMs)
+        public static string CreateHoursString(int timeInMs)
         {
+            if (timeInMs < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(timeInMs), "Provided time must be non-negative.");
+            }
             int HInt = timeInMs / (1000 * 60 * 60); // H = hours (1 digit), run cannot be longer than 1 hour and a few minutes because of game logic
             int MMSSmmmRemaining = timeInMs % (1000 * 60 * 60);
             int MMInt = MMSSmmmRemaining / (1000 * 60); // MM = minutes (2 digits), always between 00 and 59 (inclusive)
@@ -108,66 +112,20 @@ namespace acc_hotrun_run_compare
         }
 
         /// <summary>
-        /// Takes an integer and turns it into the following format:
-        /// m:ss:MMM
-        /// Example: 1:40:412 (101412)
-        /// 0:01:987 (1987)
-        /// </summary>
-        /// <param name="timeInMs">The time in miliseconds</param>
-        /// <returns>A string displaying the time in the following format: m:ss:MMM</returns>
-        public static string FormatMilisecondsToMinutesString(int timeInMs)
-        {
-            int minutes = timeInMs / (1000 * 60);
-            int totalTimeAfterMinuteCutoff = timeInMs % (1000 * 60);
-            int secondsAsInt = totalTimeAfterMinuteCutoff / 1000;
-            int remainingMiliseconds = totalTimeAfterMinuteCutoff % 1000;
-
-            //Prepare string representation
-            string secondsAsRawString = secondsAsInt.ToString();
-            string secondsCorrectRepresentation;
-
-            string milisecondsAsRawString = remainingMiliseconds.ToString();
-            string milisecondsCorrectRepresentation;
-
-            //Turn 4 seconds into 04 seconds
-            if (secondsAsRawString.Length == 1)
-            {
-                secondsCorrectRepresentation = "0" + secondsAsRawString;
-            }
-            else
-            {
-                secondsCorrectRepresentation = secondsAsRawString;
-            }
-
-            //Turn 5 miliseconds into 005 milliseconds/ turn 19 miliseconds into 019 miliseconds
-            if (milisecondsAsRawString.Length == 1)
-            {
-                milisecondsCorrectRepresentation = "00" + milisecondsAsRawString;
-            }
-            else if (milisecondsAsRawString.Length == 2)
-            {
-                milisecondsCorrectRepresentation = "0" + milisecondsAsRawString;
-            }
-            else
-            {
-                milisecondsCorrectRepresentation = milisecondsAsRawString;
-            }
-
-
-            return (minutes + ":" + secondsCorrectRepresentation + "." + milisecondsCorrectRepresentation);
-        }
-
-        /// <summary>
         /// Takes an integer of the time in miliseconds and turns it into a string of the following format:
-        /// m:ss:MMM
+        /// m:ss.MMM
         /// m = minutes, variable length
         /// ss = seconds, alsways two digits
         /// MMM = miliseconds, always three digits
         /// </summary>
         /// <param name="timeInMs">The time in miliseconds as an integer</param>
         /// <returns></returns>
-        public static string ConvertMilisecondsToMinutesString(int timeInMs)
+        public static string CreateMinutesString(int timeInMs)
         {
+            if (timeInMs < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(timeInMs), "Provided time must be non-negative.");
+            }
             int minutes = timeInMs / (1000 * 60);
             int totalTimeAfterMinuteCutoff = timeInMs % (1000 * 60);
             int secondsAsInt = totalTimeAfterMinuteCutoff / 1000;
@@ -219,12 +177,17 @@ namespace acc_hotrun_run_compare
         /// 1001ms   = "  1.001"
         /// 
         /// </summary>
-        /// <param name="timeInMS"></param>
+        /// <param name="timeInMs"></param>
         /// <returns></returns>
-        public static string ConvertMilisecondsToThreeFixedDigitsSecondsString (int timeInMS)
+        public static string CreateThreeFixedDigitsSecondsString(int timeInMs)
         {
-            int SSSInt = timeInMS / 1000;
-            int MMMInt = timeInMS % 1000;
+            if (timeInMs < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(timeInMs), "Provided time must be non-negative.");
+            }
+
+            int SSSInt = timeInMs / 1000;
+            int MMMInt = timeInMs % 1000;
 
             string SSSString;
             string MMMString;
@@ -234,7 +197,7 @@ namespace acc_hotrun_run_compare
                 MMMString = MMMInt.ToString();
             else if (MMMInt <= 99 && MMMInt >= 10)
                 MMMString = "0" + MMMInt.ToString(); //one whitespace
-            else 
+            else
                 MMMString = "00" + MMMInt.ToString(); //two whitespaces
 
             //Only display times up to 999.999 seconds
@@ -246,11 +209,60 @@ namespace acc_hotrun_run_compare
                 SSSString = SSSInt.ToString();
             else if (SSSInt <= 99 && SSSInt >= 10)
                 SSSString = " " + SSSInt.ToString(); //one whitespace
-            else 
+            else
                 SSSString = "  " + SSSInt.ToString(); //two whitespaces
 
 
             return SSSString + "." + MMMString;
+        }
+
+        /// <summary>
+        /// Creates a string representation of a time difference value.
+        /// -50 -> -0.050
+        /// 1040 -> +1.040
+        /// 0 -> ±0.000
+        /// </summary>
+        /// <param name="timeDifferenceValueInMs">Time in ms</param>
+        /// <returns>A string with a representation of the time difference</returns>
+        public static string CreateTimeDifferenceString(int timeDifferenceValueInMs)
+        {
+            int absoluteTimeDifferenceValue = Math.Abs(timeDifferenceValueInMs);
+            bool isNegativeValue = (timeDifferenceValueInMs < 0);
+            if (absoluteTimeDifferenceValue == 0)
+            {
+                return "±0.000";
+            }
+            string milisecondsString;
+            string secondsString;
+            int milisecondsValue = absoluteTimeDifferenceValue % 1000;
+            int secondsValue = absoluteTimeDifferenceValue / 1000;
+
+            string signString;
+            if (isNegativeValue)
+            {
+                signString = "-";
+            }
+            else
+            {
+                signString = "+";
+            }
+
+            if (milisecondsValue >= 0 && milisecondsValue <= 9)
+            {
+                milisecondsString = "00" + milisecondsValue.ToString();
+            }
+            else if (milisecondsValue >= 10 && milisecondsValue <= 99)
+            {
+                milisecondsString = "0" + milisecondsValue.ToString();
+            }
+            else
+            {
+                milisecondsString = milisecondsValue.ToString();
+            }
+
+            secondsString = secondsValue.ToString();
+
+            return signString + secondsString + "." + milisecondsString;
         }
     }
 }

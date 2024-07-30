@@ -21,13 +21,14 @@ namespace acc_hotrun_run_compare.GameListener
 
         private readonly RunAnalyzer runAnalyzerInstance = new();
 
-        
+
 
         /// <summary>
         /// Initializer for the ACCGameStateReader. Invoked by the main form. 
         /// </summary>
         /// <param name="form"></param>
-        public ACCGameStateReader(MainForm form) {
+        public ACCGameStateReader(MainForm form)
+        {
 
             formContext = form;
             debugMessageQueue = formContext.AccDebugMsgListenerQueue;
@@ -41,7 +42,8 @@ namespace acc_hotrun_run_compare.GameListener
         /// <summary>
         /// The main function to read the ACC game state. Runs as its own thread. Has an infinite loop to read the game state.
         /// </summary>
-        public void Start() {
+        public void Start()
+        {
 
             //string accPhysicsPageName = "Local\\acpmf_physics"; not needed
             string accGraphicsPageName = "Local\\acpmf_graphics";
@@ -264,7 +266,7 @@ namespace acc_hotrun_run_compare.GameListener
         /// remaining session time, completed laps number). 
         /// </summary>
         /// <param name="sharedMemoryGraphic"></param>
-        private void RunAnalyzerGraphics (SharedMemoryGraphics sharedMemoryGraphic) 
+        private void RunAnalyzerGraphics(SharedMemoryGraphics sharedMemoryGraphic)
         {
             //Move needed data into the RunAnalyzer
             int currentSectorIndex = sharedMemoryGraphic.currentSectorIndex;
@@ -291,7 +293,7 @@ namespace acc_hotrun_run_compare.GameListener
                 int sectorIndex = runAnalyzerInstance.AnalyzedLastSectorIndex;
                 GetSectorDataAndSendToMainForm(sectorTime, sectorIndex);
                 runAnalyzerInstance.SectorChanged = false;
-                
+
             }
 
             //Run after each lap change
@@ -400,13 +402,13 @@ namespace acc_hotrun_run_compare.GameListener
         private void GetLapDataAndSendToMainForm(int finishedLapTime, bool wasLastLap, int newLapNumber)
         {
             string endFinishedLapConstruct;
-            string endFinishedLapTime = TimeFormatter.ConvertMilisecondsToMinutesString(finishedLapTime);
+            string endFinishedLapTime = TimeFormatter.CreateMinutesString(finishedLapTime);
             endFinishedLapConstruct = "lapend|" + endFinishedLapTime;
             debugMessageQueue.Enqueue(endFinishedLapConstruct + "\r\n");
             currentRunInformationQueue.Enqueue(endFinishedLapConstruct);
 
-            if (!wasLastLap) 
-            { 
+            if (!wasLastLap)
+            {
                 string beginNewLapString;
                 beginNewLapString = "lapstart|" + newLapNumber.ToString();
                 debugMessageQueue.Enqueue(beginNewLapString + "\r\n");

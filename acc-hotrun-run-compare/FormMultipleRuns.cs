@@ -220,7 +220,7 @@ namespace acc_hotrun_run_compare
 
                 Label sectorLabel = new()
                 {
-                    Text = TimeFormatter.ConvertMilisecondsToThreeFixedDigitsSecondsString(sector.DrivenSectorTime),
+                    Text = TimeFormatter.CreateThreeFixedDigitsSecondsString(sector.DrivenSectorTime),
                     Size = new Size(SIZE_X_SECTORTIME, SIZE_Y_SINGLELINE),
                     Visible = true,
                     Location = new Point(OFFSET_X_FIRST_SECTORTIME, OFFSET_Y_FIRST_SECTORTIME + OFFSET_Y_LAP * sector.LapNumber + OFFSET_Y_EACH_SECTOR * sector.SectorIndex),
@@ -234,7 +234,7 @@ namespace acc_hotrun_run_compare
             {
                 Label lapLabel = new()
                 {
-                    Text = TimeFormatter.ConvertMilisecondsToMinutesString(lapTimes[i]),
+                    Text = TimeFormatter.CreateMinutesString(lapTimes[i]),
                     Size = new Size(SIZE_X_LAPTIME, SIZE_Y_SINGLELINE),
                     Visible = true,
                     Location = new Point(OFFSET_X_FIRST_LAPTIME, OFFSET_Y_FIRST_LAPTIME + OFFSET_Y_LAP * i),
@@ -244,7 +244,7 @@ namespace acc_hotrun_run_compare
 
             //Calculate cumulative lap times
             cumulativeLapTimesCurrentRun[0] = lapTimes[0];
-            for (int i = 1; i < lapTimes.Length; i++) 
+            for (int i = 1; i < lapTimes.Length; i++)
             {
                 cumulativeLapTimesCurrentRun[i] = cumulativeLapTimesCurrentRun[i - 1] + lapTimes[i];
             }
@@ -255,8 +255,8 @@ namespace acc_hotrun_run_compare
             {
                 for (int i = 0; i < cumulativeLapTimesCurrentRun.Length; i++)
                 {
-                    string timeString = TimeFormatter.ConvertMilisecondsToMinutesString(cumulativeLapTimesCurrentRun[i]);
-                    string formattedTimeString = (cumulativeLapTimesCurrentRun[i] < 600000)? " " + timeString : timeString;
+                    string timeString = TimeFormatter.CreateMinutesString(cumulativeLapTimesCurrentRun[i]);
+                    string formattedTimeString = (cumulativeLapTimesCurrentRun[i] < 600000) ? " " + timeString : timeString;
                     Label cumulativeLapTimeLabel = new()
                     {
                         Text = formattedTimeString,
@@ -267,7 +267,7 @@ namespace acc_hotrun_run_compare
                     };
                     box.Controls.Add(cumulativeLapTimeLabel);
                 }
-            } 
+            }
             else //Add labels for comparing to cumulative times of the fastest run
             {
                 for (int i = 0; i < cumulativeLapTimesCurrentRun.Length; i++)
@@ -284,7 +284,7 @@ namespace acc_hotrun_run_compare
                         color = Color.DarkGreen;
                     }
 
-                    string timeDifferenceString = CreateTimeDifferenceString(timeDifferenceValue);
+                    string timeDifferenceString = TimeFormatter.CreateTimeDifferenceString(timeDifferenceValue);
 
                     Label timeDifferenceLabel = new()
                     {
@@ -294,7 +294,7 @@ namespace acc_hotrun_run_compare
                         Location = new Point(OFFSET_X_FIRST_TIMEDIFFERENCE, OFFSET_Y_FIRST_TIMEDIFFERENCE + i * OFFSET_Y_LAP),
                         Size = new Size(SIZE_X_TIMEDIFFERENCE, SIZE_Y_SINGLELINE)
                     };
-                    
+
                     box.Controls.Add(timeDifferenceLabel);
                 }
             }
@@ -320,57 +320,13 @@ namespace acc_hotrun_run_compare
             CumulativeLapTimesFastestRun[0] = tempArrayLapTimes[0];
 
             //Make a cumulative array
-            for (int i = 1; i < tempArrayLapTimes.Length; i++) 
+            for (int i = 1; i < tempArrayLapTimes.Length; i++)
             {
                 CumulativeLapTimesFastestRun[i] = tempArrayLapTimes[i] + CumulativeLapTimesFastestRun[i - 1];
             }
         }
 
-        /// <summary>
-        /// Creates a string representation of a time difference value.
-        /// -50 -> -0.050
-        /// 1040 -> +1.040
-        /// 0 -> ±0.000
-        /// </summary>
-        /// <param name="timeDifferenceValue">Time in ms</param>
-        /// <returns>A string with a representation of the time difference</returns>
-        private string CreateTimeDifferenceString(int timeDifferenceValue)
-        {
-            int absoluteTimeDifferenceValue = Math.Abs(timeDifferenceValue);
-            bool isNegativeValue = (timeDifferenceValue < 0);
-            if (absoluteTimeDifferenceValue == 0)
-            {
-                return "±0.000";
-            }
-            string milisecondsString;
-            string secondsString;
-            int milisecondsValue = absoluteTimeDifferenceValue % 1000;  
-            int secondsValue = absoluteTimeDifferenceValue / 1000;
 
-            string signString;
-            if (isNegativeValue)
-            {
-                signString = "-";
-            } else
-            {
-                signString = "+";
-            }
-
-            if (milisecondsValue >= 0 && milisecondsValue <= 9)
-            {
-                milisecondsString = "00" + milisecondsValue.ToString();
-            } else if (milisecondsValue >= 10 && milisecondsValue <= 99)
-            {
-                milisecondsString = "0" + milisecondsValue.ToString();
-            } else
-            {
-                milisecondsString = milisecondsValue.ToString();
-            }
-
-            secondsString = secondsValue.ToString();
-
-            return signString + secondsString + "." + milisecondsString;
-        }
 
         private void CreateRunInformationLabel(Panel box, RunInformation providedRun)
         {
@@ -379,8 +335,8 @@ namespace acc_hotrun_run_compare
                 Location = new Point(0, 0),
                 Size = new Size(box.Width, SIZE_Y_THREELINES),
                 Visible = true,
-                Text = providedRun.CarName 
-                + "\r\nTotal time: " + TimeFormatter.FormatMilisecondsToHourString(providedRun.DrivenTime)
+                Text = providedRun.CarName
+                + "\r\nTotal time: " + TimeFormatter.CreateHoursString(providedRun.DrivenTime)
                 + "\r\n" + providedRun.RunCreatedDateTime.ToString()
             };
             box.Controls.Add(runInformationLabel);
