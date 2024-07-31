@@ -1,6 +1,10 @@
-﻿using acc_hotrun_run_compare;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace acc-hotrun-run-compare.Tests
+namespace acc_hotrun_run_compare.Tests
 {
     /// <summary>
     /// The class containing tests for the TimeFormatter class
@@ -8,7 +12,7 @@ namespace acc-hotrun-run-compare.Tests
     [TestFixture]
     public class TimeFormatterTests
     {
-        
+
         [TestCase(0, "-:-0:00.000")]
         [TestCase(1, "-:-0:00.001")]
         [TestCase(10, "-:-0:00.010")]
