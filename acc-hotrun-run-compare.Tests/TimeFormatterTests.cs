@@ -103,5 +103,13 @@ namespace acc_hotrun_run_compare.Tests
             Assert.That(actualResultString, Is.EqualTo(expectedResultTimeString));
         }
 
+        [Test]
+        public void Test_CreateThreeFixedDigitsSecondsString_NegativeValue()
+        {
+            int timeInMs = -1;
+
+            Assert.That(() => TimeFormatter.CreateThreeFixedDigitsSecondsString(timeInMs), Throws.Exception);
+        }
+
     }
 }
