@@ -34,7 +34,7 @@ namespace acc_hotrun_run_compare.DBClasses
             DrivenSectorTime = drivenTime;
         }
 
-        public static List<SectorInformation> SortListSectorInformation(List<SectorInformation> list)
+        public static List<SectorInformation> SortAndVerifyListSectorInformation(List<SectorInformation> list)
         {
             if (list == null)
             {
