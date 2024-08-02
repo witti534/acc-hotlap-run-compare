@@ -265,6 +265,8 @@ namespace acc_hotrun_run_compare.GameListener
                 totalDrivenTime += sectorInfo.DrivenSectorTime;
             }
 
+            sectors = SectorInformation.SortListSectorInformation(sectors);
+
             int fastestLap = GetFastestLap(sectors);
 
             int totalSessionLength = (int)SessionLengthGuess;

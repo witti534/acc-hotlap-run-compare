@@ -33,5 +33,35 @@ namespace acc_hotrun_run_compare.DBClasses
             SectorIndex = sector;
             DrivenSectorTime = drivenTime;
         }
+
+        public static List<SectorInformation> SortListSectorInformation(List<SectorInformation> list)
+        {
+            if (list == null)
+            {
+                throw new ArgumentException("IllegalArgumentException: Provided list of SectorInformation is null.");
+            }
+
+            SectorInformation[] sectorArrayToBeSorted = new SectorInformation[list.Count];
+
+            foreach (SectorInformation sector in list)
+            {
+                int lapSectorIndex = sector.LapNumber * 3 + sector.SectorIndex;
+
+                if (sectorArrayToBeSorted[lapSectorIndex] != null)
+                {
+                    throw new Exception("Error in List<SectorInformation>: Multiple occurances of same lap/sector combination. There should only be one.");
+                }
+                if (lapSectorIndex >= sectorArrayToBeSorted.Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(list), "Sector list is not continuous from lap 0 sector 0 towards last lap sector 2.");
+                }
+
+                sectorArrayToBeSorted[lapSectorIndex] = sector;
+            }
+
+            List<SectorInformation> returnList = new(sectorArrayToBeSorted);
+
+            return returnList;
+        }
     }
 }
