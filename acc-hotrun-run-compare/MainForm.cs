@@ -10,7 +10,7 @@ namespace acc_hotrun_run_compare
     /// </summary>
     public partial class MainForm : Form
     {
-        public const string VERSION = "0.1.4";
+        public const string VERSION = "0.1.5";
 
 
         public StoredRunContext dbStoredRunsContext = new();

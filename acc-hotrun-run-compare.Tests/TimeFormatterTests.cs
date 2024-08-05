@@ -103,5 +103,44 @@ namespace acc_hotrun_run_compare.Tests
             Assert.That(actualResultString, Is.EqualTo(expectedResultTimeString));
         }
 
+        [Test]
+        public void Test_CreateThreeFixedDigitsSecondsString_NegativeValue()
+        {
+            int timeInMs = -1;
+
+            Assert.That(() => TimeFormatter.CreateThreeFixedDigitsSecondsString(timeInMs), Throws.Exception);
+        }
+
+
+
+        [TestCase(0, "±0.000")]
+        [TestCase(1, "+0.001")]
+        [TestCase(-1, "-0.001")]
+        [TestCase(10, "+0.010")]
+        [TestCase(-10, "-0.010")]
+        [TestCase(11, "+0.011")]
+        [TestCase(-11, "-0.011")]
+        [TestCase(100, "+0.100")]
+        [TestCase(-100, "-0.100")]
+        [TestCase(101, "+0.101")]
+        [TestCase(-101, "-0.101")]
+        [TestCase(110, "+0.110")]
+        [TestCase(-110, "-0.110")]
+        [TestCase(111, "+0.111")]
+        [TestCase(-111, "-0.111")]
+        [TestCase(1000, "+1.000")]
+        [TestCase(-1000, "-1.000")]
+        [TestCase(1010, "+1.010")]
+        [TestCase(-1010, "-1.010")]
+        [TestCase(10000, "+10.000")]
+        [TestCase(-10000, "-10.000")]
+        [TestCase(60000, "+60.000")]
+        [TestCase(-60000, "-60.000")]
+        public void Test_CreateTimeDifferenceString(int timeInMs, string expectedResultTimeString)
+        {
+            var actualResultString = TimeFormatter.CreateTimeDifferenceString(timeInMs);
+
+            Assert.That(actualResultString, Is.EqualTo(expectedResultTimeString));
+        }
     }
 }
