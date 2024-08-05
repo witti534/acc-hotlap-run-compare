@@ -295,7 +295,7 @@ namespace acc_hotrun_run_compare.GameListener
             lastLap = false;
             SessionLengthGuess = ACCEnums.ACC_HOTSTINT_SESSION_LENGTH.INVALID;
             sessionLengthGuessed = false;
-            sectors.Clear();
+            sectors = new List<SectorInformation>();
 
             trackName = "DEBUG_STRING_TRACK";
 
