@@ -543,10 +543,13 @@
 
         private void InitializeLabelsOnCurrentRunTab()
         {
-            labelCurrentRunInfo.Text = "Track:\r\nCar:\r\nSession Length:";
+            labelCurrentRunInfo.Text = "Track: ...\r\nCar: ...\r\nSession Length: ...";
             labelCurrentRunLaps.Text = "";
             labelRunData.Text = "";
             labelCurrentRunSectors.Text = "Start a run in the ACC Hostint \r\ngamemode to begin data collection.";
+            labelTimeDifferenceFasterValue.Text = "...";
+            labelTimeDifferenceFastestValue.Text = "...";
+            labelPositionValue.Text = "Waiting...";
         }
 
         private GroupBox debugBox;
