@@ -11,6 +11,9 @@
   </PropertyGroup>
   
   <ItemGroup>
+	  <Content Include="version.xml">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="8.0.7" />

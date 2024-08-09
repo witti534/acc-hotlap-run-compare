@@ -1,7 +1,10 @@
 using acc_hotrun_run_compare.DBClasses;
 using acc_hotrun_run_compare.GameListener;
 using System.Collections.Concurrent;
+using System.Configuration;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace acc_hotrun_run_compare
 {
@@ -10,7 +13,7 @@ namespace acc_hotrun_run_compare
     /// </summary>
     public partial class MainForm : Form
     {
-        public const string VERSION = "0.1.5";
+        public string Version = "0.0.1-error"; //Default value for Version in case something goes wrong
 
 
         public StoredRunContext dbStoredRunsContext = new();
@@ -30,6 +33,7 @@ namespace acc_hotrun_run_compare
 
         public MainForm()
         {
+            InitializeVersion();
             InitializeComponent();
             InitializeDebugBox();
             InitialzeOrderByCheckBox();
@@ -38,7 +42,7 @@ namespace acc_hotrun_run_compare
             tabCompareRuns = new TabCompareRuns(dbStoredRunsContext);
             tabDebug = new TabDebug(dbStoredRunsContext);
             tabCurrentRun = new TabCurrentRun(dbStoredRunsContext);
-            labelVersion.Text = "Version: " + VERSION;
+            labelVersion.Text = "Version: " + Version;
         }
 
 
@@ -292,6 +296,21 @@ namespace acc_hotrun_run_compare
         private void ButtonCompareRuns_Click(object sender, EventArgs e)
         {
             tabCompareRuns.ShowRuns(panelDisplayRuns);
+        }
+
+        private void InitializeVersion()
+        {
+            XmlReader xmlReader = XmlReader.Create("version.xml");
+
+            try
+            {
+                xmlReader.MoveToContent();
+                Version = xmlReader.ReadElementContentAsString();
+            }
+            finally
+            {
+                xmlReader?.Close();
+            }
         }
     }
 }
