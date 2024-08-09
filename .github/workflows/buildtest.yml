@@ -35,7 +35,7 @@ jobs:
       id: getxmlversion
       uses: mavrosxristoforos/get-xml-info@2.0 
       with:
-        xml-file: '.\acc-hotrun-run-compare\version.xml'
+        xml-file: '.\version.xml'
         xpath: '//version'
 
     - name: Echo version
