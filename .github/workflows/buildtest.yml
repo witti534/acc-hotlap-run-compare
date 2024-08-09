@@ -26,10 +26,23 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore   
       
     - name: Build
       run: dotnet build .\acc-hotrun-run-compare\acc-hotrun-run-compare.csproj
+
+    - name: Get XML Info
+      id: getxmlversion
+      uses: mavrosxristoforos/get-xml-info@2.0 
+      with:
+        xml-file: '.\acc-hotrun-run-compare\version.xml'
+        xpath: '//version'
+
+    - name: Echo version
+      env: 
+        VERSION_CONTEXT: ${{ steps.getxmlversion.outputs.info }}
+      run: echo "$VERSION_CONTEXT"
+      
     
-    - name: Test
+    - name: Automatic testing
       run: dotnet test
