@@ -56,4 +56,4 @@ jobs:
         release_name: ${{ steps.getxmlversion.outputs.info }}
         body: New release with version ${{ steps.getxmlversion.outputs.info }}
         draft: false
-        prereleae: false
+        prerelease: false
