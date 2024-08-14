@@ -1,4 +1,4 @@
-name: build
+name: buildandrelease
 
 on:
   push:
@@ -42,7 +42,18 @@ jobs:
       env: 
         VERSION_CONTEXT: ${{ steps.getxmlversion.outputs.info }}
       run: echo "$VERSION_CONTEXT"
-      
     
     - name: Automatic testing
       run: dotnet test
+
+    - name: Release version
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: release
+        release_name: ${{ steps.getxmlversion.outputs.info }}
+        body: New release with version ${{ steps.getxmlversion.outputs.info }}
+        draft: false
+        prereleae: false
