@@ -47,7 +47,7 @@ jobs:
       run: dotnet test
 
     - name: Release version
-      id: create_release
+      id: create_release_github
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -56,4 +56,23 @@ jobs:
         release_name: ${{ steps.getxmlversion.outputs.info }}
         body: New release with version ${{ steps.getxmlversion.outputs.info }}
         draft: false
-        prerelease: false
+        prerelease: true
+
+    - name: Create Release Build
+      id: create_release_build
+      run: dotnet publish --output "./bin/release" --runtime win-x64 --configuration Release -p:PusblishSingleFile=true
+
+    - name: Create zip file of release
+      id: create_release_file
+      run: tar.exe -czvf releasefile.zip -C "./bin/release"
+
+    - name: Push release zip to GitHub
+      id: publish_release_file
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release_github.outputs.upload_url }}
+        asset_path: releasefile.zip
+        asset_name: release_v${{ steps.getxmlversion.outputs.info }}.zip
+        asset_content_type: application/zip
