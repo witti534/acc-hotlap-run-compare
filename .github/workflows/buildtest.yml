@@ -64,7 +64,8 @@ jobs:
 
     - name: Create zip file of release
       id: create_release_file
-      run: tar.exe -czvf releasefile.zip -C "./bin/release"
+      shell: pwsh
+      run: Compress-Archive bin/release/* releasefile.zip
 
     - name: Push release zip to GitHub
       id: publish_release_file
