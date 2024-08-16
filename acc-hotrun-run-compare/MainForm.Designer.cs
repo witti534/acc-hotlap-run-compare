@@ -70,6 +70,8 @@
             comboBoxTrackSelector = new ComboBox();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
+            buttonExportSelectedRuns = new Button();
+            buttonImportRuns = new Button();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -334,6 +336,8 @@
             // 
             // tabPageCompareRuns
             // 
+            tabPageCompareRuns.Controls.Add(buttonImportRuns);
+            tabPageCompareRuns.Controls.Add(buttonExportSelectedRuns);
             tabPageCompareRuns.Controls.Add(ButtonCompareRuns);
             tabPageCompareRuns.Controls.Add(buttonDeleteSelectedRuns);
             tabPageCompareRuns.Controls.Add(sortRunsByComboBox);
@@ -358,7 +362,7 @@
             ButtonCompareRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ButtonCompareRuns.Location = new Point(279, 113);
             ButtonCompareRuns.Name = "ButtonCompareRuns";
-            ButtonCompareRuns.Size = new Size(255, 27);
+            ButtonCompareRuns.Size = new Size(226, 27);
             ButtonCompareRuns.TabIndex = 11;
             ButtonCompareRuns.Text = "Show Selected Run(s)";
             ButtonCompareRuns.UseVisualStyleBackColor = true;
@@ -367,9 +371,9 @@
             // buttonDeleteSelectedRuns
             // 
             buttonDeleteSelectedRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonDeleteSelectedRuns.Location = new Point(540, 113);
+            buttonDeleteSelectedRuns.Location = new Point(511, 113);
             buttonDeleteSelectedRuns.Name = "buttonDeleteSelectedRuns";
-            buttonDeleteSelectedRuns.Size = new Size(255, 27);
+            buttonDeleteSelectedRuns.Size = new Size(226, 27);
             buttonDeleteSelectedRuns.TabIndex = 10;
             buttonDeleteSelectedRuns.Text = "Delete Selected Runs";
             buttonDeleteSelectedRuns.UseVisualStyleBackColor = true;
@@ -501,6 +505,27 @@
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
             // 
+            // buttonExportSelectedRuns
+            // 
+            buttonExportSelectedRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            buttonExportSelectedRuns.Location = new Point(743, 113);
+            buttonExportSelectedRuns.Name = "buttonExportSelectedRuns";
+            buttonExportSelectedRuns.Size = new Size(226, 27);
+            buttonExportSelectedRuns.TabIndex = 12;
+            buttonExportSelectedRuns.Text = "Export Selected Runs";
+            buttonExportSelectedRuns.UseVisualStyleBackColor = true;
+            buttonExportSelectedRuns.Click += ButtonExportSelectedRuns_Click;
+            // 
+            // buttonImportRuns
+            // 
+            buttonImportRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            buttonImportRuns.Location = new Point(975, 114);
+            buttonImportRuns.Name = "buttonImportRuns";
+            buttonImportRuns.Size = new Size(226, 27);
+            buttonImportRuns.TabIndex = 13;
+            buttonImportRuns.Text = "Import Runs";
+            buttonImportRuns.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -590,5 +615,7 @@
         private Label labelTimeDifferenceFastestValue;
         private Label labelTimeDifferenceFasterValue;
         private Label label2;
+        private Button buttonImportRuns;
+        private Button buttonExportSelectedRuns;
     }
 }

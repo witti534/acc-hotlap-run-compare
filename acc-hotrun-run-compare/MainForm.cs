@@ -312,5 +312,10 @@ namespace acc_hotrun_run_compare
                 xmlReader?.Close();
             }
         }
+
+        private void ButtonExportSelectedRuns_Click(object sender, EventArgs e)
+        {
+            tabCompareRuns.ExportRunsEntryFunction(panelDisplayRuns);
+        }
     }
 }

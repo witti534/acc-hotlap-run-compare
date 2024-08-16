@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace acc_hotrun_run_compare
 {
@@ -271,7 +272,7 @@ namespace acc_hotrun_run_compare
         /// This function is being called from the main form.
         /// It reads the selected checkboxes from the 
         /// </summary>
-        /// <param name="panelWithRuns"></param>
+        /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
         public void ShowRuns(Panel panelWithRuns)
         {
             List<int> selectedRuns = GetSelectedRunIDs(panelWithRuns);
@@ -307,6 +308,46 @@ namespace acc_hotrun_run_compare
                 Form multipleRunsForm = new FormMultipleRuns(runs, StoredRunContext);
                 multipleRunsForm.Show();
             }
+        }
+
+        /// <summary>
+        /// This function serves as the entry point to export runs. It reads all selected runs from the Panel panelWithRuns. 
+        /// </summary>
+        /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
+        public void ExportRunsEntryFunction(Panel panelWithRuns)
+        {
+            List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+
+            if (selectedRunIDs.Count == 0)
+            {
+                MessageBox.Show("No runs were selected.");
+            }
+            else //Count >= 1
+            {
+                //Open a FileDialog so the user can select a folder where to export runs to
+                CommonOpenFileDialog folderDialog = new CommonOpenFileDialog();
+                folderDialog.IsFolderPicker = true;
+
+                if (folderDialog.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    string saveLocation = folderDialog.FileName;
+
+                    foreach (int runID in selectedRunIDs)
+                    {
+                        CreateAndSaveSingleRunSaveFile(runID, saveLocation);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// This function creates and saves a single run save file
+        /// </summary>
+        /// <param name="runID"></param>
+        /// <param name="saveLocation"></param>
+        private void CreateAndSaveSingleRunSaveFile(int runID, string saveLocation)
+        {
+            //TODO
         }
     }
 }
