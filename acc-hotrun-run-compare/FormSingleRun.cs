@@ -14,7 +14,7 @@ namespace acc_hotrun_run_compare
     public partial class FormSingleRun : Form
     {
         RunInformation providedRun;
-        StoredRunContext storedRunContext;
+        StoredRunContext storedRunContext = StoredRunContext.GetInstance();
 
         const int XOFFSETLAPNUMBER = 17;
         const int XOFFSETLAPTIME = 124;
@@ -33,11 +33,10 @@ namespace acc_hotrun_run_compare
         const int SIZEXLABELLAPTIME = 89;
         const int SIZEYLABEL = 19;
 
-        public FormSingleRun(RunInformation providedRun, StoredRunContext storedRunContext)
+        public FormSingleRun(RunInformation providedRun)
         {
             InitializeComponent();
             this.providedRun = providedRun;
-            this.storedRunContext = storedRunContext;
             DeleteDesignLabels();
             FillUpRunInformation();
             FillUpSectorAndLapInformation();

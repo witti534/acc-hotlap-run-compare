@@ -12,9 +12,9 @@ namespace acc_hotrun_run_compare
     /// <summary>
     /// This class contains functions for the debug tab.
     /// </summary>
-    internal class TabDebug(StoredRunContext storedRunContext)
+    internal class TabDebug()
     {
-        readonly StoredRunContext StoredRunContext = storedRunContext;
+        readonly StoredRunContext StoredRunContext = StoredRunContext.GetInstance();
         readonly Random RandomNumberGenerator = new();
 
         /// <summary>

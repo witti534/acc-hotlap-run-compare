@@ -4,17 +4,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace acc_hotrun_run_compare.DBClasses;
 
-public partial class StoredRunContext : DbContext
+public sealed partial class StoredRunContext : DbContext
 {
     public DbSet<RunInformation> RunInformationSet { get; set; }
-    public DbSet<SectorInformation> SectorInformationSet { get; set; } 
+    public DbSet<SectorInformation> SectorInformationSet { get; set; }
 
+    private static StoredRunContext Instance = null;
     /// <summary>
     /// This class gives the whole context needed to store RunInformation and SectorInformation objects
     /// </summary>
-    public StoredRunContext()
+    private StoredRunContext()
     {
         Database.EnsureCreated();
+    }
+
+    public static StoredRunContext GetInstance()
+    {
+        //If Instance == null, create a new StoredRunContext
+        Instance ??= new StoredRunContext();
+
+        return Instance;
     }
 
     public StoredRunContext(DbContextOptions<StoredRunContext> options)
