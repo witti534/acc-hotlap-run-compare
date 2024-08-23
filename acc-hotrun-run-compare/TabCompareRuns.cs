@@ -317,6 +317,7 @@ namespace acc_hotrun_run_compare
         public void ExportRunsEntryFunction(Panel panelWithRuns)
         {
             List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+            //Get a list of each runID of all selected runs
 
             if (selectedRunIDs.Count == 0)
             {
@@ -325,8 +326,10 @@ namespace acc_hotrun_run_compare
             else //Count >= 1
             {
                 //Open a FileDialog so the user can select a folder where to export runs to
-                CommonOpenFileDialog folderDialog = new CommonOpenFileDialog();
-                folderDialog.IsFolderPicker = true;
+                CommonOpenFileDialog folderDialog = new CommonOpenFileDialog
+                {
+                    IsFolderPicker = true
+                };
 
                 if (folderDialog.ShowDialog() == CommonFileDialogResult.Ok)
                 {
@@ -334,20 +337,33 @@ namespace acc_hotrun_run_compare
 
                     foreach (int runID in selectedRunIDs)
                     {
-                        CreateAndSaveSingleRunSaveFile(runID, saveLocation);
+                        RunImportAndExport.ExportSingleRun(runID, saveLocation);
                     }
                 }
             }
-        }
+        } //function ExportRunsEntryFunction
+
 
         /// <summary>
-        /// This function creates and saves a single run save file
+        /// 
         /// </summary>
-        /// <param name="runID"></param>
-        /// <param name="saveLocation"></param>
-        private void CreateAndSaveSingleRunSaveFile(int runID, string saveLocation)
+        /// <param name="panelWithRuns"></param>
+        public void ImportRunsEntryFunction(Panel panelWithRuns)
         {
-            //TODO
-        }
-    }
-}
+            CommonOpenFileDialog fileDialog = new CommonOpenFileDialog
+            {
+                Multiselect = true
+            };
+
+            if (fileDialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                List<string> fileLocations = fileDialog.FileNames.ToList();
+                foreach (string fileLocation in fileLocations)
+                {
+                    RunImportAndExport.ImportSingleRun(fileLocation);
+                }
+            }
+
+        } //function ImportRunsEntryFunction
+    } //class
+} //namespace

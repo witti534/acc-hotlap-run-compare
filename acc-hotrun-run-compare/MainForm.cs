@@ -317,5 +317,10 @@ namespace acc_hotrun_run_compare
         {
             tabCompareRuns.ExportRunsEntryFunction(panelDisplayRuns);
         }
+
+        private void buttonImportRuns_Click(object sender, EventArgs e)
+        {
+            tabCompareRuns.ImportRunsEntryFunction(panelDisplayRuns);
+        }
     }
 }
