@@ -56,7 +56,7 @@ jobs:
         release_name: ${{ steps.getxmlversion.outputs.info }}
         body: New release with version ${{ steps.getxmlversion.outputs.info }}
         draft: false
-        prerelease: true
+        prerelease: false
 
     - name: Create Release Build
       id: create_release_build
