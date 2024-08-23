@@ -52,7 +52,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: release
+        tag_name: release${{ steps.getxmlversion.outputs.info }}
         release_name: ${{ steps.getxmlversion.outputs.info }}
         body: New release with version ${{ steps.getxmlversion.outputs.info }}
         draft: false
