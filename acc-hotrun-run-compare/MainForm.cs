@@ -16,7 +16,7 @@ namespace acc_hotrun_run_compare
         public string Version = "0.0.1-error"; //Default value for Version in case something goes wrong
 
 
-        public StoredRunContext dbStoredRunsContext = new();
+        public StoredRunContext dbStoredRunsContext = StoredRunContext.GetInstance();
         private readonly Random DebugRNGProvider = new();
         public Thread AccListenerThread { get; private set; }
         private ACCGameStateReader AccListener { get; set; }
@@ -39,9 +39,9 @@ namespace acc_hotrun_run_compare
             InitialzeOrderByCheckBox();
             InitializeLabelsOnCurrentRunTab();
             timer1.Enabled = true;
-            tabCompareRuns = new TabCompareRuns(dbStoredRunsContext);
-            tabDebug = new TabDebug(dbStoredRunsContext);
-            tabCurrentRun = new TabCurrentRun(dbStoredRunsContext);
+            tabCompareRuns = new TabCompareRuns();
+            tabDebug = new TabDebug();
+            tabCurrentRun = new TabCurrentRun();
             labelVersion.Text = "Version: " + Version;
         }
 
@@ -311,6 +311,16 @@ namespace acc_hotrun_run_compare
             {
                 xmlReader?.Close();
             }
+        }
+
+        private void ButtonExportSelectedRuns_Click(object sender, EventArgs e)
+        {
+            tabCompareRuns.ExportRunsEntryFunction(panelDisplayRuns);
+        }
+
+        private void buttonImportRuns_Click(object sender, EventArgs e)
+        {
+            tabCompareRuns.ImportRunsEntryFunction(panelDisplayRuns);
         }
     }
 }

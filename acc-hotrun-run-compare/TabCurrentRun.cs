@@ -11,9 +11,9 @@ namespace acc_hotrun_run_compare
     /// <summary>
     /// This class contains functions for the current run tab. 
     /// </summary>
-    internal class TabCurrentRun(StoredRunContext storedRunContext)
+    internal class TabCurrentRun()
     {
-        readonly StoredRunContext StoredRunContext = storedRunContext;
+        readonly StoredRunContext StoredRunContext = StoredRunContext.GetInstance();
 
         List<int[]> cumulativeSectorTimes = [];
         string trackName = "";

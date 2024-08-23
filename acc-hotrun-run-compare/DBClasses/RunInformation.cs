@@ -70,6 +70,19 @@ namespace acc_hotrun_run_compare.DBClasses
             SectorList = [];
             RunDescription = "";
         }
+
+        public RunInformation(string trackName, string carName, int drivenTime, int fastestLap, int sessionTime, bool penaltyOccured, DateTime runCreatedAt, IList<SectorInformation> sectorList)
+        {
+            TrackName = trackName;
+            CarName = carName;
+            DrivenTime = drivenTime;
+            FastestLap = fastestLap;
+            SessionTime = sessionTime;
+            PenaltyOccured = penaltyOccured;
+            RunCreatedDateTime = runCreatedAt;
+            SectorList = sectorList;
+            RunDescription = "";
+        }
     }
 
     public class RunInformationComparerFastestRunFirst : Comparer<RunInformation>

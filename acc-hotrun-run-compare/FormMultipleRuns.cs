@@ -18,7 +18,7 @@ namespace acc_hotrun_run_compare
     public partial class FormMultipleRuns : Form
     {
         List<RunInformation> providedRuns;
-        StoredRunContext storedRunContext;
+        StoredRunContext storedRunContext = StoredRunContext.GetInstance();
 
         // Section for all locations and offsets for all labels
         private readonly int OFFSET_X_ONCE_GENERAL = 13;
@@ -68,10 +68,9 @@ namespace acc_hotrun_run_compare
         /// </summary>
         /// <param name="providedRuns">A list of the runs to be compared. They must have the same track and session length</param>
         /// <param name="storedRunContext">The context to load sector times.</param>
-        public FormMultipleRuns(List<RunInformation> providedRuns, StoredRunContext storedRunContext)
+        public FormMultipleRuns(List<RunInformation> providedRuns)
         {
             this.providedRuns = providedRuns;
-            this.storedRunContext = storedRunContext;
             InitializeComponent();
             DeleteDesignerElements();
             CreateElementsForGeneralInformation();
