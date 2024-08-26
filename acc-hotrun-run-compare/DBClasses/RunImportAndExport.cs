@@ -30,10 +30,10 @@ namespace acc_hotrun_run_compare.DBClasses
         private static StoredRunContext? StoredRunContext = null;
 
         /// <summary>
-        /// This function takes the runID as an argument 
+        /// This is the function to export a single file. The output scheme might change over time, version number implies changes in this scheme. 
         /// </summary>
         /// <param name="runID">The runID as an int</param>
-        /// <param name="saveLocation">The saveLocation on the disk where the run will be exported to</param>
+        /// <param name="saveLocation">The saveLocation (folder) on the disk where the run will be exported to</param>
         public static void ExportSingleRun(int runID, string saveLocation)
         {
             StoredRunContext ??= StoredRunContext.GetInstance(); // Get StoredRunContext singleton if not assigned yet
@@ -56,7 +56,9 @@ namespace acc_hotrun_run_compare.DBClasses
                 );
             }
 
-            DateTimeOffset dateTimeOffset = new DateTimeOffset(runInstance.RunCreatedDateTime);
+            //Create the unix timestap with UTC+0
+            TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
+            DateTimeOffset dateTimeOffset = new DateTimeOffset(runInstance.RunCreatedDateTime, TimeZoneInfo.Local.GetUtcOffset(runInstance.RunCreatedDateTime));
             string unixTimeStampRunCreated = dateTimeOffset.ToUnixTimeSeconds().ToString();
 
             //Create the XDocument with all the data (except runID) from a RunInformation.
@@ -80,13 +82,15 @@ namespace acc_hotrun_run_compare.DBClasses
 
             DateTime dateTime = DateTime.Now;
 
+            //
             String xmlSaveLocation = saveLocation + "\\" + DateTimeOffset.Now.ToUnixTimeSeconds() + "-" + runID + ".xml";
 
             xDocument.Save(xmlSaveLocation);
         }
 
         /// <summary>
-        /// 
+        /// The entry function to import a single run. This function reads the xml file which contains a run and also the version of the xml scheme. 
+        /// It then calls a function depending on the version of the xml scheme to generate a RunInformation + multiple SecterInformation to store that information.
         /// </summary>
         /// <param name="fileLocation">The location on the disk of the file to be loaded</param>
         public static void ImportSingleRun(String fileLocation)
@@ -108,8 +112,6 @@ namespace acc_hotrun_run_compare.DBClasses
                     MessageBox.Show(e.Message);
                 }
             }
-            
-            //TODO Function for importing a run
         }
 
         private static void InterpretXMLFileSchemev1(XElement rootXElement)
@@ -124,7 +126,8 @@ namespace acc_hotrun_run_compare.DBClasses
                 int fastestLap = Int32.Parse(rootXElement.Element(XML_FASTESTLAP_KEY).Value);
                 int sessionTime = Int32.Parse(rootXElement.Element(XML_SESSIONTIME_KEY).Value);
                 DateTimeOffset runCreatedAtOffset = DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(rootXElement.Element(XML_RUNCREATEDTIME_KEY).Value));
-                DateTime runCreatedAt = runCreatedAtOffset.UtcDateTime;
+                DateTime runCreatedAt = runCreatedAtOffset.LocalDateTime;
+                
                 bool penaltyOccured = Boolean.Parse(rootXElement.Element(XML_PENALTYOCCURED_KEY).Value);
 
                 List<SectorInformation> sectorList = [];
