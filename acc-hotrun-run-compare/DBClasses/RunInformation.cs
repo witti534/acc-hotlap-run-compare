@@ -56,6 +56,7 @@ namespace acc_hotrun_run_compare.DBClasses
             PenaltyOccured = penaltyOccured;
             SectorList = sectorList;
             RunCreatedDateTime = DateTime.Now;
+            RunCreatedDateTime = DateTime.SpecifyKind(RunCreatedDateTime, DateTimeKind.Local);
             RunDescription = "";
         }
 
