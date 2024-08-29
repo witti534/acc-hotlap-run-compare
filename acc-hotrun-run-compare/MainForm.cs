@@ -39,7 +39,7 @@ namespace acc_hotrun_run_compare
             InitialzeOrderByCheckBox();
             InitializeLabelsOnCurrentRunTab();
             timer1.Enabled = true;
-            tabCompareRuns = new TabCompareRuns();
+            tabCompareRuns = new TabCompareRuns(panelDisplayRuns, comboBoxTrackSelector, comboBoxCarSelector, comboBoxTimeSelector, checkBoxDisplayRunsWIthPenalties, ComboBoxSortRunsBy);
             tabDebug = new TabDebug();
             tabCurrentRun = new TabCurrentRun();
             labelVersion.Text = "Version: " + Version;
@@ -161,9 +161,8 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxTrackSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string trackName = comboBoxTrackSelector.Text;
             comboBoxCarSelector.Enabled = true;
-            tabCompareRuns.PopulateCarSelector(comboBoxCarSelector, trackName);
+            tabCompareRuns.PopulateCarSelector();
 
             comboBoxTimeSelector.Items.Clear();
             comboBoxTimeSelector.Enabled = false;
@@ -184,9 +183,7 @@ namespace acc_hotrun_run_compare
         private void comboBoxCarSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBoxTimeSelector.Enabled = true;
-            string trackName = comboBoxTrackSelector.Text;
-            string carName = comboBoxCarSelector.Text;
-            tabCompareRuns.PopulateSessionSelector(comboBoxTimeSelector, trackName, carName);
+            tabCompareRuns.PopulateSessionSelector();
             checkBoxDisplayRunsWIthPenalties.Enabled = true;
 
             if (comboBoxTimeSelector.Items.Count == 1)
@@ -205,10 +202,11 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedIndex == 1) //tab for comparing runs
+            if (tabControl1.SelectedTab.Name == "tabPageCompareRuns") //tab for comparing runs
             {
+                
                 //Clear fields and populate TrackSelector
-                tabCompareRuns.PopulateTrackSelector(comboBoxTrackSelector);
+                tabCompareRuns.PopulateTrackSelector();
 
                 //Disable other Selectors
                 comboBoxCarSelector.Items.Clear();
@@ -223,6 +221,7 @@ namespace acc_hotrun_run_compare
                 {
                     comboBoxTrackSelector.SelectedIndex = 0;
                 }
+                
             }
         }
 
@@ -235,19 +234,11 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxTimeSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string trackName = comboBoxTrackSelector.Text;
-            string carName = comboBoxCarSelector.Text;
-            string sessionTime = comboBoxTimeSelector.Text;
-            bool displayRunsWithPenalties = checkBoxDisplayRunsWIthPenalties.Checked;
-            string comparerName = sortRunsByComboBox.Text;
-
             if (comboBoxTimeSelector.Items.Count > 0 || comboBoxTimeSelector.SelectedItem != null)
             {
-                int sessionTimeString = Int32.Parse(sessionTime);
-
                 panelDisplayRuns.Controls.Clear();
 
-                tabCompareRuns.FillUpPanelWithRuns(panelDisplayRuns, trackName, carName, displayRunsWithPenalties, sessionTimeString, comparerName);
+                tabCompareRuns.FillUpPanelWithRuns();
             }
         }
 
@@ -321,6 +312,11 @@ namespace acc_hotrun_run_compare
         private void buttonImportRuns_Click(object sender, EventArgs e)
         {
             tabCompareRuns.ImportRunsEntryFunction(panelDisplayRuns);
+        }
+
+        private void comboBoxTrackSelector_MouseClick(object sender, MouseEventArgs e)
+        {
+            //tabCompareRuns.PopulateTrackSelector();
         }
     }
 }

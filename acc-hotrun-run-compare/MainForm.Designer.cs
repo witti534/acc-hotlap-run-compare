@@ -60,7 +60,7 @@
             buttonExportSelectedRuns = new Button();
             ButtonCompareRuns = new Button();
             buttonDeleteSelectedRuns = new Button();
-            sortRunsByComboBox = new ComboBox();
+            ComboBoxSortRunsBy = new ComboBox();
             labelSortBy = new Label();
             panelDisplayRuns = new Panel();
             checkBoxDisplayRunsWIthPenalties = new CheckBox();
@@ -340,7 +340,7 @@
             tabPageCompareRuns.Controls.Add(buttonExportSelectedRuns);
             tabPageCompareRuns.Controls.Add(ButtonCompareRuns);
             tabPageCompareRuns.Controls.Add(buttonDeleteSelectedRuns);
-            tabPageCompareRuns.Controls.Add(sortRunsByComboBox);
+            tabPageCompareRuns.Controls.Add(ComboBoxSortRunsBy);
             tabPageCompareRuns.Controls.Add(labelSortBy);
             tabPageCompareRuns.Controls.Add(panelDisplayRuns);
             tabPageCompareRuns.Controls.Add(checkBoxDisplayRunsWIthPenalties);
@@ -401,16 +401,16 @@
             buttonDeleteSelectedRuns.UseVisualStyleBackColor = true;
             buttonDeleteSelectedRuns.Click += buttonDeleteSelectedRuns_Click;
             // 
-            // sortRunsByComboBox
+            // ComboBoxSortRunsBy
             // 
-            sortRunsByComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            sortRunsByComboBox.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            sortRunsByComboBox.FormattingEnabled = true;
-            sortRunsByComboBox.Location = new Point(3, 114);
-            sortRunsByComboBox.Name = "sortRunsByComboBox";
-            sortRunsByComboBox.Size = new Size(270, 27);
-            sortRunsByComboBox.TabIndex = 9;
-            sortRunsByComboBox.SelectedIndexChanged += comboBoxTimeSelector_SelectedIndexChanged;
+            ComboBoxSortRunsBy.DropDownStyle = ComboBoxStyle.DropDownList;
+            ComboBoxSortRunsBy.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ComboBoxSortRunsBy.FormattingEnabled = true;
+            ComboBoxSortRunsBy.Location = new Point(3, 114);
+            ComboBoxSortRunsBy.Name = "ComboBoxSortRunsBy";
+            ComboBoxSortRunsBy.Size = new Size(270, 27);
+            ComboBoxSortRunsBy.TabIndex = 9;
+            ComboBoxSortRunsBy.SelectedIndexChanged += comboBoxTimeSelector_SelectedIndexChanged;
             // 
             // labelSortBy
             // 
@@ -510,6 +510,7 @@
             comboBoxTrackSelector.Sorted = true;
             comboBoxTrackSelector.TabIndex = 0;
             comboBoxTrackSelector.SelectedIndexChanged += comboBoxTrackSelector_SelectedIndexChanged;
+            comboBoxTrackSelector.MouseClick += comboBoxTrackSelector_MouseClick;
             // 
             // tabPageDebug
             // 
@@ -559,12 +560,12 @@
 
         private void InitialzeOrderByCheckBox()
         {
-            sortRunsByComboBox.Items.Add(FormStrings.SortByFastestLapShortestFirst);
-            sortRunsByComboBox.Items.Add(FormStrings.SortByFastestLapShortestLast);
-            sortRunsByComboBox.Items.Add(FormStrings.SortByDateOldestFirst);
-            sortRunsByComboBox.Items.Add(FormStrings.SortByDateOldestLast);
-            sortRunsByComboBox.Items.Add(FormStrings.SortByTotalTimeShortestFirst);
-            sortRunsByComboBox.Items.Add(FormStrings.SortByTotalTimeShortestLast);
+            ComboBoxSortRunsBy.Items.Add(FormStrings.SortByFastestLapShortestFirst);
+            ComboBoxSortRunsBy.Items.Add(FormStrings.SortByFastestLapShortestLast);
+            ComboBoxSortRunsBy.Items.Add(FormStrings.SortByDateOldestFirst);
+            ComboBoxSortRunsBy.Items.Add(FormStrings.SortByDateOldestLast);
+            ComboBoxSortRunsBy.Items.Add(FormStrings.SortByTotalTimeShortestFirst);
+            ComboBoxSortRunsBy.Items.Add(FormStrings.SortByTotalTimeShortestLast);
         }
 
         private void InitializeLabelsOnCurrentRunTab()
@@ -601,7 +602,7 @@
         private CheckBox checkBoxDisplayRunsWIthPenalties;
         private Panel panelDisplayRuns;
         private Label labelSortBy;
-        private ComboBox sortRunsByComboBox;
+        private ComboBox ComboBoxSortRunsBy;
         private Button resetDatabase;
         private Label labelCurrentRunInfo;
         private Label labelCurrentRunLaps;
