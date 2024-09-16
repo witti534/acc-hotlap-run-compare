@@ -114,6 +114,11 @@ namespace acc_hotrun_run_compare.DBClasses
             }
         }
 
+        /// <summary>
+        /// This function tries to read the content of an root XML element and parse it into a RunInformation object. 
+        /// Result will be saved into the EF database. 
+        /// </summary>
+        /// <param name="rootXElement">The root element of the XML file to be parsed</param>
         private static void InterpretXMLFileSchemev1(XElement rootXElement)
         {
             StoredRunContext ??= StoredRunContext.GetInstance(); // Get StoredRunContext singleton if not assigned yet
@@ -126,7 +131,7 @@ namespace acc_hotrun_run_compare.DBClasses
                 int fastestLap = Int32.Parse(rootXElement.Element(XML_FASTESTLAP_KEY).Value);
                 int sessionTime = Int32.Parse(rootXElement.Element(XML_SESSIONTIME_KEY).Value);
                 DateTimeOffset runCreatedAtOffset = DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(rootXElement.Element(XML_RUNCREATEDTIME_KEY).Value));
-                DateTime runCreatedAt = runCreatedAtOffset.LocalDateTime;
+                DateTime runCreatedAt = runCreatedAtOffset.LocalDateTime; //Save the time as local time
                 
                 bool penaltyOccured = Boolean.Parse(rootXElement.Element(XML_PENALTYOCCURED_KEY).Value);
 
