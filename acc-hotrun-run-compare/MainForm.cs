@@ -23,6 +23,7 @@ namespace acc_hotrun_run_compare
         private readonly TabCompareRuns tabCompareRuns;
         private readonly TabCurrentRun tabCurrentRun;
         private readonly TabDebug tabDebug;
+        private readonly SettingsProvider settingsProvider;
 
         public ConcurrentQueue<string> AccDebugMsgListenerQueue { get; private set; } = new();
         public ConcurrentQueue<string> AccGameStateControlQueue { get; private set; } = new();
@@ -33,11 +34,13 @@ namespace acc_hotrun_run_compare
 
         public MainForm()
         {
+            settingsProvider = SettingsProvider.GetInstance();
             InitializeVersion();
             InitializeComponent();
             InitializeDebugBox();
             InitialzeOrderByCheckBox();
             InitializeLabelsOnCurrentRunTab();
+            InitializeSettings();
             timer1.Enabled = true;
             tabCompareRuns = new TabCompareRuns(panelDisplayRuns, comboBoxTrackSelector, comboBoxCarSelector, comboBoxTimeSelector, checkBoxDisplayRunsWIthPenalties, ComboBoxSortRunsBy);
             tabDebug = new TabDebug();
@@ -204,7 +207,7 @@ namespace acc_hotrun_run_compare
         {
             if (tabControl1.SelectedTab.Name == "tabPageCompareRuns") //tab for comparing runs
             {
-                
+
                 //Clear fields and populate TrackSelector
                 tabCompareRuns.PopulateTrackSelector();
 
@@ -221,7 +224,7 @@ namespace acc_hotrun_run_compare
                 {
                     comboBoxTrackSelector.SelectedIndex = 0;
                 }
-                
+
             }
         }
 
@@ -317,6 +320,85 @@ namespace acc_hotrun_run_compare
         private void comboBoxTrackSelector_MouseClick(object sender, MouseEventArgs e)
         {
             //tabCompareRuns.PopulateTrackSelector();
+        }
+
+        /// <summary>
+        /// Reads values from SettingsProvider and sets up the radio buttons with the correct values
+        /// </summary>
+        private void InitializeSettings()
+        {
+            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
+            {
+                radioButtonStoreRunsWithPenaltiesEnabled.Checked = true;
+            }
+            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED)
+            {
+                radioButtonStoreRunsWithPenaltiesDisabled.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS)
+            {
+                radioButtonCarCompareAllCars.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
+            {
+                radioButtonCarCompareCurrentCar.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            {
+                radioButtonDriverCompareAllDrivers.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            {
+                radioButtonDriverCompareUserOnly.Checked = true;
+            }
+        }
+
+        private void radioButtonStoreRunsWithPenaltiesEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonStoreRunsWithPenaltiesEnabled.Checked)
+            {
+                settingsProvider.SettingsSetStoreRunsWithPenaltiesEnabled();
+            }
+        }
+
+        private void radioButtonStoreRunsWithPenaltiesDisabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonStoreRunsWithPenaltiesDisabled.Checked)
+            {
+                settingsProvider.SettingsSetStoreRunsWithPenaltiesDisabled();
+            }
+        }
+
+        private void radioButtonCarCompareCurrentCar_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCarCompareCurrentCar.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstCarsCurrent();
+            }
+        }
+
+        private void radioButtonCarCompareAllCars_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCarCompareAllCars.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstCarsAll();
+            }
+        }
+
+        private void radioButtonDriverCompareUserOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonDriverCompareUserOnly.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstDriverUser();
+            }
+        }
+
+        private void radioButtonDriverCompareAllDrivers_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonDriverCompareAllDrivers.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstDriverAll();
+            }
         }
     }
 }

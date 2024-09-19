@@ -70,6 +70,21 @@
             comboBoxTimeSelector = new ComboBox();
             comboBoxCarSelector = new ComboBox();
             comboBoxTrackSelector = new ComboBox();
+            tabPageSettings = new TabPage();
+            groupBoxLiveRunDriverCompare = new GroupBox();
+            radioButtonDriverCompareAllDrivers = new RadioButton();
+            radioButtonDriverCompareUserOnly = new RadioButton();
+            groupBoxUsername = new GroupBox();
+            checkBoxUpdateUsernameForAllRuns = new CheckBox();
+            buttonUpdateUsername = new Button();
+            textBoxUsername = new TextBox();
+            groupBoxLiveRunCarCategory = new GroupBox();
+            radioButtonCarCompareCarCategory = new RadioButton();
+            radioButtonCarCompareAllCars = new RadioButton();
+            radioButtonCarCompareCurrentCar = new RadioButton();
+            groupBoxStoreInvalidRuns = new GroupBox();
+            radioButtonStoreRunsWithPenaltiesDisabled = new RadioButton();
+            radioButtonStoreRunsWithPenaltiesEnabled = new RadioButton();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
             debugBox.SuspendLayout();
@@ -77,6 +92,11 @@
             tabPageMainAddRun.SuspendLayout();
             panelCurrentRunInfo.SuspendLayout();
             tabPageCompareRuns.SuspendLayout();
+            tabPageSettings.SuspendLayout();
+            groupBoxLiveRunDriverCompare.SuspendLayout();
+            groupBoxUsername.SuspendLayout();
+            groupBoxLiveRunCarCategory.SuspendLayout();
+            groupBoxStoreInvalidRuns.SuspendLayout();
             tabPageDebug.SuspendLayout();
             SuspendLayout();
             // 
@@ -186,13 +206,14 @@
             // 
             tabControl1.Controls.Add(tabPageMainAddRun);
             tabControl1.Controls.Add(tabPageCompareRuns);
+            tabControl1.Controls.Add(tabPageSettings);
             tabControl1.Controls.Add(tabPageDebug);
             tabControl1.Font = new Font("Segoe UI", 10F);
-            tabControl1.Location = new Point(9, 9);
+            tabControl1.Location = new Point(0, 0);
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1222, 576);
+            tabControl1.Size = new Size(1231, 585);
             tabControl1.SizeMode = TabSizeMode.FillToRight;
             tabControl1.TabIndex = 9;
             tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
@@ -204,7 +225,7 @@
             tabPageMainAddRun.Location = new Point(4, 26);
             tabPageMainAddRun.Name = "tabPageMainAddRun";
             tabPageMainAddRun.Padding = new Padding(3);
-            tabPageMainAddRun.Size = new Size(1214, 546);
+            tabPageMainAddRun.Size = new Size(1223, 555);
             tabPageMainAddRun.TabIndex = 0;
             tabPageMainAddRun.Text = "Add New Run";
             tabPageMainAddRun.UseVisualStyleBackColor = true;
@@ -352,7 +373,7 @@
             tabPageCompareRuns.Controls.Add(comboBoxTrackSelector);
             tabPageCompareRuns.Location = new Point(4, 26);
             tabPageCompareRuns.Name = "tabPageCompareRuns";
-            tabPageCompareRuns.Size = new Size(1214, 546);
+            tabPageCompareRuns.Size = new Size(1223, 555);
             tabPageCompareRuns.TabIndex = 2;
             tabPageCompareRuns.Text = "Compare Runs";
             tabPageCompareRuns.UseVisualStyleBackColor = true;
@@ -512,13 +533,185 @@
             comboBoxTrackSelector.SelectedIndexChanged += comboBoxTrackSelector_SelectedIndexChanged;
             comboBoxTrackSelector.MouseClick += comboBoxTrackSelector_MouseClick;
             // 
+            // tabPageSettings
+            // 
+            tabPageSettings.AutoScroll = true;
+            tabPageSettings.Controls.Add(groupBoxLiveRunDriverCompare);
+            tabPageSettings.Controls.Add(groupBoxUsername);
+            tabPageSettings.Controls.Add(groupBoxLiveRunCarCategory);
+            tabPageSettings.Controls.Add(groupBoxStoreInvalidRuns);
+            tabPageSettings.Location = new Point(4, 26);
+            tabPageSettings.Name = "tabPageSettings";
+            tabPageSettings.Size = new Size(1223, 555);
+            tabPageSettings.TabIndex = 3;
+            tabPageSettings.Text = "Settings";
+            tabPageSettings.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxLiveRunDriverCompare
+            // 
+            groupBoxLiveRunDriverCompare.Controls.Add(radioButtonDriverCompareAllDrivers);
+            groupBoxLiveRunDriverCompare.Controls.Add(radioButtonDriverCompareUserOnly);
+            groupBoxLiveRunDriverCompare.Location = new Point(8, 319);
+            groupBoxLiveRunDriverCompare.Name = "groupBoxLiveRunDriverCompare";
+            groupBoxLiveRunDriverCompare.Size = new Size(380, 100);
+            groupBoxLiveRunDriverCompare.TabIndex = 3;
+            groupBoxLiveRunDriverCompare.TabStop = false;
+            groupBoxLiveRunDriverCompare.Text = "Live Hotrun: Compare against drivers";
+            // 
+            // radioButtonDriverCompareAllDrivers
+            // 
+            radioButtonDriverCompareAllDrivers.AutoSize = true;
+            radioButtonDriverCompareAllDrivers.Location = new Point(6, 53);
+            radioButtonDriverCompareAllDrivers.Name = "radioButtonDriverCompareAllDrivers";
+            radioButtonDriverCompareAllDrivers.Size = new Size(87, 23);
+            radioButtonDriverCompareAllDrivers.TabIndex = 1;
+            radioButtonDriverCompareAllDrivers.TabStop = true;
+            radioButtonDriverCompareAllDrivers.Text = "All drivers";
+            radioButtonDriverCompareAllDrivers.UseVisualStyleBackColor = true;
+            radioButtonDriverCompareAllDrivers.CheckedChanged += radioButtonDriverCompareAllDrivers_CheckedChanged;
+            // 
+            // radioButtonDriverCompareUserOnly
+            // 
+            radioButtonDriverCompareUserOnly.AutoSize = true;
+            radioButtonDriverCompareUserOnly.Location = new Point(6, 24);
+            radioButtonDriverCompareUserOnly.Name = "radioButtonDriverCompareUserOnly";
+            radioButtonDriverCompareUserOnly.Size = new Size(117, 23);
+            radioButtonDriverCompareUserOnly.TabIndex = 0;
+            radioButtonDriverCompareUserOnly.TabStop = true;
+            radioButtonDriverCompareUserOnly.Text = "Own runs only";
+            radioButtonDriverCompareUserOnly.UseVisualStyleBackColor = true;
+            radioButtonDriverCompareUserOnly.CheckedChanged += radioButtonDriverCompareUserOnly_CheckedChanged;
+            // 
+            // groupBoxUsername
+            // 
+            groupBoxUsername.Controls.Add(checkBoxUpdateUsernameForAllRuns);
+            groupBoxUsername.Controls.Add(buttonUpdateUsername);
+            groupBoxUsername.Controls.Add(textBoxUsername);
+            groupBoxUsername.Location = new Point(8, 3);
+            groupBoxUsername.Name = "groupBoxUsername";
+            groupBoxUsername.Size = new Size(380, 100);
+            groupBoxUsername.TabIndex = 2;
+            groupBoxUsername.TabStop = false;
+            groupBoxUsername.Text = "Username";
+            // 
+            // checkBoxUpdateUsernameForAllRuns
+            // 
+            checkBoxUpdateUsernameForAllRuns.AutoSize = true;
+            checkBoxUpdateUsernameForAllRuns.Checked = true;
+            checkBoxUpdateUsernameForAllRuns.CheckState = CheckState.Checked;
+            checkBoxUpdateUsernameForAllRuns.Location = new Point(6, 55);
+            checkBoxUpdateUsernameForAllRuns.Name = "checkBoxUpdateUsernameForAllRuns";
+            checkBoxUpdateUsernameForAllRuns.Size = new Size(345, 23);
+            checkBoxUpdateUsernameForAllRuns.TabIndex = 2;
+            checkBoxUpdateUsernameForAllRuns.Text = "Update username for all saved runs (recommended)";
+            checkBoxUpdateUsernameForAllRuns.UseVisualStyleBackColor = true;
+            // 
+            // buttonUpdateUsername
+            // 
+            buttonUpdateUsername.Location = new Point(299, 23);
+            buttonUpdateUsername.Name = "buttonUpdateUsername";
+            buttonUpdateUsername.Size = new Size(75, 25);
+            buttonUpdateUsername.TabIndex = 1;
+            buttonUpdateUsername.Text = "Update";
+            buttonUpdateUsername.UseVisualStyleBackColor = true;
+            // 
+            // textBoxUsername
+            // 
+            textBoxUsername.Location = new Point(6, 24);
+            textBoxUsername.Name = "textBoxUsername";
+            textBoxUsername.Size = new Size(287, 25);
+            textBoxUsername.TabIndex = 0;
+            // 
+            // groupBoxLiveRunCarCategory
+            // 
+            groupBoxLiveRunCarCategory.Controls.Add(radioButtonCarCompareCarCategory);
+            groupBoxLiveRunCarCategory.Controls.Add(radioButtonCarCompareAllCars);
+            groupBoxLiveRunCarCategory.Controls.Add(radioButtonCarCompareCurrentCar);
+            groupBoxLiveRunCarCategory.Location = new Point(8, 203);
+            groupBoxLiveRunCarCategory.Name = "groupBoxLiveRunCarCategory";
+            groupBoxLiveRunCarCategory.Size = new Size(380, 110);
+            groupBoxLiveRunCarCategory.TabIndex = 1;
+            groupBoxLiveRunCarCategory.TabStop = false;
+            groupBoxLiveRunCarCategory.Text = "Live Hotrun: Compare against cars";
+            // 
+            // radioButtonCarCompareCarCategory
+            // 
+            radioButtonCarCompareCarCategory.AutoSize = true;
+            radioButtonCarCompareCarCategory.Enabled = false;
+            radioButtonCarCompareCarCategory.Location = new Point(6, 82);
+            radioButtonCarCompareCarCategory.Name = "radioButtonCarCompareCarCategory";
+            radioButtonCarCompareCarCategory.Size = new Size(201, 23);
+            radioButtonCarCompareCarCategory.TabIndex = 2;
+            radioButtonCarCompareCarCategory.TabStop = true;
+            radioButtonCarCompareCarCategory.Text = "Car category (future update)";
+            radioButtonCarCompareCarCategory.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCarCompareAllCars
+            // 
+            radioButtonCarCompareAllCars.AutoSize = true;
+            radioButtonCarCompareAllCars.Location = new Point(6, 53);
+            radioButtonCarCompareAllCars.Name = "radioButtonCarCompareAllCars";
+            radioButtonCarCompareAllCars.Size = new Size(70, 23);
+            radioButtonCarCompareAllCars.TabIndex = 1;
+            radioButtonCarCompareAllCars.TabStop = true;
+            radioButtonCarCompareAllCars.Text = "All cars";
+            radioButtonCarCompareAllCars.UseVisualStyleBackColor = true;
+            radioButtonCarCompareAllCars.CheckedChanged += radioButtonCarCompareAllCars_CheckedChanged;
+            // 
+            // radioButtonCarCompareCurrentCar
+            // 
+            radioButtonCarCompareCurrentCar.AutoSize = true;
+            radioButtonCarCompareCurrentCar.Location = new Point(6, 24);
+            radioButtonCarCompareCurrentCar.Name = "radioButtonCarCompareCurrentCar";
+            radioButtonCarCompareCurrentCar.Size = new Size(150, 23);
+            radioButtonCarCompareCurrentCar.TabIndex = 0;
+            radioButtonCarCompareCurrentCar.TabStop = true;
+            radioButtonCarCompareCurrentCar.Text = "Only the current car";
+            radioButtonCarCompareCurrentCar.UseVisualStyleBackColor = true;
+            radioButtonCarCompareCurrentCar.CheckedChanged += radioButtonCarCompareCurrentCar_CheckedChanged;
+            // 
+            // groupBoxStoreInvalidRuns
+            // 
+            groupBoxStoreInvalidRuns.Controls.Add(radioButtonStoreRunsWithPenaltiesDisabled);
+            groupBoxStoreInvalidRuns.Controls.Add(radioButtonStoreRunsWithPenaltiesEnabled);
+            groupBoxStoreInvalidRuns.Location = new Point(8, 109);
+            groupBoxStoreInvalidRuns.Name = "groupBoxStoreInvalidRuns";
+            groupBoxStoreInvalidRuns.Size = new Size(380, 88);
+            groupBoxStoreInvalidRuns.TabIndex = 0;
+            groupBoxStoreInvalidRuns.TabStop = false;
+            groupBoxStoreInvalidRuns.Text = "Store Runs With Penalties";
+            // 
+            // radioButtonStoreRunsWithPenaltiesDisabled
+            // 
+            radioButtonStoreRunsWithPenaltiesDisabled.AutoSize = true;
+            radioButtonStoreRunsWithPenaltiesDisabled.Location = new Point(6, 53);
+            radioButtonStoreRunsWithPenaltiesDisabled.Name = "radioButtonStoreRunsWithPenaltiesDisabled";
+            radioButtonStoreRunsWithPenaltiesDisabled.Size = new Size(141, 23);
+            radioButtonStoreRunsWithPenaltiesDisabled.TabIndex = 1;
+            radioButtonStoreRunsWithPenaltiesDisabled.TabStop = true;
+            radioButtonStoreRunsWithPenaltiesDisabled.Text = "Do not store them";
+            radioButtonStoreRunsWithPenaltiesDisabled.UseVisualStyleBackColor = true;
+            radioButtonStoreRunsWithPenaltiesDisabled.CheckedChanged += radioButtonStoreRunsWithPenaltiesDisabled_CheckedChanged;
+            // 
+            // radioButtonStoreRunsWithPenaltiesEnabled
+            // 
+            radioButtonStoreRunsWithPenaltiesEnabled.AutoSize = true;
+            radioButtonStoreRunsWithPenaltiesEnabled.Location = new Point(6, 24);
+            radioButtonStoreRunsWithPenaltiesEnabled.Name = "radioButtonStoreRunsWithPenaltiesEnabled";
+            radioButtonStoreRunsWithPenaltiesEnabled.Size = new Size(95, 23);
+            radioButtonStoreRunsWithPenaltiesEnabled.TabIndex = 0;
+            radioButtonStoreRunsWithPenaltiesEnabled.TabStop = true;
+            radioButtonStoreRunsWithPenaltiesEnabled.Text = "Store them";
+            radioButtonStoreRunsWithPenaltiesEnabled.UseVisualStyleBackColor = true;
+            radioButtonStoreRunsWithPenaltiesEnabled.CheckedChanged += radioButtonStoreRunsWithPenaltiesEnabled_CheckedChanged;
+            // 
             // tabPageDebug
             // 
             tabPageDebug.Controls.Add(debugBox);
             tabPageDebug.Location = new Point(4, 26);
             tabPageDebug.Name = "tabPageDebug";
             tabPageDebug.Padding = new Padding(3);
-            tabPageDebug.Size = new Size(1214, 546);
+            tabPageDebug.Size = new Size(1223, 555);
             tabPageDebug.TabIndex = 1;
             tabPageDebug.Text = "Debug Page";
             tabPageDebug.UseVisualStyleBackColor = true;
@@ -546,6 +739,15 @@
             panelCurrentRunInfo.PerformLayout();
             tabPageCompareRuns.ResumeLayout(false);
             tabPageCompareRuns.PerformLayout();
+            tabPageSettings.ResumeLayout(false);
+            groupBoxLiveRunDriverCompare.ResumeLayout(false);
+            groupBoxLiveRunDriverCompare.PerformLayout();
+            groupBoxUsername.ResumeLayout(false);
+            groupBoxUsername.PerformLayout();
+            groupBoxLiveRunCarCategory.ResumeLayout(false);
+            groupBoxLiveRunCarCategory.PerformLayout();
+            groupBoxStoreInvalidRuns.ResumeLayout(false);
+            groupBoxStoreInvalidRuns.PerformLayout();
             tabPageDebug.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -619,5 +821,20 @@
         private Label label2;
         private Button buttonImportRuns;
         private Button buttonExportSelectedRuns;
+        private TabPage tabPageSettings;
+        private GroupBox groupBoxStoreInvalidRuns;
+        private RadioButton radioButtonStoreRunsWithPenaltiesDisabled;
+        private RadioButton radioButtonStoreRunsWithPenaltiesEnabled;
+        private GroupBox groupBoxLiveRunCarCategory;
+        private RadioButton radioButtonCarCompareCurrentCar;
+        private RadioButton radioButtonCarCompareAllCars;
+        private RadioButton radioButtonCarCompareCarCategory;
+        private GroupBox groupBoxUsername;
+        private CheckBox checkBoxUpdateUsernameForAllRuns;
+        private Button buttonUpdateUsername;
+        private TextBox textBoxUsername;
+        private GroupBox groupBoxLiveRunDriverCompare;
+        private RadioButton radioButtonDriverCompareAllDrivers;
+        private RadioButton radioButtonDriverCompareUserOnly;
     }
 }
