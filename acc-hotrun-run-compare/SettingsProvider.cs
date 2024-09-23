@@ -91,6 +91,7 @@ namespace acc_hotrun_run_compare
                     {
                         //Couldn't find child XElement for CompareRunsAgainstCars, create a new one
                         compareRunsAgainstCarsXElement = new XElement("CompareRunsAgainstCars", 1);
+                        CompareRunsAgainstCars = CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR;
                         rootXElement.Add(compareRunsAgainstCarsXElement);
                     }
                     else
@@ -112,7 +113,8 @@ namespace acc_hotrun_run_compare
                     if (compareRunsAgainstDriversXElement == null)
                     {
                         //Couldn't find child XElement for CompareRunsAgainstDrivers, create a new one
-                        compareRunsAgainstDriversXElement = new XElement("CompareRunsAgainstDrivers");
+                        compareRunsAgainstDriversXElement = new XElement("CompareRunsAgainstDrivers", 1);
+                        CompareRunsAgainstDrivers = CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS;
                         rootXElement.Add(compareRunsAgainstDriversXElement);
                     }
                     else
@@ -128,7 +130,22 @@ namespace acc_hotrun_run_compare
                             CompareRunsAgainstDrivers = CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS; //default value
                         }
                     }
+
+                    //Username
+                    XElement usernameXElement = rootXElement.Element("username");
+                    if (usernameXElement == null)
+                    {
+                        usernameXElement = new XElement("username", "You");
+                        Username = "You";
+                        rootXElement.Add(usernameXElement);
+                    }
+                    else
+                    {
+                        Username = usernameXElement.Value;
+                    }
+
                 } //end read existing settings
+                SaveSettingsFile();
             }//end file exists
             else
             {
@@ -204,6 +221,26 @@ namespace acc_hotrun_run_compare
             compareDriversXElement.Value = "1";
             CompareRunsAgainstDrivers = CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS;
             SaveSettingsFile();
+        }
+
+        public void SettingsUpdateUsername(string newUsername, bool additionallyUpdateRunInformation)
+        {
+            if (string.IsNullOrEmpty(newUsername))
+            {
+                MessageBox.Show("Please enter a valid username.");
+                return;
+            }
+
+            string oldUsername = Username;
+
+            XElement usernameXElement = rootXElement.Element("username");
+            usernameXElement.Value = newUsername;
+            SaveSettingsFile();
+
+            if (additionallyUpdateRunInformation)
+            {
+                //TODO Write code to update RunInformation
+            }
         }
     }
 }

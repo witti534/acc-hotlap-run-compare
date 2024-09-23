@@ -25,6 +25,7 @@ namespace acc_hotrun_run_compare.DBClasses
         public long RunID { get; set; }
         public DateTime RunCreatedDateTime { get; set; }
         public string RunDescription { get; set; }
+        public string ?DriverName { get; set; }
 
 
 

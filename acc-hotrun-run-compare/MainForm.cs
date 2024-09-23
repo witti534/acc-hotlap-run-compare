@@ -327,6 +327,8 @@ namespace acc_hotrun_run_compare
         /// </summary>
         private void InitializeSettings()
         {
+            textBoxUsername.Text = settingsProvider.Username;
+
             if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
             {
                 radioButtonStoreRunsWithPenaltiesEnabled.Checked = true;
@@ -399,6 +401,11 @@ namespace acc_hotrun_run_compare
             {
                 settingsProvider.SettingsSetCompareAgainstDriverAll();
             }
+        }
+
+        private void buttonUpdateUsername_Click(object sender, EventArgs e)
+        {
+            settingsProvider.SettingsUpdateUsername(textBoxUsername.Text , checkBoxUpdateUsernameForAllRuns.Checked);
         }
     }
 }

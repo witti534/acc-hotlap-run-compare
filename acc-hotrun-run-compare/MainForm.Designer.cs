@@ -614,6 +614,7 @@
             buttonUpdateUsername.TabIndex = 1;
             buttonUpdateUsername.Text = "Update";
             buttonUpdateUsername.UseVisualStyleBackColor = true;
+            buttonUpdateUsername.Click += buttonUpdateUsername_Click;
             // 
             // textBoxUsername
             // 
