@@ -1,5 +1,6 @@
 using acc_hotrun_run_compare.DBClasses;
 using acc_hotrun_run_compare.GameListener;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using System.Configuration;
 using System.Text;
@@ -95,11 +96,12 @@ namespace acc_hotrun_run_compare
 
         /// <summary>
         /// This method is intended to accept a finished RunInformation from the ACCGameStateReader thread or the debug context. 
-        /// 
+        /// The RunInformation including all SectorInformation will be added to the database.
         /// </summary>
         /// <param name="finishedRun">A RunInformation object. No RunID is needed</param>
         public void addFinishedRunToFormContext(RunInformation finishedRun)
         {
+            //debug text
             if (finishedRun != null)
             {
                 AccDebugMsgListenerQueue.Enqueue("RunInformation added.");
@@ -111,8 +113,13 @@ namespace acc_hotrun_run_compare
                 return;
             }
             MoveTextFromQueueToDebugbox();
+
+
             labelRunData.Text = TabCurrentRun.CreateDisplayStringFromCompleteRunInformation(finishedRun);
 
+            finishedRun.DriverName = settingsProvider.Username; //Get username from SettingsProvider
+
+            //Add all sectors to the database, afterwards add the RunInformation itself to the database
             foreach (SectorInformation sectorInformation in finishedRun.SectorList)
             {
                 dbStoredRunsContext.Add(sectorInformation);
@@ -405,7 +412,8 @@ namespace acc_hotrun_run_compare
 
         private void buttonUpdateUsername_Click(object sender, EventArgs e)
         {
-            settingsProvider.SettingsUpdateUsername(textBoxUsername.Text , checkBoxUpdateUsernameForAllRuns.Checked);
+            settingsProvider.SettingsUpdateUsername(textBoxUsername.Text, checkBoxUpdateUsernameForAllRuns.Checked);
         }
+
     }
 }

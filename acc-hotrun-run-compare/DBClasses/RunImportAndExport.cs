@@ -25,6 +25,7 @@ namespace acc_hotrun_run_compare.DBClasses
         static readonly string XML_SECTOR_KEY = "sector";
         static readonly string XML_LAPNUMBER_KEY = "lapNumber";
         static readonly string XML_SECTORINDEX_KEY = "sectorIndex";
+        static readonly string XML_DRIVERNAME_KEY = "driverName";
 
         //Retrieve and store run information in the StoredRunContext
         private static StoredRunContext? StoredRunContext = null;
@@ -61,12 +62,23 @@ namespace acc_hotrun_run_compare.DBClasses
             DateTimeOffset dateTimeOffset = new DateTimeOffset(runInstance.RunCreatedDateTime, TimeZoneInfo.Local.GetUtcOffset(runInstance.RunCreatedDateTime));
             string unixTimeStampRunCreated = dateTimeOffset.ToUnixTimeSeconds().ToString();
 
+            //Prepare the drivername string
+            string driverNameString;
+            if (runInstance.DriverName != null)
+            {
+                driverNameString = runInstance.DriverName;
+            }
+            else
+            {
+                driverNameString = "";
+            }
+
             //Create the XDocument with all the data (except runID) from a RunInformation.
             //runID is not supposed to be in the export file because IDs are to be determined
             //by the local database itself when importing the run later.
             var xDocument = new XDocument(
                 new XElement(XML_RUN_KEY,
-                    new XElement(XML_XMLSCHEME_KEY, "version1"),
+                    new XElement(XML_XMLSCHEME_KEY, "version2"),
                     //xmlStructure might change over time
                     new XElement(XML_TRACKNAME_KEY, runInstance.TrackName),
                     new XElement(XML_CARNAME_KEY, runInstance.CarName),
@@ -76,7 +88,8 @@ namespace acc_hotrun_run_compare.DBClasses
                     xSectors, //XElement containing sectors
                     new XElement(XML_PENALTYOCCURED_KEY, runInstance.PenaltyOccured),
                     new XElement(XML_RUNCREATEDTIME_KEY, unixTimeStampRunCreated),
-                    new XElement(XML_RUNDESCRIPTION_KEY, runInstance.RunDescription)
+                    new XElement(XML_RUNDESCRIPTION_KEY, runInstance.RunDescription),
+                    new XElement(XML_DRIVERNAME_KEY, driverNameString)
                 )
             );
 
@@ -106,6 +119,11 @@ namespace acc_hotrun_run_compare.DBClasses
                     {
                         InterpretXMLFileSchemev1(rootElement);
                     }
+                    if (xmlScheme.Value == "version2")
+                    {
+                        InterpretXMLFileSchemev2(rootElement);
+                    }
+                    throw new Exception("Unknown document version. Please download the latest update.");
                 }
                 catch (Exception e)
                 {
@@ -148,8 +166,50 @@ namespace acc_hotrun_run_compare.DBClasses
                 }
 
                 RunInformation newRun = new RunInformation(trackName, carName, drivenTime, fastestLap, sessionTime, penaltyOccured, runCreatedAt, sectorList);
-
+                newRun.DriverName = "";
                 
+                StoredRunContext.RunInformationSet.Add(newRun);
+                StoredRunContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.StackTrace);
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        private static void InterpretXMLFileSchemev2(XElement rootXElement)
+        {
+            StoredRunContext ??= StoredRunContext.GetInstance(); // Get StoredRunContext singleton if not assigned yet
+
+            try
+            {
+                string trackName = rootXElement.Element(XML_TRACKNAME_KEY).Value;
+                string carName = rootXElement.Element(XML_CARNAME_KEY).Value;
+                int drivenTime = Int32.Parse(rootXElement.Element(XML_DRIVENTIME_KEY).Value);
+                int fastestLap = Int32.Parse(rootXElement.Element(XML_FASTESTLAP_KEY).Value);
+                int sessionTime = Int32.Parse(rootXElement.Element(XML_SESSIONTIME_KEY).Value);
+                DateTimeOffset runCreatedAtOffset = DateTimeOffset.FromUnixTimeSeconds(Int64.Parse(rootXElement.Element(XML_RUNCREATEDTIME_KEY).Value));
+                DateTime runCreatedAt = runCreatedAtOffset.LocalDateTime; //Save the time as local time
+
+                bool penaltyOccured = Boolean.Parse(rootXElement.Element(XML_PENALTYOCCURED_KEY).Value);
+                string driverName = rootXElement.Element(XML_DRIVERNAME_KEY).Value.ToString();
+
+                List<SectorInformation> sectorList = [];
+                XElement xSectors = rootXElement.Element(XML_SECTORLIST_KEY);
+                foreach (XElement xSector in xSectors.Nodes())
+                {
+                    int lapNumber = Int32.Parse(xSector.Attribute(XML_LAPNUMBER_KEY).Value);
+                    int sectorIndex = Int32.Parse(xSector.Attribute(XML_SECTORINDEX_KEY).Value);
+                    int sectorTime = Int32.Parse(xSector.Value);
+                    SectorInformation sectorInformation = new(lapNumber, sectorIndex, sectorTime);
+                    sectorList.Add(sectorInformation);
+                    StoredRunContext.SectorInformationSet.Add(sectorInformation);
+                }
+
+                RunInformation newRun = new RunInformation(trackName, carName, drivenTime, fastestLap, sessionTime, penaltyOccured, runCreatedAt, sectorList);
+                newRun.DriverName = driverName;
+
                 StoredRunContext.RunInformationSet.Add(newRun);
                 StoredRunContext.SaveChanges();
             }

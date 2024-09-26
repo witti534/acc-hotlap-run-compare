@@ -13,8 +13,9 @@ public sealed partial class StoredRunContext : DbContext
     /// <summary>
     /// This class gives the whole context needed to store RunInformation and SectorInformation objects
     /// </summary>
-    private StoredRunContext()
+    public StoredRunContext()
     {
+        Database.GetPendingMigrations();
         Database.EnsureCreated();
     }
 
