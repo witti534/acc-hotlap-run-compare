@@ -54,15 +54,23 @@ namespace acc_hotrun_run_compare
         }
 
         /// <summary>
-        /// This function fills up the label for the static run information and the text box with information from the provided run.
+        /// This function fills up the label for the static run information and the text boxes with information from the provided run.
         /// </summary>
         private void FillUpRunInformation()
         {
             labelRunInfoStatic.Text = "Track: " + providedRun.TrackName +
                 "\r\nCar: " + providedRun.CarName +
-                "\r\nSession length: " + (providedRun.SessionTime / 60000).ToString() + " min";
+                "\r\nSession length: " + (providedRun.SessionTime / 60000).ToString() + " min"; //miliseconds to minutes
             TextBoxRunDescription.Text = providedRun.RunDescription;
             labelRunTotalTime.Text = "Total Run Time: " + TimeFormatter.CreateHoursString(providedRun.DrivenTime);
+            if (providedRun.DriverName != null)
+            {
+                TextBoxDriverName.Text = providedRun.DriverName;
+            }
+            else
+            {
+                TextBoxDriverName.Text = "";
+            }
         }
 
         /// <summary>
@@ -171,6 +179,17 @@ namespace acc_hotrun_run_compare
             Controls.Remove(labelSector3Delete);
             Controls.Remove(labelSeperator1Delete);
             Controls.Remove(labelSeperator2Delete);
+        }
+
+        /// <summary>
+        /// This function is used to update the driver name of the provided run.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonSaveDriverName_Click(object sender, EventArgs e)
+        {
+            providedRun.DriverName = TextBoxDriverName.Text;
+            storedRunContext.SaveChanges();
         }
     }
 }

@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSingleRun));
             labelRunInfoStatic = new Label();
             TextBoxRunDescription = new TextBox();
-            label1 = new Label();
+            LabelRunInfo = new Label();
             ButtonSaveRunInfoText = new Button();
             labelRunTotalTime = new Label();
             labelLapDelete = new Label();
@@ -41,6 +41,9 @@
             labelSector3Delete = new Label();
             labelSeperator1Delete = new Label();
             labelSeperator2Delete = new Label();
+            LabelDriverName = new Label();
+            TextBoxDriverName = new TextBox();
+            ButtonSaveDriverName = new Button();
             SuspendLayout();
             // 
             // labelRunInfoStatic
@@ -56,27 +59,27 @@
             // 
             // TextBoxRunDescription
             // 
-            TextBoxRunDescription.Location = new Point(84, 117);
+            TextBoxRunDescription.Location = new Point(84, 125);
             TextBoxRunDescription.Margin = new Padding(4);
             TextBoxRunDescription.Name = "TextBoxRunDescription";
             TextBoxRunDescription.Size = new Size(647, 26);
             TextBoxRunDescription.TabIndex = 12;
             // 
-            // label1
+            // LabelRunInfo
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(17, 120);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(59, 19);
-            label1.TabIndex = 13;
-            label1.Text = "Info:";
+            LabelRunInfo.AutoSize = true;
+            LabelRunInfo.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            LabelRunInfo.Location = new Point(17, 128);
+            LabelRunInfo.Margin = new Padding(4, 0, 4, 0);
+            LabelRunInfo.Name = "LabelRunInfo";
+            LabelRunInfo.Size = new Size(59, 19);
+            LabelRunInfo.TabIndex = 13;
+            LabelRunInfo.Text = "Info:";
             // 
             // ButtonSaveRunInfoText
             // 
             ButtonSaveRunInfoText.Image = (Image)resources.GetObject("ButtonSaveRunInfoText.Image");
-            ButtonSaveRunInfoText.Location = new Point(739, 113);
+            ButtonSaveRunInfoText.Location = new Point(739, 121);
             ButtonSaveRunInfoText.Margin = new Padding(4);
             ButtonSaveRunInfoText.Name = "ButtonSaveRunInfoText";
             ButtonSaveRunInfoText.Size = new Size(40, 33);
@@ -172,12 +175,43 @@
             labelSeperator2Delete.TabIndex = 22;
             labelSeperator2Delete.Text = "|";
             // 
+            // LabelDriverName
+            // 
+            LabelDriverName.AutoSize = true;
+            LabelDriverName.Location = new Point(17, 94);
+            LabelDriverName.Name = "LabelDriverName";
+            LabelDriverName.Size = new Size(129, 19);
+            LabelDriverName.TabIndex = 23;
+            LabelDriverName.Text = "Driver name:";
+            // 
+            // TextBoxDriverName
+            // 
+            TextBoxDriverName.Location = new Point(153, 91);
+            TextBoxDriverName.Margin = new Padding(4);
+            TextBoxDriverName.Name = "TextBoxDriverName";
+            TextBoxDriverName.Size = new Size(578, 26);
+            TextBoxDriverName.TabIndex = 24;
+            // 
+            // ButtonSaveDriverName
+            // 
+            ButtonSaveDriverName.Image = (Image)resources.GetObject("ButtonSaveDriverName.Image");
+            ButtonSaveDriverName.Location = new Point(739, 87);
+            ButtonSaveDriverName.Margin = new Padding(4);
+            ButtonSaveDriverName.Name = "ButtonSaveDriverName";
+            ButtonSaveDriverName.Size = new Size(40, 33);
+            ButtonSaveDriverName.TabIndex = 25;
+            ButtonSaveDriverName.UseVisualStyleBackColor = true;
+            ButtonSaveDriverName.Click += ButtonSaveDriverName_Click;
+            // 
             // FormSingleRun
             // 
             AutoScaleDimensions = new SizeF(10F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(872, 508);
+            Controls.Add(ButtonSaveDriverName);
+            Controls.Add(TextBoxDriverName);
+            Controls.Add(LabelDriverName);
             Controls.Add(labelSeperator2Delete);
             Controls.Add(labelSeperator1Delete);
             Controls.Add(labelSector3Delete);
@@ -187,7 +221,7 @@
             Controls.Add(labelLapDelete);
             Controls.Add(labelRunTotalTime);
             Controls.Add(ButtonSaveRunInfoText);
-            Controls.Add(label1);
+            Controls.Add(LabelRunInfo);
             Controls.Add(TextBoxRunDescription);
             Controls.Add(labelRunInfoStatic);
             Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -203,7 +237,7 @@
 
         private Label labelRunInfoStatic;
         private TextBox TextBoxRunDescription;
-        private Label label1;
+        private Label LabelRunInfo;
         private Button ButtonSaveRunInfoText;
         private Label labelRunTotalTime;
         private Label labelLapDelete;
@@ -213,5 +247,8 @@
         private Label labelSector3Delete;
         private Label labelSeperator1Delete;
         private Label labelSeperator2Delete;
+        private Label LabelDriverName;
+        private TextBox TextBoxDriverName;
+        private Button ButtonSaveDriverName;
     }
 }

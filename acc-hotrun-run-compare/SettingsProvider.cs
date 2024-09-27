@@ -1,4 +1,5 @@
-﻿using System;
+﻿using acc_hotrun_run_compare.DBClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace acc_hotrun_run_compare
         private string settingsFilePath = "settings.xml";
         private XElement rootXElement;
         private XDocument settingsDocument;
+        private StoredRunContext storedRunContext = StoredRunContext.GetInstance();
 
         public enum StoreRunsWithPenaltiesEnum
         {
@@ -233,13 +235,25 @@ namespace acc_hotrun_run_compare
 
             string oldUsername = Username;
 
+            Username = newUsername;
             XElement usernameXElement = rootXElement.Element("username");
             usernameXElement.Value = newUsername;
             SaveSettingsFile();
 
             if (additionallyUpdateRunInformation)
             {
-                //TODO Write code to update RunInformation
+                List<RunInformation> runsWithOldUsername = storedRunContext.RunInformationSet
+                    .Where(run => run.DriverName == oldUsername)
+                    .ToList();
+
+                MessageBox.Show("Updated " + runsWithOldUsername.Count + " runs.");
+
+                foreach (RunInformation run in runsWithOldUsername)
+                {
+                    run.DriverName = newUsername;
+                }
+
+                storedRunContext.SaveChanges();
             }
         }
     }

@@ -51,7 +51,7 @@
             labelTimeDifferenceFastestText = new Label();
             labelTimeDifferenceFasterText = new Label();
             labelPositionValue = new Label();
-            labelRunData = new Label();
+            labelLastSavedRunData = new Label();
             labelCurrentRunInfo = new Label();
             labelCurrentRunLaps = new Label();
             labelCurrentRunSectors = new Label();
@@ -238,7 +238,7 @@
             panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFastestText);
             panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFasterText);
             panelCurrentRunInfo.Controls.Add(labelPositionValue);
-            panelCurrentRunInfo.Controls.Add(labelRunData);
+            panelCurrentRunInfo.Controls.Add(labelLastSavedRunData);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunInfo);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunLaps);
             panelCurrentRunInfo.Controls.Add(labelRadioSessionLength);
@@ -315,15 +315,15 @@
             labelPositionValue.TabIndex = 13;
             labelPositionValue.Text = "6/12";
             // 
-            // labelRunData
+            // labelLastSavedRunData
             // 
-            labelRunData.AutoSize = true;
-            labelRunData.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelRunData.Location = new Point(561, 126);
-            labelRunData.Name = "labelRunData";
-            labelRunData.Size = new Size(399, 57);
-            labelRunData.TabIndex = 9;
-            labelRunData.Text = "Lap 1 | 1:11.123 | 11.123 12.123 13.123\r\nLap 2 | 2:22.123 | 21.123 22.123 23.123\r\nLap 3 | 3:33.123 | 31.123 23.123 33.123\r\n";
+            labelLastSavedRunData.AutoSize = true;
+            labelLastSavedRunData.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelLastSavedRunData.Location = new Point(561, 126);
+            labelLastSavedRunData.Name = "labelLastSavedRunData";
+            labelLastSavedRunData.Size = new Size(399, 57);
+            labelLastSavedRunData.TabIndex = 9;
+            labelLastSavedRunData.Text = "Lap 1 | 1:11.123 | 11.123 12.123 13.123\r\nLap 2 | 2:22.123 | 21.123 22.123 23.123\r\nLap 3 | 3:33.123 | 31.123 23.123 33.123\r\n";
             // 
             // labelCurrentRunInfo
             // 
@@ -775,7 +775,7 @@
         {
             labelCurrentRunInfo.Text = "Track: ...\r\nCar: ...\r\nSession Length: ...";
             labelCurrentRunLaps.Text = "";
-            labelRunData.Text = "";
+            labelLastSavedRunData.Text = "";
             labelCurrentRunSectors.Text = "Start a run in the ACC Hostint \r\ngamemode to begin data collection.";
             labelTimeDifferenceFasterValue.Text = "...";
             labelTimeDifferenceFastestValue.Text = "...";
@@ -795,7 +795,7 @@
         private TabPage tabPageDebug;
         private TabPage tabPageCompareRuns;
         private System.Windows.Forms.Timer timer1;
-        private Label labelRunData;
+        private Label labelLastSavedRunData;
         private ComboBox comboBoxTrackSelector;
         private ComboBox comboBoxTimeSelector;
         private ComboBox comboBoxCarSelector;

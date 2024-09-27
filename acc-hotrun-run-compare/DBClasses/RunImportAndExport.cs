@@ -135,6 +135,7 @@ namespace acc_hotrun_run_compare.DBClasses
         /// <summary>
         /// This function tries to read the content of an root XML element and parse it into a RunInformation object. 
         /// Result will be saved into the EF database. 
+        /// Version1 does not contain a driver name.
         /// </summary>
         /// <param name="rootXElement">The root element of the XML file to be parsed</param>
         private static void InterpretXMLFileSchemev1(XElement rootXElement)
@@ -178,6 +179,12 @@ namespace acc_hotrun_run_compare.DBClasses
             }
         }
 
+        /// <summary>
+        /// This function tries to read the content of an root XML element and parse it into a RunInformation object. 
+        /// Result will be saved into the EF database. 
+        /// Version2 contains a driver name.
+        /// </summary>
+        /// <param name="rootXElement">The root element of the XML file to be parsed</param>
         private static void InterpretXMLFileSchemev2(XElement rootXElement)
         {
             StoredRunContext ??= StoredRunContext.GetInstance(); // Get StoredRunContext singleton if not assigned yet
@@ -207,8 +214,10 @@ namespace acc_hotrun_run_compare.DBClasses
                     StoredRunContext.SectorInformationSet.Add(sectorInformation);
                 }
 
-                RunInformation newRun = new RunInformation(trackName, carName, drivenTime, fastestLap, sessionTime, penaltyOccured, runCreatedAt, sectorList);
-                newRun.DriverName = driverName;
+                RunInformation newRun = new(trackName, carName, drivenTime, fastestLap, sessionTime, penaltyOccured, runCreatedAt, sectorList)
+                {
+                    DriverName = driverName
+                };
 
                 StoredRunContext.RunInformationSet.Add(newRun);
                 StoredRunContext.SaveChanges();

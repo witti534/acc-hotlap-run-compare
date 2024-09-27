@@ -104,7 +104,7 @@ namespace acc_hotrun_run_compare
             //debug text
             if (finishedRun != null)
             {
-                AccDebugMsgListenerQueue.Enqueue("RunInformation added.");
+                AccDebugMsgListenerQueue.Enqueue("RunInformation recieved in main thread.");
             }
             else
             {
@@ -112,10 +112,22 @@ namespace acc_hotrun_run_compare
                 MoveTextFromQueueToDebugbox();
                 return;
             }
+
+            //Check if penalties occured during the run.
+            //Do not save the run if settings forbid saving runs with penalties.
+            //Display debug text.
+            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED && finishedRun.PenaltyOccured)
+            {
+                labelLastSavedRunData.Text = "There has been a penalty in the last run.\r\n" +
+                    "Change settings if you want to store runs with penalties.";
+                AccDebugMsgListenerQueue.Enqueue("RunInformation not saved: Settings forbid saving runs with penalties.");
+                MoveTextFromQueueToDebugbox();
+                return;
+            }
+
             MoveTextFromQueueToDebugbox();
 
-
-            labelRunData.Text = TabCurrentRun.CreateDisplayStringFromCompleteRunInformation(finishedRun);
+            labelLastSavedRunData.Text = TabCurrentRun.CreateDisplayStringFromCompleteRunInformation(finishedRun);
 
             finishedRun.DriverName = settingsProvider.Username; //Get username from SettingsProvider
 
