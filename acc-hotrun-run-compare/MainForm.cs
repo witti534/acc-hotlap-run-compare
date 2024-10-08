@@ -1,5 +1,6 @@
 using acc_hotrun_run_compare.DBClasses;
 using acc_hotrun_run_compare.GameListener;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using System.Configuration;
 using System.Text;
@@ -23,6 +24,7 @@ namespace acc_hotrun_run_compare
         private readonly TabCompareRuns tabCompareRuns;
         private readonly TabCurrentRun tabCurrentRun;
         private readonly TabDebug tabDebug;
+        private readonly SettingsProvider settingsProvider;
 
         public ConcurrentQueue<string> AccDebugMsgListenerQueue { get; private set; } = new();
         public ConcurrentQueue<string> AccGameStateControlQueue { get; private set; } = new();
@@ -33,13 +35,15 @@ namespace acc_hotrun_run_compare
 
         public MainForm()
         {
+            settingsProvider = SettingsProvider.GetInstance();
             InitializeVersion();
             InitializeComponent();
             InitializeDebugBox();
             InitialzeOrderByCheckBox();
             InitializeLabelsOnCurrentRunTab();
+            InitializeSettings();
             timer1.Enabled = true;
-            tabCompareRuns = new TabCompareRuns();
+            tabCompareRuns = new TabCompareRuns(panelDisplayRuns, comboBoxTrackSelector, comboBoxCarSelector, comboBoxTimeSelector, checkBoxDisplayRunsWIthPenalties, ComboBoxSortRunsBy);
             tabDebug = new TabDebug();
             tabCurrentRun = new TabCurrentRun();
             labelVersion.Text = "Version: " + Version;
@@ -92,14 +96,15 @@ namespace acc_hotrun_run_compare
 
         /// <summary>
         /// This method is intended to accept a finished RunInformation from the ACCGameStateReader thread or the debug context. 
-        /// 
+        /// The RunInformation including all SectorInformation will be added to the database.
         /// </summary>
         /// <param name="finishedRun">A RunInformation object. No RunID is needed</param>
         public void addFinishedRunToFormContext(RunInformation finishedRun)
         {
+            //debug text
             if (finishedRun != null)
             {
-                AccDebugMsgListenerQueue.Enqueue("RunInformation added.");
+                AccDebugMsgListenerQueue.Enqueue("RunInformation recieved in main thread.");
             }
             else
             {
@@ -107,9 +112,26 @@ namespace acc_hotrun_run_compare
                 MoveTextFromQueueToDebugbox();
                 return;
             }
-            MoveTextFromQueueToDebugbox();
-            labelRunData.Text = TabCurrentRun.CreateDisplayStringFromCompleteRunInformation(finishedRun);
 
+            //Check if penalties occured during the run.
+            //Do not save the run if settings forbid saving runs with penalties.
+            //Display debug text.
+            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED && finishedRun.PenaltyOccured)
+            {
+                labelLastSavedRunData.Text = "There has been a penalty in the last run.\r\n" +
+                    "Change settings if you want to store runs with penalties.";
+                AccDebugMsgListenerQueue.Enqueue("RunInformation not saved: Settings forbid saving runs with penalties.");
+                MoveTextFromQueueToDebugbox();
+                return;
+            }
+
+            MoveTextFromQueueToDebugbox();
+
+            labelLastSavedRunData.Text = TabCurrentRun.CreateDisplayStringFromCompleteRunInformation(finishedRun);
+
+            finishedRun.DriverName = settingsProvider.Username; //Get username from SettingsProvider
+
+            //Add all sectors to the database, afterwards add the RunInformation itself to the database
             foreach (SectorInformation sectorInformation in finishedRun.SectorList)
             {
                 dbStoredRunsContext.Add(sectorInformation);
@@ -161,9 +183,8 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxTrackSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string trackName = comboBoxTrackSelector.Text;
             comboBoxCarSelector.Enabled = true;
-            tabCompareRuns.PopulateCarSelector(comboBoxCarSelector, trackName);
+            tabCompareRuns.PopulateCarSelector();
 
             comboBoxTimeSelector.Items.Clear();
             comboBoxTimeSelector.Enabled = false;
@@ -184,9 +205,7 @@ namespace acc_hotrun_run_compare
         private void comboBoxCarSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBoxTimeSelector.Enabled = true;
-            string trackName = comboBoxTrackSelector.Text;
-            string carName = comboBoxCarSelector.Text;
-            tabCompareRuns.PopulateSessionSelector(comboBoxTimeSelector, trackName, carName);
+            tabCompareRuns.PopulateSessionSelector();
             checkBoxDisplayRunsWIthPenalties.Enabled = true;
 
             if (comboBoxTimeSelector.Items.Count == 1)
@@ -205,10 +224,11 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedIndex == 1) //tab for comparing runs
+            if (tabControl1.SelectedTab.Name == "tabPageCompareRuns") //tab for comparing runs
             {
+
                 //Clear fields and populate TrackSelector
-                tabCompareRuns.PopulateTrackSelector(comboBoxTrackSelector);
+                tabCompareRuns.PopulateTrackSelector();
 
                 //Disable other Selectors
                 comboBoxCarSelector.Items.Clear();
@@ -223,6 +243,7 @@ namespace acc_hotrun_run_compare
                 {
                     comboBoxTrackSelector.SelectedIndex = 0;
                 }
+
             }
         }
 
@@ -235,19 +256,11 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxTimeSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string trackName = comboBoxTrackSelector.Text;
-            string carName = comboBoxCarSelector.Text;
-            string sessionTime = comboBoxTimeSelector.Text;
-            bool displayRunsWithPenalties = checkBoxDisplayRunsWIthPenalties.Checked;
-            string comparerName = sortRunsByComboBox.Text;
-
             if (comboBoxTimeSelector.Items.Count > 0 || comboBoxTimeSelector.SelectedItem != null)
             {
-                int sessionTimeString = Int32.Parse(sessionTime);
-
                 panelDisplayRuns.Controls.Clear();
 
-                tabCompareRuns.FillUpPanelWithRuns(panelDisplayRuns, trackName, carName, displayRunsWithPenalties, sessionTimeString, comparerName);
+                tabCompareRuns.FillUpPanelWithRuns();
             }
         }
 
@@ -322,5 +335,97 @@ namespace acc_hotrun_run_compare
         {
             tabCompareRuns.ImportRunsEntryFunction(panelDisplayRuns);
         }
+
+        private void comboBoxTrackSelector_MouseClick(object sender, MouseEventArgs e)
+        {
+            //tabCompareRuns.PopulateTrackSelector();
+        }
+
+        /// <summary>
+        /// Reads values from SettingsProvider and sets up the radio buttons with the correct values
+        /// </summary>
+        private void InitializeSettings()
+        {
+            textBoxUsername.Text = settingsProvider.Username;
+
+            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
+            {
+                radioButtonStoreRunsWithPenaltiesEnabled.Checked = true;
+            }
+            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED)
+            {
+                radioButtonStoreRunsWithPenaltiesDisabled.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS)
+            {
+                radioButtonCarCompareAllCars.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
+            {
+                radioButtonCarCompareCurrentCar.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            {
+                radioButtonDriverCompareAllDrivers.Checked = true;
+            }
+            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            {
+                radioButtonDriverCompareUserOnly.Checked = true;
+            }
+        }
+
+        private void radioButtonStoreRunsWithPenaltiesEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonStoreRunsWithPenaltiesEnabled.Checked)
+            {
+                settingsProvider.SettingsSetStoreRunsWithPenaltiesEnabled();
+            }
+        }
+
+        private void radioButtonStoreRunsWithPenaltiesDisabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonStoreRunsWithPenaltiesDisabled.Checked)
+            {
+                settingsProvider.SettingsSetStoreRunsWithPenaltiesDisabled();
+            }
+        }
+
+        private void radioButtonCarCompareCurrentCar_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCarCompareCurrentCar.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstCarsCurrent();
+            }
+        }
+
+        private void radioButtonCarCompareAllCars_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCarCompareAllCars.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstCarsAll();
+            }
+        }
+
+        private void radioButtonDriverCompareUserOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonDriverCompareUserOnly.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstDriverUser();
+            }
+        }
+
+        private void radioButtonDriverCompareAllDrivers_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonDriverCompareAllDrivers.Checked)
+            {
+                settingsProvider.SettingsSetCompareAgainstDriverAll();
+            }
+        }
+
+        private void buttonUpdateUsername_Click(object sender, EventArgs e)
+        {
+            settingsProvider.SettingsUpdateUsername(textBoxUsername.Text, checkBoxUpdateUsernameForAllRuns.Checked);
+        }
+
     }
 }
