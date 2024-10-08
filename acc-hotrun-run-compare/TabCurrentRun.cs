@@ -395,23 +395,23 @@ namespace acc_hotrun_run_compare
             totalNumberOfComparableRuns = cumulativeSectorTimes.Count;
         }
 
-        private int ParseSessionLength(string inputString)
+        /// <summary>
+        /// A function to retrieve the integer of the session length. Needed because the session length is being 
+        /// transported using a string message queue from another thread.
+        /// </summary>
+        /// <param name="inputString">The input string consisting of the length of the session.</param>
+        /// <returns></returns>
+        private static int ParseSessionLength(string inputString)
         {
-            switch (inputString)
+            return inputString switch
             {
-                case "5 Minutes":
-                    return 5 * 60 * 1000;
-                case "10 Minutes":
-                    return 10 * 60 * 1000;
-                case "15 Minutes":
-                    return 15 * 60 * 1000;
-                case "30 Minutes":
-                    return 30 * 60 * 1000;
-                case "60 Minutes":
-                    return 60 * 60 * 1000;
-                default:
-                    return 0;
-            }
+                "5 Minutes" => 5 * 60 * 1000,
+                "10 Minutes" => 10 * 60 * 1000,
+                "15 Minutes" => 15 * 60 * 1000,
+                "30 Minutes" => 30 * 60 * 1000,
+                "60 Minutes" => 60 * 60 * 1000,
+                _ => 0,
+            };
         }
     }
 }
