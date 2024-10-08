@@ -24,6 +24,7 @@ namespace acc_hotrun_run_compare
         int cumulativeRunTime = 0;
         int analyzedSectors = 0;
         int totalNumberOfComparableRuns = 0;
+        readonly SettingsProvider settingsProvider = SettingsProvider.GetInstance();
 
         /// <summary>
         /// It reads the strings from the AccCurrentRunInformationQueue and interpretes the information. 
@@ -314,11 +315,54 @@ namespace acc_hotrun_run_compare
         {
 
             //get runs with matching carname, trackname and sessionlength
-            List<RunInformation> listOfSelectedRuns = StoredRunContext.RunInformationSet
-                .Where(run => run.TrackName == trackName
-                && run.SessionTime == sessionLength
-                && run.CarName == carName)
-                .ToList();
+            List<RunInformation> listOfSelectedRuns;
+            
+            //get runs for following settings: Compare against current car only/compare against all drivers
+            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
+                && settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            {
+                listOfSelectedRuns = StoredRunContext.RunInformationSet
+                    .Where(run => run.TrackName == trackName
+                    && run.SessionTime == sessionLength
+                    && run.CarName == carName)
+                    .ToList();
+            }
+            //get runs for following settings: Compare against all cars/compare against all drivers
+            else if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS
+                && settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            {
+                listOfSelectedRuns = StoredRunContext.RunInformationSet
+                    .Where(run => run.TrackName == trackName
+                    && run.SessionTime == sessionLength)
+                    .ToList();
+            } 
+            //get runs for the following settings: Compare against current car only/compare against current driver only
+            else if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
+                && settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            {
+                listOfSelectedRuns = StoredRunContext.RunInformationSet
+                    .Where(run => run.TrackName == trackName
+                    && run.SessionTime == sessionLength
+                    && run.CarName == carName
+                    && run.DriverName == settingsProvider.Username)
+                    .ToList();
+            }
+            //get runs for the following settings: Compare against all cars/compare against current driver only
+            else if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS &&
+                settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            {
+                listOfSelectedRuns = StoredRunContext.RunInformationSet
+                    .Where(run => run.TrackName == trackName
+                    && run.SessionTime == sessionLength
+                    && run.DriverName == settingsProvider.Username)
+                    .ToList();
+            }
+            //something went wrong with settings
+            else
+            {
+                listOfSelectedRuns = new List<RunInformation> ();
+                MessageBox.Show("Something went wrong with reading the settings for a live run.");
+            }
 
             foreach (RunInformation run in listOfSelectedRuns)
             {
@@ -351,23 +395,23 @@ namespace acc_hotrun_run_compare
             totalNumberOfComparableRuns = cumulativeSectorTimes.Count;
         }
 
-        private int ParseSessionLength(string inputString)
+        /// <summary>
+        /// A function to retrieve the integer of the session length. Needed because the session length is being 
+        /// transported using a string message queue from another thread.
+        /// </summary>
+        /// <param name="inputString">The input string consisting of the length of the session.</param>
+        /// <returns></returns>
+        private static int ParseSessionLength(string inputString)
         {
-            switch (inputString)
+            return inputString switch
             {
-                case "5 Minutes":
-                    return 5 * 60 * 1000;
-                case "10 Minutes":
-                    return 10 * 60 * 1000;
-                case "15 Minutes":
-                    return 15 * 60 * 1000;
-                case "30 Minutes":
-                    return 30 * 60 * 1000;
-                case "60 Minutes":
-                    return 60 * 60 * 1000;
-                default:
-                    return 0;
-            }
+                "5 Minutes" => 5 * 60 * 1000,
+                "10 Minutes" => 10 * 60 * 1000,
+                "15 Minutes" => 15 * 60 * 1000,
+                "30 Minutes" => 30 * 60 * 1000,
+                "60 Minutes" => 60 * 60 * 1000,
+                _ => 0,
+            };
         }
     }
 }

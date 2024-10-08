@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!--
-    Microsoft ResX Schema 
+    Microsoft ResX Schema
 
     Version 2.0
 
@@ -48,7 +48,7 @@
     value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
     value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
@@ -119,6 +119,15 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="ButtonSaveRunInfoText.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAALhJREFUSEvt
+        le0NgzAMRDNCR+kIjNIRukFHYARG6QgdgREYob2TOGRFceKUVuIHT3qSFRsOha900ssVvuC70zsM8YSl
+        E0QMhWi4hwGGQ2yA6poiHGIPVF3TYkNc7IDqmjne+oYdUF0zx1vfaA40OG7ABY6QL+G81iW+DnhA9WQp
+        RD0Xb4BXrZ5cYI56Lt7A3wO4HerJn24RUQivfIK88Tm7AiI0jy/tda98lF34wdoTwv/JDZ5ESekD/kS3
+        V6783zsAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="ButtonSaveDriverName.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAALhJREFUSEvt
         le0NgzAMRDNCR+kIjNIRukFHYARG6QgdgREYob2TOGRFceKUVuIHT3qSFRsOha900ssVvuC70zsM8YSl
