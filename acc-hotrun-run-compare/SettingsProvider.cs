@@ -19,10 +19,10 @@ namespace acc_hotrun_run_compare
         public StoreRunsWithPenaltiesEnum StoreRunsWithPenalties { get; private set; }
         public CompareRunsAgainstCarsEnum CompareRunsAgainstCars { get; private set; }
         public CompareRunsAgainstDriversEnum CompareRunsAgainstDrivers { get; private set; }
-        private string settingsFilePath = "settings.xml";
-        private XElement rootXElement;
-        private XDocument settingsDocument;
-        private StoredRunContext storedRunContext = StoredRunContext.GetInstance();
+        private readonly string settingsFilePath = "settings.xml";
+        private readonly XElement rootXElement;
+        private readonly XDocument settingsDocument;
+        private readonly StoredRunContext storedRunContext = StoredRunContext.GetInstance();
 
         public enum StoreRunsWithPenaltiesEnum
         {
