@@ -318,8 +318,8 @@ namespace acc_hotrun_run_compare
             List<RunInformation> listOfSelectedRuns;
             
             //get runs for following settings: Compare against current car only/compare against all drivers
-            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
-                && settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
+                && settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
             {
                 listOfSelectedRuns = StoredRunContext.RunInformationSet
                     .Where(run => run.TrackName == trackName
@@ -328,8 +328,8 @@ namespace acc_hotrun_run_compare
                     .ToList();
             }
             //get runs for following settings: Compare against all cars/compare against all drivers
-            else if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS
-                && settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            else if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS
+                && settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
             {
                 listOfSelectedRuns = StoredRunContext.RunInformationSet
                     .Where(run => run.TrackName == trackName
@@ -337,8 +337,8 @@ namespace acc_hotrun_run_compare
                     .ToList();
             } 
             //get runs for the following settings: Compare against current car only/compare against current driver only
-            else if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
-                && settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            else if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
+                && settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
             {
                 listOfSelectedRuns = StoredRunContext.RunInformationSet
                     .Where(run => run.TrackName == trackName
@@ -348,8 +348,8 @@ namespace acc_hotrun_run_compare
                     .ToList();
             }
             //get runs for the following settings: Compare against all cars/compare against current driver only
-            else if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS &&
-                settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            else if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS &&
+                settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
             {
                 listOfSelectedRuns = StoredRunContext.RunInformationSet
                     .Where(run => run.TrackName == trackName

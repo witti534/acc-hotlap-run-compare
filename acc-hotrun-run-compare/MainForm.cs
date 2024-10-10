@@ -116,7 +116,7 @@ namespace acc_hotrun_run_compare
             //Check if penalties occured during the run.
             //Do not save the run if settings forbid saving runs with penalties.
             //Display debug text.
-            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED && finishedRun.PenaltyOccured)
+            if (settingsProvider.CurrentRunStoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED && finishedRun.PenaltyOccured)
             {
                 labelLastSavedRunData.Text = "There has been a penalty in the last run.\r\n" +
                     "Change settings if you want to store runs with penalties.";
@@ -328,12 +328,12 @@ namespace acc_hotrun_run_compare
 
         private void ButtonExportSelectedRuns_Click(object sender, EventArgs e)
         {
-            tabCompareRuns.ExportRunsEntryFunction(panelDisplayRuns);
+            tabCompareRuns.ExportRunsEntryFunction();
         }
 
         private void buttonImportRuns_Click(object sender, EventArgs e)
         {
-            tabCompareRuns.ImportRunsEntryFunction(panelDisplayRuns);
+            tabCompareRuns.ImportRunsEntryFunction();
         }
 
         private void comboBoxTrackSelector_MouseClick(object sender, MouseEventArgs e)
@@ -348,27 +348,27 @@ namespace acc_hotrun_run_compare
         {
             textBoxUsername.Text = settingsProvider.Username;
 
-            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
+            if (settingsProvider.CurrentRunStoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
             {
                 radioButtonStoreRunsWithPenaltiesEnabled.Checked = true;
             }
-            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED)
+            if (settingsProvider.CurrentRunStoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED)
             {
                 radioButtonStoreRunsWithPenaltiesDisabled.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS)
+            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS)
             {
                 radioButtonCarCompareAllCars.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
+            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
             {
                 radioButtonCarCompareCurrentCar.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            if (settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
             {
                 radioButtonDriverCompareAllDrivers.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            if (settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
             {
                 radioButtonDriverCompareUserOnly.Checked = true;
             }
