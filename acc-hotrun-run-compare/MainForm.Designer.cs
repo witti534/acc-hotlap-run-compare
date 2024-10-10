@@ -56,9 +56,9 @@
             labelCurrentRunLaps = new Label();
             labelCurrentRunSectors = new Label();
             tabPageCompareRuns = new TabPage();
+            ButtonCompareRuns = new Button();
             buttonImportRuns = new Button();
             buttonExportSelectedRuns = new Button();
-            ButtonCompareRuns = new Button();
             buttonDeleteSelectedRuns = new Button();
             ComboBoxSortRunsBy = new ComboBox();
             labelSortBy = new Label();
@@ -87,6 +87,7 @@
             radioButtonStoreRunsWithPenaltiesEnabled = new RadioButton();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
+            CheckBoxDisplayOwnRunsOnly = new CheckBox();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -111,7 +112,7 @@
             debugBox.Controls.Add(debugTextbox1);
             debugBox.Location = new Point(6, 6);
             debugBox.Name = "debugBox";
-            debugBox.Size = new Size(1202, 527);
+            debugBox.Size = new Size(929, 527);
             debugBox.TabIndex = 0;
             debugBox.TabStop = false;
             debugBox.Text = "DebugBox";
@@ -174,7 +175,7 @@
             // 
             // debugTextbox1
             // 
-            debugTextbox1.Location = new Point(682, 11);
+            debugTextbox1.Location = new Point(275, 17);
             debugTextbox1.Multiline = true;
             debugTextbox1.Name = "debugTextbox1";
             debugTextbox1.ReadOnly = true;
@@ -185,20 +186,20 @@
             // labelRadioSessionLength
             // 
             labelRadioSessionLength.AutoSize = true;
-            labelRadioSessionLength.Font = new Font("Noto Mono", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelRadioSessionLength.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelRadioSessionLength.Location = new Point(3, 9);
             labelRadioSessionLength.Name = "labelRadioSessionLength";
-            labelRadioSessionLength.Size = new Size(230, 23);
+            labelRadioSessionLength.Size = new Size(185, 25);
             labelRadioSessionLength.TabIndex = 7;
             labelRadioSessionLength.Text = "Current Session Info";
             // 
             // labelStaticLastSavedRun
             // 
             labelStaticLastSavedRun.AutoSize = true;
-            labelStaticLastSavedRun.Font = new Font("Noto Mono", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelStaticLastSavedRun.Location = new Point(561, 89);
+            labelStaticLastSavedRun.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold);
+            labelStaticLastSavedRun.Location = new Point(427, 119);
             labelStaticLastSavedRun.Name = "labelStaticLastSavedRun";
-            labelStaticLastSavedRun.Size = new Size(164, 23);
+            labelStaticLastSavedRun.Size = new Size(141, 25);
             labelStaticLastSavedRun.TabIndex = 8;
             labelStaticLastSavedRun.Text = "Last Saved Run";
             // 
@@ -213,7 +214,7 @@
             tabControl1.Margin = new Padding(0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1231, 585);
+            tabControl1.Size = new Size(949, 1000);
             tabControl1.SizeMode = TabSizeMode.FillToRight;
             tabControl1.TabIndex = 9;
             tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
@@ -223,15 +224,17 @@
             tabPageMainAddRun.AutoScroll = true;
             tabPageMainAddRun.Controls.Add(panelCurrentRunInfo);
             tabPageMainAddRun.Location = new Point(4, 26);
+            tabPageMainAddRun.Margin = new Padding(0);
             tabPageMainAddRun.Name = "tabPageMainAddRun";
             tabPageMainAddRun.Padding = new Padding(3);
-            tabPageMainAddRun.Size = new Size(1223, 555);
+            tabPageMainAddRun.Size = new Size(941, 970);
             tabPageMainAddRun.TabIndex = 0;
             tabPageMainAddRun.Text = "Add New Run";
             tabPageMainAddRun.UseVisualStyleBackColor = true;
             // 
             // panelCurrentRunInfo
             // 
+            panelCurrentRunInfo.AutoScroll = true;
             panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFastestValue);
             panelCurrentRunInfo.Controls.Add(labelTimeDifferenceFasterValue);
             panelCurrentRunInfo.Controls.Add(label2);
@@ -244,63 +247,64 @@
             panelCurrentRunInfo.Controls.Add(labelRadioSessionLength);
             panelCurrentRunInfo.Controls.Add(labelCurrentRunSectors);
             panelCurrentRunInfo.Controls.Add(labelStaticLastSavedRun);
-            panelCurrentRunInfo.Location = new Point(6, 6);
+            panelCurrentRunInfo.Location = new Point(0, 0);
+            panelCurrentRunInfo.Margin = new Padding(0);
             panelCurrentRunInfo.Name = "panelCurrentRunInfo";
-            panelCurrentRunInfo.Size = new Size(1202, 537);
+            panelCurrentRunInfo.Size = new Size(941, 970);
             panelCurrentRunInfo.TabIndex = 13;
             // 
             // labelTimeDifferenceFastestValue
             // 
             labelTimeDifferenceFastestValue.AutoSize = true;
-            labelTimeDifferenceFastestValue.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelTimeDifferenceFastestValue.Location = new Point(880, 32);
+            labelTimeDifferenceFastestValue.Font = new Font("Noto Mono", 11.25F);
+            labelTimeDifferenceFastestValue.Location = new Point(804, 79);
             labelTimeDifferenceFastestValue.Margin = new Padding(0);
             labelTimeDifferenceFastestValue.Name = "labelTimeDifferenceFastestValue";
-            labelTimeDifferenceFastestValue.Size = new Size(79, 19);
+            labelTimeDifferenceFastestValue.Size = new Size(71, 18);
             labelTimeDifferenceFastestValue.TabIndex = 18;
             labelTimeDifferenceFastestValue.Text = "23.456s";
             // 
             // labelTimeDifferenceFasterValue
             // 
             labelTimeDifferenceFasterValue.AutoSize = true;
-            labelTimeDifferenceFasterValue.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelTimeDifferenceFasterValue.Location = new Point(881, 9);
+            labelTimeDifferenceFasterValue.Font = new Font("Noto Mono", 11.25F);
+            labelTimeDifferenceFasterValue.Location = new Point(804, 59);
             labelTimeDifferenceFasterValue.Margin = new Padding(0);
             labelTimeDifferenceFasterValue.Name = "labelTimeDifferenceFasterValue";
-            labelTimeDifferenceFasterValue.Size = new Size(79, 19);
+            labelTimeDifferenceFasterValue.Size = new Size(71, 18);
             labelTimeDifferenceFasterValue.TabIndex = 17;
             labelTimeDifferenceFasterValue.Text = "12.345s";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(1020, 13);
+            label2.Font = new Font("Segoe UI", 11.25F);
+            label2.Location = new Point(740, 37);
             label2.Margin = new Padding(3, 0, 0, 0);
             label2.Name = "label2";
-            label2.Size = new Size(99, 19);
+            label2.Size = new Size(64, 20);
             label2.TabIndex = 16;
             label2.Text = "Position:";
             // 
             // labelTimeDifferenceFastestText
             // 
             labelTimeDifferenceFastestText.AutoSize = true;
-            labelTimeDifferenceFastestText.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelTimeDifferenceFastestText.Location = new Point(561, 32);
+            labelTimeDifferenceFastestText.Font = new Font("Segoe UI", 11.25F);
+            labelTimeDifferenceFastestText.Location = new Point(589, 77);
             labelTimeDifferenceFastestText.Margin = new Padding(0);
             labelTimeDifferenceFastestText.Name = "labelTimeDifferenceFastestText";
-            labelTimeDifferenceFastestText.Size = new Size(319, 19);
+            labelTimeDifferenceFastestText.Size = new Size(215, 20);
             labelTimeDifferenceFastestText.TabIndex = 15;
             labelTimeDifferenceFastestText.Text = "Time Difference To Fastest Run:";
             // 
             // labelTimeDifferenceFasterText
             // 
             labelTimeDifferenceFasterText.AutoSize = true;
-            labelTimeDifferenceFasterText.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelTimeDifferenceFasterText.Location = new Point(561, 9);
+            labelTimeDifferenceFasterText.Font = new Font("Segoe UI", 11.25F);
+            labelTimeDifferenceFasterText.Location = new Point(595, 57);
             labelTimeDifferenceFasterText.Margin = new Padding(0);
             labelTimeDifferenceFasterText.Name = "labelTimeDifferenceFasterText";
-            labelTimeDifferenceFasterText.Size = new Size(309, 19);
+            labelTimeDifferenceFasterText.Size = new Size(209, 20);
             labelTimeDifferenceFasterText.TabIndex = 14;
             labelTimeDifferenceFasterText.Text = "Time Difference To Faster Run:";
             // 
@@ -308,7 +312,7 @@
             // 
             labelPositionValue.AutoSize = true;
             labelPositionValue.Font = new Font("Noto Mono", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelPositionValue.Location = new Point(1042, 32);
+            labelPositionValue.Location = new Point(804, 34);
             labelPositionValue.Margin = new Padding(0, 0, 3, 0);
             labelPositionValue.Name = "labelPositionValue";
             labelPositionValue.Size = new Size(62, 24);
@@ -318,48 +322,49 @@
             // labelLastSavedRunData
             // 
             labelLastSavedRunData.AutoSize = true;
-            labelLastSavedRunData.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelLastSavedRunData.Location = new Point(561, 126);
+            labelLastSavedRunData.Font = new Font("Noto Mono", 11.25F);
+            labelLastSavedRunData.Location = new Point(427, 144);
             labelLastSavedRunData.Name = "labelLastSavedRunData";
-            labelLastSavedRunData.Size = new Size(399, 57);
+            labelLastSavedRunData.Size = new Size(359, 54);
             labelLastSavedRunData.TabIndex = 9;
             labelLastSavedRunData.Text = "Lap 1 | 1:11.123 | 11.123 12.123 13.123\r\nLap 2 | 2:22.123 | 21.123 22.123 23.123\r\nLap 3 | 3:33.123 | 31.123 23.123 33.123\r\n";
             // 
             // labelCurrentRunInfo
             // 
             labelCurrentRunInfo.AutoSize = true;
-            labelCurrentRunInfo.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelCurrentRunInfo.Location = new Point(3, 32);
+            labelCurrentRunInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelCurrentRunInfo.Location = new Point(3, 34);
             labelCurrentRunInfo.Name = "labelCurrentRunInfo";
-            labelCurrentRunInfo.Size = new Size(269, 57);
+            labelCurrentRunInfo.Size = new Size(186, 60);
             labelCurrentRunInfo.TabIndex = 10;
             labelCurrentRunInfo.Text = "Track: ABC\r\nCar: ABC\r\nSession Length: 99 minutes";
             // 
             // labelCurrentRunLaps
             // 
             labelCurrentRunLaps.AutoSize = true;
-            labelCurrentRunLaps.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelCurrentRunLaps.Location = new Point(3, 126);
+            labelCurrentRunLaps.Font = new Font("Noto Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelCurrentRunLaps.Location = new Point(3, 144);
             labelCurrentRunLaps.Name = "labelCurrentRunLaps";
-            labelCurrentRunLaps.Size = new Size(179, 190);
+            labelCurrentRunLaps.Size = new Size(161, 180);
             labelCurrentRunLaps.TabIndex = 11;
             labelCurrentRunLaps.Text = "Lap  1 | 1:11.123\r\nLap  2 | 1:12.123\r\nLap  3 | 1:13.123\r\nLap  4 | 1:14.123\r\nLap  5 | 1:15.123\r\nLap  6 | 1:16.123\r\nLap  7 | 1:17.123\r\nLap  8 | 1:18.123\r\nLap  9 | 1:19.123\r\nLap 10 | 1:20.123";
             // 
             // labelCurrentRunSectors
             // 
             labelCurrentRunSectors.AutoSize = true;
-            labelCurrentRunSectors.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelCurrentRunSectors.Location = new Point(188, 126);
+            labelCurrentRunSectors.Font = new Font("Noto Mono", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelCurrentRunSectors.Location = new Point(170, 144);
             labelCurrentRunSectors.Name = "labelCurrentRunSectors";
-            labelCurrentRunSectors.Size = new Size(279, 152);
+            labelCurrentRunSectors.Size = new Size(251, 144);
             labelCurrentRunSectors.TabIndex = 12;
             labelCurrentRunSectors.Text = resources.GetString("labelCurrentRunSectors.Text");
             // 
             // tabPageCompareRuns
             // 
+            tabPageCompareRuns.Controls.Add(CheckBoxDisplayOwnRunsOnly);
+            tabPageCompareRuns.Controls.Add(ButtonCompareRuns);
             tabPageCompareRuns.Controls.Add(buttonImportRuns);
             tabPageCompareRuns.Controls.Add(buttonExportSelectedRuns);
-            tabPageCompareRuns.Controls.Add(ButtonCompareRuns);
             tabPageCompareRuns.Controls.Add(buttonDeleteSelectedRuns);
             tabPageCompareRuns.Controls.Add(ComboBoxSortRunsBy);
             tabPageCompareRuns.Controls.Add(labelSortBy);
@@ -373,17 +378,28 @@
             tabPageCompareRuns.Controls.Add(comboBoxTrackSelector);
             tabPageCompareRuns.Location = new Point(4, 26);
             tabPageCompareRuns.Name = "tabPageCompareRuns";
-            tabPageCompareRuns.Size = new Size(1223, 555);
+            tabPageCompareRuns.Size = new Size(941, 970);
             tabPageCompareRuns.TabIndex = 2;
             tabPageCompareRuns.Text = "Compare Runs";
             tabPageCompareRuns.UseVisualStyleBackColor = true;
             // 
+            // ButtonCompareRuns
+            // 
+            ButtonCompareRuns.Font = new Font("Segoe UI", 11.25F);
+            ButtonCompareRuns.Location = new Point(279, 124);
+            ButtonCompareRuns.Name = "ButtonCompareRuns";
+            ButtonCompareRuns.Size = new Size(159, 27);
+            ButtonCompareRuns.TabIndex = 11;
+            ButtonCompareRuns.Text = "Show Selected Run(s)";
+            ButtonCompareRuns.UseVisualStyleBackColor = true;
+            ButtonCompareRuns.Click += ButtonCompareRuns_Click;
+            // 
             // buttonImportRuns
             // 
-            buttonImportRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonImportRuns.Location = new Point(975, 114);
+            buttonImportRuns.Font = new Font("Segoe UI", 11.25F);
+            buttonImportRuns.Location = new Point(771, 123);
             buttonImportRuns.Name = "buttonImportRuns";
-            buttonImportRuns.Size = new Size(226, 27);
+            buttonImportRuns.Size = new Size(99, 27);
             buttonImportRuns.TabIndex = 13;
             buttonImportRuns.Text = "Import Runs";
             buttonImportRuns.UseVisualStyleBackColor = true;
@@ -391,32 +407,21 @@
             // 
             // buttonExportSelectedRuns
             // 
-            buttonExportSelectedRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonExportSelectedRuns.Location = new Point(743, 113);
+            buttonExportSelectedRuns.Font = new Font("Segoe UI", 11.25F);
+            buttonExportSelectedRuns.Location = new Point(608, 123);
             buttonExportSelectedRuns.Name = "buttonExportSelectedRuns";
-            buttonExportSelectedRuns.Size = new Size(226, 27);
+            buttonExportSelectedRuns.Size = new Size(157, 27);
             buttonExportSelectedRuns.TabIndex = 12;
             buttonExportSelectedRuns.Text = "Export Selected Runs";
             buttonExportSelectedRuns.UseVisualStyleBackColor = true;
             buttonExportSelectedRuns.Click += ButtonExportSelectedRuns_Click;
             // 
-            // ButtonCompareRuns
-            // 
-            ButtonCompareRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ButtonCompareRuns.Location = new Point(279, 113);
-            ButtonCompareRuns.Name = "ButtonCompareRuns";
-            ButtonCompareRuns.Size = new Size(226, 27);
-            ButtonCompareRuns.TabIndex = 11;
-            ButtonCompareRuns.Text = "Show Selected Run(s)";
-            ButtonCompareRuns.UseVisualStyleBackColor = true;
-            ButtonCompareRuns.Click += ButtonCompareRuns_Click;
-            // 
             // buttonDeleteSelectedRuns
             // 
-            buttonDeleteSelectedRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            buttonDeleteSelectedRuns.Location = new Point(511, 113);
+            buttonDeleteSelectedRuns.Font = new Font("Segoe UI", 11.25F);
+            buttonDeleteSelectedRuns.Location = new Point(444, 123);
             buttonDeleteSelectedRuns.Name = "buttonDeleteSelectedRuns";
-            buttonDeleteSelectedRuns.Size = new Size(226, 27);
+            buttonDeleteSelectedRuns.Size = new Size(158, 27);
             buttonDeleteSelectedRuns.TabIndex = 10;
             buttonDeleteSelectedRuns.Text = "Delete Selected Runs";
             buttonDeleteSelectedRuns.UseVisualStyleBackColor = true;
@@ -425,40 +430,40 @@
             // ComboBoxSortRunsBy
             // 
             ComboBoxSortRunsBy.DropDownStyle = ComboBoxStyle.DropDownList;
-            ComboBoxSortRunsBy.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ComboBoxSortRunsBy.Font = new Font("Segoe UI", 11.25F);
             ComboBoxSortRunsBy.FormattingEnabled = true;
-            ComboBoxSortRunsBy.Location = new Point(3, 114);
+            ComboBoxSortRunsBy.Location = new Point(3, 123);
             ComboBoxSortRunsBy.Name = "ComboBoxSortRunsBy";
-            ComboBoxSortRunsBy.Size = new Size(270, 27);
+            ComboBoxSortRunsBy.Size = new Size(270, 28);
             ComboBoxSortRunsBy.TabIndex = 9;
             ComboBoxSortRunsBy.SelectedIndexChanged += comboBoxTimeSelector_SelectedIndexChanged;
             // 
             // labelSortBy
             // 
             labelSortBy.AutoSize = true;
-            labelSortBy.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelSortBy.Location = new Point(3, 90);
+            labelSortBy.Font = new Font("Segoe UI", 11.25F);
+            labelSortBy.Location = new Point(3, 100);
             labelSortBy.Name = "labelSortBy";
-            labelSortBy.Size = new Size(79, 19);
+            labelSortBy.Size = new Size(56, 20);
             labelSortBy.TabIndex = 8;
             labelSortBy.Text = "Sort by";
             // 
             // panelDisplayRuns
             // 
             panelDisplayRuns.AutoScroll = true;
-            panelDisplayRuns.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            panelDisplayRuns.Location = new Point(3, 146);
+            panelDisplayRuns.Font = new Font("Segoe UI", 11.25F);
+            panelDisplayRuns.Location = new Point(3, 157);
             panelDisplayRuns.Name = "panelDisplayRuns";
-            panelDisplayRuns.Size = new Size(1208, 397);
+            panelDisplayRuns.Size = new Size(935, 810);
             panelDisplayRuns.TabIndex = 7;
             // 
             // checkBoxDisplayRunsWIthPenalties
             // 
             checkBoxDisplayRunsWIthPenalties.AutoSize = true;
-            checkBoxDisplayRunsWIthPenalties.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBoxDisplayRunsWIthPenalties.Location = new Point(727, 44);
+            checkBoxDisplayRunsWIthPenalties.Font = new Font("Segoe UI", 11.25F);
+            checkBoxDisplayRunsWIthPenalties.Location = new Point(3, 73);
             checkBoxDisplayRunsWIthPenalties.Name = "checkBoxDisplayRunsWIthPenalties";
-            checkBoxDisplayRunsWIthPenalties.Size = new Size(298, 23);
+            checkBoxDisplayRunsWIthPenalties.Size = new Size(204, 24);
             checkBoxDisplayRunsWIthPenalties.TabIndex = 6;
             checkBoxDisplayRunsWIthPenalties.Text = "Display runs with penalties";
             checkBoxDisplayRunsWIthPenalties.UseVisualStyleBackColor = true;
@@ -467,10 +472,10 @@
             // labelChooseSessionTime
             // 
             labelChooseSessionTime.AutoSize = true;
-            labelChooseSessionTime.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelChooseSessionTime.Location = new Point(540, 18);
+            labelChooseSessionTime.Font = new Font("Segoe UI", 11.25F);
+            labelChooseSessionTime.Location = new Point(499, 18);
             labelChooseSessionTime.Name = "labelChooseSessionTime";
-            labelChooseSessionTime.Size = new Size(129, 19);
+            labelChooseSessionTime.Size = new Size(95, 20);
             labelChooseSessionTime.TabIndex = 5;
             labelChooseSessionTime.Text = "Session Time";
             labelChooseSessionTime.Click += labelChooseSessionTime_Click;
@@ -478,56 +483,56 @@
             // labelChooseCar
             // 
             labelChooseCar.AutoSize = true;
-            labelChooseCar.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            labelChooseCar.Location = new Point(279, 18);
+            labelChooseCar.Font = new Font("Segoe UI", 11.25F);
+            labelChooseCar.Location = new Point(238, 18);
             labelChooseCar.Name = "labelChooseCar";
-            labelChooseCar.Size = new Size(39, 19);
+            labelChooseCar.Size = new Size(31, 20);
             labelChooseCar.TabIndex = 4;
             labelChooseCar.Text = "Car";
             // 
             // labelChooseTrack
             // 
             labelChooseTrack.AutoSize = true;
-            labelChooseTrack.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelChooseTrack.Font = new Font("Segoe UI", 11.25F);
             labelChooseTrack.Location = new Point(3, 18);
             labelChooseTrack.Name = "labelChooseTrack";
-            labelChooseTrack.Size = new Size(59, 19);
+            labelChooseTrack.Size = new Size(43, 20);
             labelChooseTrack.TabIndex = 3;
             labelChooseTrack.Text = "Track";
             // 
             // comboBoxTimeSelector
             // 
             comboBoxTimeSelector.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxTimeSelector.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            comboBoxTimeSelector.Font = new Font("Segoe UI", 11.25F);
             comboBoxTimeSelector.FormattingEnabled = true;
             comboBoxTimeSelector.Items.AddRange(new object[] { "5 minutes", "10 minutes", "15 minutes", "30 minutes", "60 minutes" });
-            comboBoxTimeSelector.Location = new Point(540, 40);
+            comboBoxTimeSelector.Location = new Point(499, 41);
             comboBoxTimeSelector.Name = "comboBoxTimeSelector";
-            comboBoxTimeSelector.Size = new Size(181, 27);
+            comboBoxTimeSelector.Size = new Size(181, 28);
             comboBoxTimeSelector.TabIndex = 2;
             comboBoxTimeSelector.SelectedIndexChanged += comboBoxTimeSelector_SelectedIndexChanged;
             // 
             // comboBoxCarSelector
             // 
             comboBoxCarSelector.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxCarSelector.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            comboBoxCarSelector.Font = new Font("Segoe UI", 11.25F);
             comboBoxCarSelector.FormattingEnabled = true;
             comboBoxCarSelector.Items.AddRange(new object[] { "DEBUG_CAR", "ANOTHER_CAR", "FAKE_CAR" });
-            comboBoxCarSelector.Location = new Point(279, 40);
+            comboBoxCarSelector.Location = new Point(238, 41);
             comboBoxCarSelector.Name = "comboBoxCarSelector";
-            comboBoxCarSelector.Size = new Size(255, 27);
+            comboBoxCarSelector.Size = new Size(255, 28);
             comboBoxCarSelector.TabIndex = 1;
             comboBoxCarSelector.SelectedIndexChanged += comboBoxCarSelector_SelectedIndexChanged;
             // 
             // comboBoxTrackSelector
             // 
             comboBoxTrackSelector.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxTrackSelector.Font = new Font("Noto Mono", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            comboBoxTrackSelector.Font = new Font("Segoe UI", 11.25F);
             comboBoxTrackSelector.FormattingEnabled = true;
             comboBoxTrackSelector.Items.AddRange(new object[] { "0", "4", "5", "6", "7", "8", "9", "ANOTHER_TRACK", "DEBUG_TRACK", "MADE_UP_TRACK" });
-            comboBoxTrackSelector.Location = new Point(3, 40);
+            comboBoxTrackSelector.Location = new Point(3, 41);
             comboBoxTrackSelector.Name = "comboBoxTrackSelector";
-            comboBoxTrackSelector.Size = new Size(270, 27);
+            comboBoxTrackSelector.Size = new Size(229, 28);
             comboBoxTrackSelector.Sorted = true;
             comboBoxTrackSelector.TabIndex = 0;
             comboBoxTrackSelector.SelectedIndexChanged += comboBoxTrackSelector_SelectedIndexChanged;
@@ -542,7 +547,7 @@
             tabPageSettings.Controls.Add(groupBoxStoreInvalidRuns);
             tabPageSettings.Location = new Point(4, 26);
             tabPageSettings.Name = "tabPageSettings";
-            tabPageSettings.Size = new Size(1223, 555);
+            tabPageSettings.Size = new Size(941, 970);
             tabPageSettings.TabIndex = 3;
             tabPageSettings.Text = "Settings";
             tabPageSettings.UseVisualStyleBackColor = true;
@@ -712,7 +717,7 @@
             tabPageDebug.Location = new Point(4, 26);
             tabPageDebug.Name = "tabPageDebug";
             tabPageDebug.Padding = new Padding(3);
-            tabPageDebug.Size = new Size(1223, 555);
+            tabPageDebug.Size = new Size(941, 970);
             tabPageDebug.TabIndex = 1;
             tabPageDebug.Text = "Debug Page";
             tabPageDebug.UseVisualStyleBackColor = true;
@@ -722,16 +727,28 @@
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
             // 
+            // CheckBoxDisplayOwnRunsOnly
+            // 
+            CheckBoxDisplayOwnRunsOnly.AutoSize = true;
+            CheckBoxDisplayOwnRunsOnly.Location = new Point(213, 73);
+            CheckBoxDisplayOwnRunsOnly.Name = "CheckBoxDisplayOwnRunsOnly";
+            CheckBoxDisplayOwnRunsOnly.Size = new Size(163, 23);
+            CheckBoxDisplayOwnRunsOnly.TabIndex = 14;
+            CheckBoxDisplayOwnRunsOnly.Text = "Display own runs only";
+            CheckBoxDisplayOwnRunsOnly.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1240, 594);
+            ClientSize = new Size(958, 1000);
             Controls.Add(tabControl1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(974, 1030);
             Name = "MainForm";
             Text = "ACC Hotrun Compare";
             FormClosing += Form1_FormClosing;
+            SizeChanged += MainForm_SizeChanged;
             debugBox.ResumeLayout(false);
             debugBox.PerformLayout();
             tabControl1.ResumeLayout(false);
@@ -837,5 +854,6 @@
         private GroupBox groupBoxLiveRunDriverCompare;
         private RadioButton radioButtonDriverCompareAllDrivers;
         private RadioButton radioButtonDriverCompareUserOnly;
+        private CheckBox CheckBoxDisplayOwnRunsOnly;
     }
 }

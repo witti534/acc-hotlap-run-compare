@@ -297,7 +297,7 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void buttonDeleteSelectedRuns_Click(object sender, EventArgs e)
         {
-            tabCompareRuns.DeleteSelectedRuns(panelDisplayRuns);
+            tabCompareRuns.DeleteSelectedRuns();
             comboBoxTimeSelector_SelectedIndexChanged(null, null);
         }
 
@@ -427,5 +427,9 @@ namespace acc_hotrun_run_compare
             settingsProvider.SettingsUpdateUsername(textBoxUsername.Text, checkBoxUpdateUsernameForAllRuns.Checked);
         }
 
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            //label1.Text = Size.Width.ToString();
+        }
     }
 }

@@ -217,10 +217,9 @@ namespace acc_hotrun_run_compare
         /// <summary>
         /// This function is used to get all selected runs and delete each of the 
         /// </summary>
-        /// <param name="panelWithRuns"></param>
-        public void DeleteSelectedRuns(Panel panelWithRuns)
+        public void DeleteSelectedRuns()
         {
-            List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+            List<int> selectedRunIDs = GetSelectedRunIDs();
 
             foreach (int runID in selectedRunIDs)
             {
@@ -248,14 +247,13 @@ namespace acc_hotrun_run_compare
         /// <summary>
         /// A helper function to get all currently selected checkboxes and runs
         /// </summary>
-        /// <param name="panelWithRuns">The panel for </param>
         /// <returns></returns>
-        private List<int> GetSelectedRunIDs(Panel panelWithRuns)
+        private List<int> GetSelectedRunIDs()
         {
             List<int> resultList = [];
 
             //Get all controls in the panel)
-            foreach (Control control in panelWithRuns.Controls)
+            foreach (Control control in RunPanel.Controls)
             {
                 //all checkboxes we need starts with "checkboxrun|"
                 if (control.Name.StartsWith("checkboxrun|"))
@@ -282,7 +280,7 @@ namespace acc_hotrun_run_compare
         /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
         public void ShowRuns(Panel panelWithRuns)
         {
-            List<int> selectedRuns = GetSelectedRunIDs(panelWithRuns);
+            List<int> selectedRuns = GetSelectedRunIDs();
 
 
             if (selectedRuns.Count == 0)
@@ -320,10 +318,9 @@ namespace acc_hotrun_run_compare
         /// <summary>
         /// This function serves as the entry point to export runs. It reads all selected runs from the Panel panelWithRuns. 
         /// </summary>
-        /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
-        public void ExportRunsEntryFunction(Panel panelWithRuns)
+        public void ExportRunsEntryFunction()
         {
-            List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+            List<int> selectedRunIDs = GetSelectedRunIDs();
             //Get a list of each runID of all selected runs
 
             if (selectedRunIDs.Count == 0)
@@ -352,10 +349,9 @@ namespace acc_hotrun_run_compare
 
 
         /// <summary>
-        /// 
+        /// This function is being called when the button is pressed to import runs. This opens a file dialog and allows importing multiple runs.
         /// </summary>
-        /// <param name="panelWithRuns"></param>
-        public void ImportRunsEntryFunction(Panel panelWithRuns)
+        public void ImportRunsEntryFunction()
         {
             CommonOpenFileDialog fileDialog = new CommonOpenFileDialog
             {
