@@ -21,9 +21,10 @@ namespace acc_hotrun_run_compare
         public CompareRunsAgainstDriversEnum CurrentRunCompareRunsAgainstDrivers { get; private set; }
         public string CompareRunsLastTrackName { get; private set; }
         public string CompareRunsLastCarName { get; private set; }
-        public int CompareRunsLastSessionTime { get; private set; }
+        public string CompareRunsLastSessionTime { get; private set; }
         public bool CompareRunsDisplayRunsWithPenalties { get; private set; }
         public bool CompareRunsDisplayRunsFromOtherDrivers { get; private set; }
+        public string CompareRunsSelectedComparerName { get; private set; }
 
         private readonly string settingsFilePath = "settings.xml";
         private readonly XElement rootXElement;
@@ -40,6 +41,7 @@ namespace acc_hotrun_run_compare
         private readonly static string XMLKeyLastSessionTime = "LastSessionTime";
         private readonly static string XMLKeyDisplayRunsWithPenalties = "DisplayRunsWithPenalties";
         private readonly static string XMLKeyDisplayRunsFromOtherDrivers = "DisplayRunsFromOtherDrivers";
+        private readonly static string XMLKeyComparerName = "ComparerName";
 
 
         public enum StoreRunsWithPenaltiesEnum
@@ -79,9 +81,10 @@ namespace acc_hotrun_run_compare
                         new XElement(XMLKeyUsername, "You"),
                         new XElement(XMLKeyLastTrackName, "-"),
                         new XElement(XMLKeyLastCarName, "-"),
-                        new XElement(XMLKeyLastSessionTime, 0),
+                        new XElement(XMLKeyLastSessionTime, "0"),
                         new XElement(XMLKeyDisplayRunsWithPenalties, false),
-                        new XElement(XMLKeyDisplayRunsFromOtherDrivers, true)
+                        new XElement(XMLKeyDisplayRunsFromOtherDrivers, true),
+                        new XElement(XMLKeyComparerName, FormStrings.SortByTotalTimeShortestFirst)
                     );
                 }
                 else
@@ -199,21 +202,20 @@ namespace acc_hotrun_run_compare
                     XElement lastSessionTimeXElement = rootXElement.Element(XMLKeyLastSessionTime);
                     if (lastSessionTimeXElement == null)
                     {
-                        lastSessionTimeXElement = new XElement(XMLKeyLastSessionTime, 0);
-                        CompareRunsLastSessionTime = 0;
+                        lastSessionTimeXElement = new XElement(XMLKeyLastSessionTime, "0");
+                        CompareRunsLastSessionTime = "0";
                         rootXElement.Add(lastSessionTimeXElement);
                     }
                     else
                     {
                         string XElementValue = lastSessionTimeXElement.Value;
-                        bool readSuccessful = Int32.TryParse(XElementValue, out int lastSessionTimeValue);
-                        if (readSuccessful)
+                        if (XElementValue != null)
                         {
-                            CompareRunsLastSessionTime = lastSessionTimeValue; //read value
+                            CompareRunsLastSessionTime = XElementValue; //read value
                         }
                         else
                         {
-                            CompareRunsLastSessionTime = 0; //default value
+                            CompareRunsLastSessionTime = "0"; //default value
                         }
                     }
 
@@ -261,6 +263,20 @@ namespace acc_hotrun_run_compare
                         }
                     }
 
+                    //comparerName
+                    XElement comparerNameXElement = rootXElement.Element(XMLKeyComparerName);
+                    if (comparerNameXElement == null)
+                    {
+                        comparerNameXElement = new XElement(XMLKeyComparerName, FormStrings.SortByTotalTimeShortestFirst);
+                        CompareRunsSelectedComparerName = FormStrings.SortByTotalTimeShortestFirst;
+                        rootXElement.Add(comparerNameXElement);
+                    }
+                    else
+                    {
+                        CompareRunsSelectedComparerName = comparerNameXElement.Value;
+                    }
+
+
                 } //end read existing settings
                 SaveSettingsFile();
             }//end file exists
@@ -274,9 +290,10 @@ namespace acc_hotrun_run_compare
                     new XElement(XMLKeyUsername, "You"),
                     new XElement(XMLKeyLastTrackName, "-"),
                     new XElement(XMLKeyLastCarName, "-"),
-                    new XElement(XMLKeyLastSessionTime, 0),
+                    new XElement(XMLKeyLastSessionTime, "0"),
                     new XElement(XMLKeyDisplayRunsWithPenalties, false),
-                    new XElement(XMLKeyDisplayRunsFromOtherDrivers, true)
+                    new XElement(XMLKeyDisplayRunsFromOtherDrivers, true),
+                    new XElement(XMLKeyComparerName, FormStrings.SortByTotalTimeShortestFirst)
                 );
                 settingsDocument = new XDocument(rootXElement);
                 SaveSettingsFile();
@@ -293,59 +310,117 @@ namespace acc_hotrun_run_compare
             return instance;
         }
 
+        /// <summary>
+        /// Save the settings file to disk. Any existing file will be updated.
+        /// </summary>
         private void SaveSettingsFile()
         {
             settingsDocument.Save(settingsFilePath);
         }
 
+        /// <summary>
+        /// Setter: Store runs with penalties has been enabled. Update all necessary values.
+        /// </summary>
         public void SettingsSetStoreRunsWithPenaltiesEnabled()
         {
-            XElement storeRunsWithPenaltiesXElement = rootXElement.Element("StoreRunsWithPenalties");
+            XElement storeRunsWithPenaltiesXElement = rootXElement.Element(XMLKeyStoreRunsWithPenalties);
             storeRunsWithPenaltiesXElement.Value = "1";
             CurrentRunStoreRunsWithPenalties = StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED;
             SaveSettingsFile();
         }
 
+        /// <summary>
+        /// Setter: Store runs with penalties has been disabled. Update all necessary values.
+        /// </summary>
         public void SettingsSetStoreRunsWithPenaltiesDisabled()
         {
-            XElement storeRunsWithPenaltiesXElement = rootXElement.Element("StoreRunsWithPenalties");
+            XElement storeRunsWithPenaltiesXElement = rootXElement.Element(XMLKeyStoreRunsWithPenalties);
             storeRunsWithPenaltiesXElement.Value = "2";
             CurrentRunStoreRunsWithPenalties = StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED;
             SaveSettingsFile();
         }
 
+        /// <summary>
+        /// Setter: Compare live runs against current car has been set. Update all necessary values.
+        /// </summary>
         public void SettingsSetCompareAgainstCarsCurrent()
         {
-            XElement compareCarsXElement = rootXElement.Element("CompareRunsAgainstCars");
+            XElement compareCarsXElement = rootXElement.Element(XMLKeyCompareRunsAgainstCars);
             compareCarsXElement.Value = "1";
             CurrentRunCompareRunsAgainstCars = CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR;
             SaveSettingsFile();
         }
 
+        /// <summary>
+        /// Setter: Compare live runs against all cars has been set. Update all necessary values.
+        /// </summary>
         public void SettingsSetCompareAgainstCarsAll()
         {
-            XElement compareCarsXElement = rootXElement.Element("CompareRunsAgainstCars");
+            XElement compareCarsXElement = rootXElement.Element(XMLKeyCompareRunsAgainstCars);
             compareCarsXElement.Value = "2";
             CurrentRunCompareRunsAgainstCars = CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS;
             SaveSettingsFile();
         }
 
+        /// <summary>
+        /// Setter: Compare live runs against current user has been set. Update all necessary values.
+        /// </summary>
         public void SettingsSetCompareAgainstDriverUser()
         {
-            XElement compareDriversXElement = rootXElement.Element("CompareRunsAgainstDrivers");
+            XElement compareDriversXElement = rootXElement.Element(XMLKeyCompareRunsAgainstDrivers);
             compareDriversXElement.Value = "2";
             CurrentRunCompareRunsAgainstDrivers = CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY;
             SaveSettingsFile();
         }
 
+        /// <summary>
+        /// Setter: Compare live runs against all users has been set. Update all necessary values.
+        /// </summary>
         public void SettingsSetCompareAgainstDriverAll()
         {
-            XElement compareDriversXElement = rootXElement.Element("CompareRunsAgainstDrivers");
+            XElement compareDriversXElement = rootXElement.Element(XMLKeyCompareRunsAgainstDrivers);
             compareDriversXElement.Value = "1";
             CurrentRunCompareRunsAgainstDrivers = CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS;
             SaveSettingsFile();
         }
 
+        public void SettingsSetDisplayRunsWithPenalties(bool displayRunsWithPenaltiesChecked)
+        {
+            XElement displayRunsWithPenaltiesXElement = rootXElement.Element(XMLKeyDisplayRunsWithPenalties);
+            if (displayRunsWithPenaltiesChecked)
+            {
+                displayRunsWithPenaltiesXElement.Value = true.ToString();
+                CompareRunsDisplayRunsWithPenalties = true;
+            }
+            else
+            {
+                displayRunsWithPenaltiesXElement.Value = false.ToString();
+                CompareRunsDisplayRunsWithPenalties = false;
+            }
+            SaveSettingsFile();
+        }
+
+        public void SettingsSetDisplayRunsFromCurrentDriver(bool displayRunsFromCurrentDriverOnlyChecked)
+        {
+            XElement displayRunsFromOtherDriversXElement = rootXElement.Element(XMLKeyDisplayRunsFromOtherDrivers);
+            if (displayRunsFromCurrentDriverOnlyChecked)
+            {
+                displayRunsFromOtherDriversXElement.Value = false.ToString();
+                CompareRunsDisplayRunsFromOtherDrivers = false;
+            }
+            else
+            {
+                displayRunsFromOtherDriversXElement.Value = true.ToString();
+                CompareRunsDisplayRunsFromOtherDrivers = true;
+            }
+            SaveSettingsFile();
+        }
+
+        /// <summary>
+        /// Function to set a new username for the application. If checkbox is ticked, then runs with old username will be updated to the new username.
+        /// </summary>
+        /// <param name="newUsername">string consisting of the new username</param>
+        /// <param name="additionallyUpdateRunInformation">If checked, runs in the database with the old username will be updated to new username. Otherwise no effect.</param>
         public void SettingsUpdateUsername(string newUsername, bool additionallyUpdateRunInformation)
         {
             if (string.IsNullOrEmpty(newUsername))
@@ -357,7 +432,7 @@ namespace acc_hotrun_run_compare
             string oldUsername = Username;
 
             Username = newUsername;
-            XElement usernameXElement = rootXElement.Element("username");
+            XElement usernameXElement = rootXElement.Element(XMLKeyUsername);
             usernameXElement.Value = newUsername;
             SaveSettingsFile();
 
@@ -376,6 +451,38 @@ namespace acc_hotrun_run_compare
 
                 storedRunContext.SaveChanges();
             }
+        }
+
+        public void SettingsSetLastTrackName(string trackName)
+        {
+            XElement lastTrackNameXElement = rootXElement.Element(XMLKeyLastTrackName);
+            lastTrackNameXElement.Value = trackName;
+            CompareRunsLastTrackName = trackName;
+            SaveSettingsFile();
+        }
+
+        public void SettingsSetLastCarName(string carName)
+        {
+            XElement lastCarNameXElement = rootXElement.Element(XMLKeyLastCarName);
+            lastCarNameXElement.Value = carName;
+            CompareRunsLastTrackName = carName;
+            SaveSettingsFile();
+        }
+
+        public void SettingsSetLastSessionTime(string sessionTime)
+        {
+            XElement lastSessionTimeXElement = rootXElement.Element(XMLKeyLastSessionTime);
+            lastSessionTimeXElement.Value = sessionTime;
+            CompareRunsLastSessionTime = sessionTime;
+            SaveSettingsFile();
+        }
+
+        public void SettingsSetLastSelector(string selectorName)
+        {
+            XElement lastSelectorNameXElement = rootXElement.Element(XMLKeyComparerName);
+            lastSelectorNameXElement.Value = selectorName;
+            CompareRunsSelectedComparerName = selectorName;
+            SaveSettingsFile();
         }
     }
 }

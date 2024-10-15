@@ -56,6 +56,7 @@
             labelCurrentRunLaps = new Label();
             labelCurrentRunSectors = new Label();
             tabPageCompareRuns = new TabPage();
+            CheckBoxDisplayOwnRunsOnly = new CheckBox();
             ButtonCompareRuns = new Button();
             buttonImportRuns = new Button();
             buttonExportSelectedRuns = new Button();
@@ -87,7 +88,6 @@
             radioButtonStoreRunsWithPenaltiesEnabled = new RadioButton();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
-            CheckBoxDisplayOwnRunsOnly = new CheckBox();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -217,7 +217,6 @@
             tabControl1.Size = new Size(949, 1000);
             tabControl1.SizeMode = TabSizeMode.FillToRight;
             tabControl1.TabIndex = 9;
-            tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
             // 
             // tabPageMainAddRun
             // 
@@ -383,6 +382,18 @@
             tabPageCompareRuns.Text = "Compare Runs";
             tabPageCompareRuns.UseVisualStyleBackColor = true;
             // 
+            // CheckBoxDisplayOwnRunsOnly
+            // 
+            CheckBoxDisplayOwnRunsOnly.AutoSize = true;
+            CheckBoxDisplayOwnRunsOnly.Font = new Font("Segoe UI", 11.25F);
+            CheckBoxDisplayOwnRunsOnly.Location = new Point(213, 73);
+            CheckBoxDisplayOwnRunsOnly.Name = "CheckBoxDisplayOwnRunsOnly";
+            CheckBoxDisplayOwnRunsOnly.Size = new Size(172, 24);
+            CheckBoxDisplayOwnRunsOnly.TabIndex = 14;
+            CheckBoxDisplayOwnRunsOnly.Text = "Display own runs only";
+            CheckBoxDisplayOwnRunsOnly.UseVisualStyleBackColor = true;
+            CheckBoxDisplayOwnRunsOnly.CheckedChanged += CheckBoxDisplayOwnRunsOnly_CheckedChanged;
+            // 
             // ButtonCompareRuns
             // 
             ButtonCompareRuns.Font = new Font("Segoe UI", 11.25F);
@@ -436,7 +447,7 @@
             ComboBoxSortRunsBy.Name = "ComboBoxSortRunsBy";
             ComboBoxSortRunsBy.Size = new Size(270, 28);
             ComboBoxSortRunsBy.TabIndex = 9;
-            ComboBoxSortRunsBy.SelectedIndexChanged += comboBoxTimeSelector_SelectedIndexChanged;
+            ComboBoxSortRunsBy.SelectedIndexChanged += ComboBoxSortRunsBy_SelectedIndexChanged;
             // 
             // labelSortBy
             // 
@@ -467,7 +478,7 @@
             checkBoxDisplayRunsWIthPenalties.TabIndex = 6;
             checkBoxDisplayRunsWIthPenalties.Text = "Display runs with penalties";
             checkBoxDisplayRunsWIthPenalties.UseVisualStyleBackColor = true;
-            checkBoxDisplayRunsWIthPenalties.CheckedChanged += comboBoxTimeSelector_SelectedIndexChanged;
+            checkBoxDisplayRunsWIthPenalties.CheckedChanged += checkBoxDisplayRunsWIthPenalties_CheckedChanged;
             // 
             // labelChooseSessionTime
             // 
@@ -726,16 +737,6 @@
             // 
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
-            // 
-            // CheckBoxDisplayOwnRunsOnly
-            // 
-            CheckBoxDisplayOwnRunsOnly.AutoSize = true;
-            CheckBoxDisplayOwnRunsOnly.Location = new Point(213, 73);
-            CheckBoxDisplayOwnRunsOnly.Name = "CheckBoxDisplayOwnRunsOnly";
-            CheckBoxDisplayOwnRunsOnly.Size = new Size(163, 23);
-            CheckBoxDisplayOwnRunsOnly.TabIndex = 14;
-            CheckBoxDisplayOwnRunsOnly.Text = "Display own runs only";
-            CheckBoxDisplayOwnRunsOnly.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
