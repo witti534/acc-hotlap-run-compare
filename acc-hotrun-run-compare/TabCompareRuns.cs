@@ -18,7 +18,9 @@ namespace acc_hotrun_run_compare
         ComboBox comboBoxCarSelector,
         ComboBox comboBoxSessionTimeSelector,
         CheckBox checkBoxDisplayInvalidRuns,
-        ComboBox comboBoxComparer)
+        ComboBox comboBoxComparer,
+        CheckBox checkBoxDisplayOwnRunsOnly)
+
     {
         readonly StoredRunContext StoredRunContext = StoredRunContext.GetInstance();
         readonly Panel RunPanel = runPanel;
@@ -27,6 +29,8 @@ namespace acc_hotrun_run_compare
         readonly ComboBox ComboBoxSessionTimeSelector = comboBoxSessionTimeSelector;
         readonly CheckBox CheckBoxDisplayInvalidRuns = checkBoxDisplayInvalidRuns;
         readonly ComboBox ComboBoxComparer = comboBoxComparer;
+
+        readonly SettingsProvider settingsProvider = SettingsProvider.GetInstance();
         
 
         /// <summary>
@@ -73,6 +77,8 @@ namespace acc_hotrun_run_compare
                 ComboBoxCarSelector.Items.Add(carName);
             }
 
+            PopulateSessionSelector();
+
         }
 
         /// <summary>
@@ -81,6 +87,7 @@ namespace acc_hotrun_run_compare
         public void PopulateSessionSelector()
         {
             ComboBoxSessionTimeSelector.Items.Clear();
+            ComboBoxSessionTimeSelector.Items.Add("Any");
 
             string carName = ComboBoxCarSelector.Text;
             string trackName = ComboBoxTrackSelector.Text;
@@ -115,43 +122,47 @@ namespace acc_hotrun_run_compare
         /// This function takes the information from the comboboxes and fills up the panel with information about different runs.
         /// It sorts runs depending on the comparer.
         /// </summary>
-        public void FillUpPanelWithRuns()
+        public void RedrawPanelWithRunsToBeCompared()
         {
             string trackName = ComboBoxTrackSelector.Text;
             string carName = ComboBoxCarSelector.Text;
             bool displayRunsWithPenalties = CheckBoxDisplayInvalidRuns.Checked;
-            int sessionLength = Int32.Parse(ComboBoxSessionTimeSelector.Text);
+            bool sessionLengthSet = Int32.TryParse(ComboBoxSessionTimeSelector.Text, out int sessionLength);
             string comparerName = ComboBoxComparer.Text;
 
+            RunPanel.Controls.Clear();
+
             //Compare with strings from FormStrings to choose the comparer.
-            Comparer<RunInformation> comparer = comparerName switch
-            {
-                FormStrings.SortByTotalTimeShortestFirst => new RunInformationComparerFastestRunFirst(),
-                FormStrings.SortByTotalTimeShortestLast => new RunInformationComparerFastestRunLast(),
-                FormStrings.SortByFastestLapShortestLast => new RunInformationComparerFastestLapFirst(),
-                FormStrings.SortByFastestLapShortestFirst => new RunInformationComparerFastestLapLast(),
-                FormStrings.SortByDateOldestFirst => new RunInformationComparerOldestDateFirst(),
-                FormStrings.SortByDateOldestLast => new RunInformationComparerOldestDateLast(),
-                _ => new RunInformationComparerFastestRunFirst(),
-            };
+            Comparer<RunInformation> comparer = RunInformation.GetComparerFromComparerName(comparerName);
             List<RunInformation> selectedRunsWithoutSectors;
-            //Select runs based on trackname, carname and session length
-            if (carName == "All cars")
-            {
-                selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
-               .Where(r => r.TrackName == trackName && r.SessionTime == sessionLength)
-               .Select(r => r)
-               .ToList();
-            }
-            else
-            {
-                selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
-                .Where(r => r.TrackName == trackName && r.CarName == carName && r.SessionTime == sessionLength)
+
+            //Get a list of all tracks of the chosen track
+            selectedRunsWithoutSectors = StoredRunContext.RunInformationSet
+                .Where(r => r.TrackName == trackName)
                 .Select(r => r)
                 .ToList();
+
+            //Filter if a certain car has been chosen
+            if (carName != "All cars")
+            {
+                selectedRunsWithoutSectors = selectedRunsWithoutSectors.Where(r => r.CarName == carName)
+                    .ToList();
+            }
+
+            //Filter if a certain session length has been chosen
+            if (sessionLengthSet)
+            {
+                selectedRunsWithoutSectors = selectedRunsWithoutSectors.Where(r => r.SessionTime == sessionLength)
+                    .ToList();
             }
 
 
+            //Filter if only runs for the current driver name shall be displayed
+            if (checkBoxDisplayOwnRunsOnly.Checked)
+            {
+                selectedRunsWithoutSectors = selectedRunsWithoutSectors.Where(r => r.DriverName == settingsProvider.Username)
+                    .ToList();
+            }
 
             //Add sector information lists to runs to be able to compare runs with different amounts of laps
             foreach (RunInformation runWithoutSectors in selectedRunsWithoutSectors)
@@ -217,10 +228,9 @@ namespace acc_hotrun_run_compare
         /// <summary>
         /// This function is used to get all selected runs and delete each of the 
         /// </summary>
-        /// <param name="panelWithRuns"></param>
-        public void DeleteSelectedRuns(Panel panelWithRuns)
+        public void DeleteSelectedRuns()
         {
-            List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+            List<int> selectedRunIDs = GetSelectedRunIDs();
 
             foreach (int runID in selectedRunIDs)
             {
@@ -248,14 +258,13 @@ namespace acc_hotrun_run_compare
         /// <summary>
         /// A helper function to get all currently selected checkboxes and runs
         /// </summary>
-        /// <param name="panelWithRuns">The panel for </param>
         /// <returns></returns>
-        private List<int> GetSelectedRunIDs(Panel panelWithRuns)
+        private List<int> GetSelectedRunIDs()
         {
             List<int> resultList = [];
 
             //Get all controls in the panel)
-            foreach (Control control in panelWithRuns.Controls)
+            foreach (Control control in RunPanel.Controls)
             {
                 //all checkboxes we need starts with "checkboxrun|"
                 if (control.Name.StartsWith("checkboxrun|"))
@@ -282,7 +291,7 @@ namespace acc_hotrun_run_compare
         /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
         public void ShowRuns(Panel panelWithRuns)
         {
-            List<int> selectedRuns = GetSelectedRunIDs(panelWithRuns);
+            List<int> selectedRuns = GetSelectedRunIDs();
 
 
             if (selectedRuns.Count == 0)
@@ -320,10 +329,9 @@ namespace acc_hotrun_run_compare
         /// <summary>
         /// This function serves as the entry point to export runs. It reads all selected runs from the Panel panelWithRuns. 
         /// </summary>
-        /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
-        public void ExportRunsEntryFunction(Panel panelWithRuns)
+        public void ExportRunsEntryFunction()
         {
-            List<int> selectedRunIDs = GetSelectedRunIDs(panelWithRuns);
+            List<int> selectedRunIDs = GetSelectedRunIDs();
             //Get a list of each runID of all selected runs
 
             if (selectedRunIDs.Count == 0)
@@ -352,10 +360,9 @@ namespace acc_hotrun_run_compare
 
 
         /// <summary>
-        /// 
+        /// This function is being called when the button is pressed to import runs. This opens a file dialog and allows importing multiple runs.
         /// </summary>
-        /// <param name="panelWithRuns"></param>
-        public void ImportRunsEntryFunction(Panel panelWithRuns)
+        public void ImportRunsEntryFunction()
         {
             CommonOpenFileDialog fileDialog = new CommonOpenFileDialog
             {

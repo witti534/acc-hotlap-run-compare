@@ -85,6 +85,52 @@ namespace acc_hotrun_run_compare.DBClasses
             SectorList = sectorList;
             RunDescription = "";
         }
+
+        public static string GetComparerNameFromComparer(Comparer<RunInformation> comparer)
+        {
+            ArgumentNullException.ThrowIfNull(comparer);
+
+            if (comparer.GetType() == typeof(RunInformationComparerFastestLapFirst))
+            {
+                return FormStrings.SortByFastestLapShortestFirst;
+            }
+            if (comparer.GetType() == typeof(RunInformationComparerFastestLapLast))
+            {
+                return FormStrings.SortByFastestLapShortestLast;
+            }
+            if (comparer.GetType() == typeof(RunInformationComparerFastestRunFirst))
+            {
+                return FormStrings.SortByTotalTimeShortestFirst;
+            }
+            if (comparer.GetType() == typeof(RunInformationComparerFastestRunLast))
+            {
+                return FormStrings.SortByTotalTimeShortestLast;
+            }
+            if (comparer.GetType() == typeof(RunInformationComparerOldestDateFirst))
+            {
+                return FormStrings.SortByDateOldestFirst;
+            }
+            if (comparer.GetType() == typeof(RunInformationComparerOldestDateLast))
+            {
+                return FormStrings.SortByDateOldestLast;
+            }
+            return "unknown_comparer";
+        }
+
+        public static Comparer<RunInformation> GetComparerFromComparerName(string comparerName)
+        {
+            Comparer<RunInformation> comparer = comparerName switch
+            {
+                FormStrings.SortByTotalTimeShortestFirst => new RunInformationComparerFastestRunFirst(),
+                FormStrings.SortByTotalTimeShortestLast => new RunInformationComparerFastestRunLast(),
+                FormStrings.SortByFastestLapShortestLast => new RunInformationComparerFastestLapFirst(),
+                FormStrings.SortByFastestLapShortestFirst => new RunInformationComparerFastestLapLast(),
+                FormStrings.SortByDateOldestFirst => new RunInformationComparerOldestDateFirst(),
+                FormStrings.SortByDateOldestLast => new RunInformationComparerOldestDateLast(),
+                _ => new RunInformationComparerFastestRunFirst(),
+            };
+            return comparer;
+        }
     }
 
     public class RunInformationComparerFastestRunFirst : Comparer<RunInformation>
