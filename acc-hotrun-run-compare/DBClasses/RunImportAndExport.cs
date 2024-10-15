@@ -118,10 +118,12 @@ namespace acc_hotrun_run_compare.DBClasses
                     if (xmlScheme.Value == "version1")
                     {
                         InterpretXMLFileSchemev1(rootElement);
+                        return;
                     }
                     if (xmlScheme.Value == "version2")
                     {
                         InterpretXMLFileSchemev2(rootElement);
+                        return;
                     }
                     throw new Exception("Unknown document version. Please download the latest update.");
                 }

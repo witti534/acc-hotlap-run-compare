@@ -43,7 +43,15 @@ namespace acc_hotrun_run_compare
             InitializeLabelsOnCurrentRunTab();
             InitializeSettings();
             timer1.Enabled = true;
-            tabCompareRuns = new TabCompareRuns(panelDisplayRuns, comboBoxTrackSelector, comboBoxCarSelector, comboBoxTimeSelector, checkBoxDisplayRunsWIthPenalties, ComboBoxSortRunsBy);
+            tabCompareRuns = new TabCompareRuns(
+                panelDisplayRuns,
+                comboBoxTrackSelector,
+                comboBoxCarSelector,
+                comboBoxTimeSelector,
+                checkBoxDisplayRunsWIthPenalties,
+                ComboBoxSortRunsBy,
+                CheckBoxDisplayOwnRunsOnly);
+            PrepareTabCompareRuns();
             tabDebug = new TabDebug();
             tabCurrentRun = new TabCurrentRun();
             labelVersion.Text = "Version: " + Version;
@@ -116,7 +124,7 @@ namespace acc_hotrun_run_compare
             //Check if penalties occured during the run.
             //Do not save the run if settings forbid saving runs with penalties.
             //Display debug text.
-            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED && finishedRun.PenaltyOccured)
+            if (settingsProvider.CurrentRunStoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED && finishedRun.PenaltyOccured)
             {
                 labelLastSavedRunData.Text = "There has been a penalty in the last run.\r\n" +
                     "Change settings if you want to store runs with penalties.";
@@ -138,6 +146,8 @@ namespace acc_hotrun_run_compare
             }
             dbStoredRunsContext.Add(finishedRun);
             dbStoredRunsContext.SaveChanges();
+
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
             return;
         }
 
@@ -184,15 +194,15 @@ namespace acc_hotrun_run_compare
         private void comboBoxTrackSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBoxCarSelector.Enabled = true;
+            comboBoxTimeSelector.Enabled = true;
             tabCompareRuns.PopulateCarSelector();
 
-            comboBoxTimeSelector.Items.Clear();
-            comboBoxTimeSelector.Enabled = false;
+            comboBoxCarSelector.SelectedIndex = 0;
+            comboBoxTimeSelector.SelectedIndex = 0;
 
-            if (comboBoxCarSelector.Items.Count == 1)
-            {
-                comboBoxCarSelector.SelectedIndex = 0;
-            }
+            settingsProvider.SettingsSetLastTrackName(comboBoxTrackSelector.Text);
+
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
         }
 
         /// <summary>
@@ -204,48 +214,16 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxCarSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBoxTimeSelector.Enabled = true;
-            tabCompareRuns.PopulateSessionSelector();
             checkBoxDisplayRunsWIthPenalties.Enabled = true;
+            tabCompareRuns.PopulateSessionSelector();
+            comboBoxTimeSelector.SelectedIndex = 0;
 
-            if (comboBoxTimeSelector.Items.Count == 1)
-            {
-                comboBoxTimeSelector.SelectedIndex = 0;
-            }
+            settingsProvider.SettingsSetLastCarName(comboBoxCarSelector.Text);
 
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
             //After changing the car populate the session length selector
         }
 
-        /// <summary>
-        /// This function is being called when the tab is changed
-        /// For now this only affects the data in the tab for comparing runs
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (tabControl1.SelectedTab.Name == "tabPageCompareRuns") //tab for comparing runs
-            {
-
-                //Clear fields and populate TrackSelector
-                tabCompareRuns.PopulateTrackSelector();
-
-                //Disable other Selectors
-                comboBoxCarSelector.Items.Clear();
-                comboBoxCarSelector.Enabled = false;
-
-                comboBoxTimeSelector.Items.Clear();
-                comboBoxTimeSelector.Enabled = false;
-
-                checkBoxDisplayRunsWIthPenalties.Enabled = false;
-
-                if (comboBoxTrackSelector.Items.Count == 1)
-                {
-                    comboBoxTrackSelector.SelectedIndex = 0;
-                }
-
-            }
-        }
 
         /// <summary>
         /// This function is being called when the Session Length Selector index is being changed (so an item has been selected).
@@ -256,12 +234,8 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxTimeSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxTimeSelector.Items.Count > 0 || comboBoxTimeSelector.SelectedItem != null)
-            {
-                panelDisplayRuns.Controls.Clear();
-
-                tabCompareRuns.FillUpPanelWithRuns();
-            }
+            settingsProvider.SettingsSetLastSessionTime(comboBoxTimeSelector.Text);
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
         }
 
         /// <summary>
@@ -297,8 +271,8 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void buttonDeleteSelectedRuns_Click(object sender, EventArgs e)
         {
-            tabCompareRuns.DeleteSelectedRuns(panelDisplayRuns);
-            comboBoxTimeSelector_SelectedIndexChanged(null, null);
+            tabCompareRuns.DeleteSelectedRuns();
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
         }
 
         /// <summary>
@@ -328,12 +302,12 @@ namespace acc_hotrun_run_compare
 
         private void ButtonExportSelectedRuns_Click(object sender, EventArgs e)
         {
-            tabCompareRuns.ExportRunsEntryFunction(panelDisplayRuns);
+            tabCompareRuns.ExportRunsEntryFunction();
         }
 
         private void buttonImportRuns_Click(object sender, EventArgs e)
         {
-            tabCompareRuns.ImportRunsEntryFunction(panelDisplayRuns);
+            tabCompareRuns.ImportRunsEntryFunction();
         }
 
         private void comboBoxTrackSelector_MouseClick(object sender, MouseEventArgs e)
@@ -348,27 +322,27 @@ namespace acc_hotrun_run_compare
         {
             textBoxUsername.Text = settingsProvider.Username;
 
-            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
+            if (settingsProvider.CurrentRunStoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_ENABLED)
             {
                 radioButtonStoreRunsWithPenaltiesEnabled.Checked = true;
             }
-            if (settingsProvider.StoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED)
+            if (settingsProvider.CurrentRunStoreRunsWithPenalties == SettingsProvider.StoreRunsWithPenaltiesEnum.STORE_RUNS_WITH_PENALTIES_DISABLED)
             {
                 radioButtonStoreRunsWithPenaltiesDisabled.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS)
+            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS)
             {
                 radioButtonCarCompareAllCars.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
+            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
             {
                 radioButtonCarCompareCurrentCar.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
+            if (settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
             {
                 radioButtonDriverCompareAllDrivers.Checked = true;
             }
-            if (settingsProvider.CompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            if (settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
             {
                 radioButtonDriverCompareUserOnly.Checked = true;
             }
@@ -427,5 +401,83 @@ namespace acc_hotrun_run_compare
             settingsProvider.SettingsUpdateUsername(textBoxUsername.Text, checkBoxUpdateUsernameForAllRuns.Checked);
         }
 
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            //label1.Text = Size.Width.ToString();
+        }
+
+        /// <summary>
+        /// This function is called during the startup phase of the program. The SettingsProvider is being accessed to get last selected values
+        /// from the TabCompare tab. This ensures a smoother user experience. 
+        /// </summary>
+        private void PrepareTabCompareRuns()
+        {
+            string savedTrackName = settingsProvider.CompareRunsLastTrackName;
+            string savedCarName = settingsProvider.CompareRunsLastCarName;
+            string savedSessionTime = settingsProvider.CompareRunsLastSessionTime;
+            string savedComparerName = settingsProvider.CompareRunsSelectedComparerName;
+
+            checkBoxDisplayRunsWIthPenalties.Checked = settingsProvider.CompareRunsDisplayRunsWithPenalties;
+            CheckBoxDisplayOwnRunsOnly.Checked = !(settingsProvider.CompareRunsDisplayRunsFromOtherDrivers);
+
+            //Restore comparer
+            if (ComboBoxSortRunsBy.Items.Contains(savedComparerName))
+            {
+                ComboBoxSortRunsBy.SelectedItem = savedComparerName;
+            }
+
+            tabCompareRuns.PopulateTrackSelector();
+            if (comboBoxTrackSelector.Items.Contains(savedTrackName))
+            {
+                //restore last saved track
+                comboBoxTrackSelector.SelectedItem = savedTrackName;
+
+                if (comboBoxCarSelector.Items.Contains(savedCarName))
+                {
+                    //restore last saved car
+                    comboBoxCarSelector.SelectedItem = savedCarName;
+
+                    if (comboBoxTimeSelector.Items.Contains(savedSessionTime))
+                    {
+                        //restore last saved session length
+                        comboBoxTimeSelector.SelectedItem = savedSessionTime;
+                    }
+                    else
+                    {
+                        //saved session length could not be found, choose any time
+                        comboBoxTimeSelector.SelectedIndex = 0;
+                    }
+
+                }
+                else
+                {
+                    //saved car name could not be found, choose all cars
+                    comboBoxCarSelector.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                //saved track name could not be found
+                comboBoxTrackSelector.SelectedItem = null;
+            }
+        }
+
+        private void checkBoxDisplayRunsWIthPenalties_CheckedChanged(object sender, EventArgs e)
+        {
+            settingsProvider.SettingsSetDisplayRunsWithPenalties(checkBoxDisplayRunsWIthPenalties.Checked);
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
+        }
+
+        private void CheckBoxDisplayOwnRunsOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            settingsProvider.SettingsSetDisplayRunsFromCurrentDriver(CheckBoxDisplayOwnRunsOnly.Checked);
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
+        }
+
+        private void ComboBoxSortRunsBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            settingsProvider.SettingsSetLastSelector(ComboBoxSortRunsBy.Text);
+            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
+        }
     }
 }
