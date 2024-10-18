@@ -64,6 +64,16 @@
             ComboBoxSortRunsBy = new ComboBox();
             labelSortBy = new Label();
             panelDisplayRuns = new Panel();
+            panel2 = new Panel();
+            panel1 = new Panel();
+            button1 = new Button();
+            EditorPreviewLabel7 = new Label();
+            EditorPreviewLabel6 = new Label();
+            EditorPreviewLabel5 = new Label();
+            EditorPreviewLabel4 = new Label();
+            EditorPreviewLabel3 = new Label();
+            EditorPreviewLabel1 = new Label();
+            checkBox1 = new CheckBox();
             checkBoxDisplayRunsWIthPenalties = new CheckBox();
             labelChooseSessionTime = new Label();
             labelChooseCar = new Label();
@@ -93,6 +103,8 @@
             tabPageMainAddRun.SuspendLayout();
             panelCurrentRunInfo.SuspendLayout();
             tabPageCompareRuns.SuspendLayout();
+            panelDisplayRuns.SuspendLayout();
+            panel1.SuspendLayout();
             tabPageSettings.SuspendLayout();
             groupBoxLiveRunDriverCompare.SuspendLayout();
             groupBoxUsername.SuspendLayout();
@@ -408,7 +420,7 @@
             // buttonImportRuns
             // 
             buttonImportRuns.Font = new Font("Segoe UI", 11.25F);
-            buttonImportRuns.Location = new Point(771, 123);
+            buttonImportRuns.Location = new Point(771, 124);
             buttonImportRuns.Name = "buttonImportRuns";
             buttonImportRuns.Size = new Size(99, 27);
             buttonImportRuns.TabIndex = 13;
@@ -419,7 +431,7 @@
             // buttonExportSelectedRuns
             // 
             buttonExportSelectedRuns.Font = new Font("Segoe UI", 11.25F);
-            buttonExportSelectedRuns.Location = new Point(608, 123);
+            buttonExportSelectedRuns.Location = new Point(608, 124);
             buttonExportSelectedRuns.Name = "buttonExportSelectedRuns";
             buttonExportSelectedRuns.Size = new Size(157, 27);
             buttonExportSelectedRuns.TabIndex = 12;
@@ -430,7 +442,7 @@
             // buttonDeleteSelectedRuns
             // 
             buttonDeleteSelectedRuns.Font = new Font("Segoe UI", 11.25F);
-            buttonDeleteSelectedRuns.Location = new Point(444, 123);
+            buttonDeleteSelectedRuns.Location = new Point(444, 124);
             buttonDeleteSelectedRuns.Name = "buttonDeleteSelectedRuns";
             buttonDeleteSelectedRuns.Size = new Size(158, 27);
             buttonDeleteSelectedRuns.TabIndex = 10;
@@ -462,11 +474,111 @@
             // panelDisplayRuns
             // 
             panelDisplayRuns.AutoScroll = true;
+            panelDisplayRuns.Controls.Add(panel2);
+            panelDisplayRuns.Controls.Add(panel1);
             panelDisplayRuns.Font = new Font("Segoe UI", 11.25F);
             panelDisplayRuns.Location = new Point(3, 157);
             panelDisplayRuns.Name = "panelDisplayRuns";
             panelDisplayRuns.Size = new Size(935, 810);
             panelDisplayRuns.TabIndex = 7;
+            // 
+            // panel2
+            // 
+            panel2.Location = new Point(5, 87);
+            panel2.Margin = new Padding(0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(200, 100);
+            panel2.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(button1);
+            panel1.Controls.Add(EditorPreviewLabel7);
+            panel1.Controls.Add(EditorPreviewLabel6);
+            panel1.Controls.Add(EditorPreviewLabel5);
+            panel1.Controls.Add(EditorPreviewLabel4);
+            panel1.Controls.Add(EditorPreviewLabel3);
+            panel1.Controls.Add(EditorPreviewLabel1);
+            panel1.Controls.Add(checkBox1);
+            panel1.Location = new Point(5, 3);
+            panel1.Margin = new Padding(0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(927, 84);
+            panel1.TabIndex = 0;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(104, 49);
+            button1.Name = "button1";
+            button1.Size = new Size(85, 30);
+            button1.TabIndex = 7;
+            button1.Text = "Details ->";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // EditorPreviewLabel7
+            // 
+            EditorPreviewLabel7.AutoSize = true;
+            EditorPreviewLabel7.Location = new Point(195, 59);
+            EditorPreviewLabel7.Name = "EditorPreviewLabel7";
+            EditorPreviewLabel7.Size = new Size(210, 20);
+            EditorPreviewLabel7.TabIndex = 6;
+            EditorPreviewLabel7.Text = "Driven at: 13/10/2024 15:32:12";
+            // 
+            // EditorPreviewLabel6
+            // 
+            EditorPreviewLabel6.AutoSize = true;
+            EditorPreviewLabel6.Font = new Font("Segoe UI", 12F);
+            EditorPreviewLabel6.Location = new Point(20, 25);
+            EditorPreviewLabel6.Name = "EditorPreviewLabel6";
+            EditorPreviewLabel6.Size = new Size(93, 21);
+            EditorPreviewLabel6.TabIndex = 5;
+            EditorPreviewLabel6.Text = "FL: 2:19.981";
+            // 
+            // EditorPreviewLabel5
+            // 
+            EditorPreviewLabel5.AutoSize = true;
+            EditorPreviewLabel5.Location = new Point(195, 39);
+            EditorPreviewLabel5.Name = "EditorPreviewLabel5";
+            EditorPreviewLabel5.Size = new Size(143, 20);
+            EditorPreviewLabel5.TabIndex = 4;
+            EditorPreviewLabel5.Text = "Info: Setup Safe v2.1";
+            // 
+            // EditorPreviewLabel4
+            // 
+            EditorPreviewLabel4.AutoSize = true;
+            EditorPreviewLabel4.Location = new Point(195, 0);
+            EditorPreviewLabel4.Name = "EditorPreviewLabel4";
+            EditorPreviewLabel4.Size = new Size(153, 20);
+            EditorPreviewLabel4.TabIndex = 3;
+            EditorPreviewLabel4.Text = "Car: Toyota Yaris 2007";
+            // 
+            // EditorPreviewLabel3
+            // 
+            EditorPreviewLabel3.AutoSize = true;
+            EditorPreviewLabel3.Location = new Point(195, 19);
+            EditorPreviewLabel3.Name = "EditorPreviewLabel3";
+            EditorPreviewLabel3.Size = new Size(88, 20);
+            EditorPreviewLabel3.TabIndex = 2;
+            EditorPreviewLabel3.Text = "Driver: Witti";
+            // 
+            // EditorPreviewLabel1
+            // 
+            EditorPreviewLabel1.AutoSize = true;
+            EditorPreviewLabel1.Font = new Font("Segoe UI", 14F);
+            EditorPreviewLabel1.Location = new Point(20, 0);
+            EditorPreviewLabel1.Name = "EditorPreviewLabel1";
+            EditorPreviewLabel1.Size = new Size(178, 25);
+            EditorPreviewLabel1.TabIndex = 1;
+            EditorPreviewLabel1.Text = "-:15:41.818 (10 laps)";
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(3, 25);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(15, 14);
+            checkBox1.TabIndex = 0;
+            checkBox1.UseVisualStyleBackColor = true;
             // 
             // checkBoxDisplayRunsWIthPenalties
             // 
@@ -758,6 +870,9 @@
             panelCurrentRunInfo.PerformLayout();
             tabPageCompareRuns.ResumeLayout(false);
             tabPageCompareRuns.PerformLayout();
+            panelDisplayRuns.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             tabPageSettings.ResumeLayout(false);
             groupBoxLiveRunDriverCompare.ResumeLayout(false);
             groupBoxLiveRunDriverCompare.PerformLayout();
@@ -856,5 +971,15 @@
         private RadioButton radioButtonDriverCompareAllDrivers;
         private RadioButton radioButtonDriverCompareUserOnly;
         private CheckBox CheckBoxDisplayOwnRunsOnly;
+        private Panel panel1;
+        private Label EditorPreviewLabel1;
+        private CheckBox checkBox1;
+        private Label EditorPreviewLabel3;
+        private Label EditorPreviewLabel4;
+        private Label EditorPreviewLabel5;
+        private Label EditorPreviewLabel6;
+        private Label EditorPreviewLabel7;
+        private Button button1;
+        private Panel panel2;
     }
 }
