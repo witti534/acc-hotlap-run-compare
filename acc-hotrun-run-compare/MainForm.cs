@@ -147,6 +147,7 @@ namespace acc_hotrun_run_compare
             dbStoredRunsContext.Add(finishedRun);
             dbStoredRunsContext.SaveChanges();
 
+            tabCompareRuns.PopulateTrackSelector();
             tabCompareRuns.RedrawPanelWithRunsToBeCompared();
             return;
         }
