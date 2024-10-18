@@ -184,8 +184,9 @@ namespace acc_hotrun_run_compare
 
 
             // Add each run to the panel
-            foreach (var run in selectedRunsWithoutSectors)
+            for (int i = 0; i < selectedRunsWithoutSectors.Count; i++)
             {
+                RunInformation run = selectedRunsWithoutSectors[i];
                 if (displayRunsWithPenalties || (!displayRunsWithPenalties && !run.PenaltyOccured))
                 {
                     //Do not display runs if a penalty occured and the checkbox is set to not show runs with penalties
@@ -196,29 +197,74 @@ namespace acc_hotrun_run_compare
 
                     int amountOfLaps = amountOfSectors / 3;
 
-                    // Create the label with the run information
-                    Label runInformationLabel = new()
+                    Color backgroundColor = (i % 2 == 0) ? Color.Silver : Color.LightGray;
+
+                    Panel runInformationPanel = new()
                     {
-                        Text = ("Total time: " + TimeFormatter.CreateHoursString(run.DrivenTime) + " | Fastest lap: " + TimeFormatter.CreateMinutesString(run.FastestLap) + " | No. of laps: " + amountOfLaps.ToString() + "\r\n"
-                        + "Description: " + run.RunDescription + "\r\n"
-                        + "Car: " + run.CarName + "\r\n"
-                        + "Created at: " + run.RunCreatedDateTime.ToString()),
-                        Location = new Point(amountPixelXOffset, 0 + indexForDrawingYOffset * amountPixelYOffset),
-                        Size = new Size(1030, amountPixelYOffset),
-                        BorderStyle = BorderStyle.FixedSingle,
-                        Name = run.RunID.ToString()
+                        Size = new Size(900, 84), //Numbers taken from editor
+                        Name = "panelrun|" + run.RunID.ToString(),
+                        BackColor = backgroundColor,
+                        Location = new Point(0, i * 84)
                     };
 
-                    CheckBox runSelectorCheckBox = new()
+                    //Label for total run time and amount of laps
+                    Color totalTimeColor = (run.PenaltyOccured) ? Color.DarkRed : Color.Black; //Red in case of penalty occured, black otherwise
+                    Label totalTimeLabel = new()
                     {
-                        Name = "checkboxrun|" + run.RunID.ToString(),
-                        Location = new Point(0, 0 + indexForDrawingYOffset * amountPixelYOffset)
+                        Text = TimeFormatter.CreateHoursString(run.DrivenTime) + " (" + amountOfLaps + " laps)",
+                        Font = new Font("Segoe UI", 14),
+                        Name = "labelTotalTime|" + run.RunID.ToString(),
+                        Location = new Point(20, 0), //Numbers from editor
+                        Size = new Size(178, 25), //Numbers from editor
+                        ForeColor = totalTimeColor,
                     };
+                    runInformationPanel.Controls.Add(totalTimeLabel);
 
-                    RunPanel.Controls.Add(runInformationLabel);
-                    RunPanel.Controls.Add(runSelectorCheckBox);
+                    //Label for fastest lap
+                    Label fastestLapLabel = new()
+                    {
+                        Text = "FL: " + TimeFormatter.CreateMinutesString(run.FastestLap),
+                        Location = new Point(20, 25), //Numbers from editor
+                        Size = new Size(115,21), //Numbers from editor
+                        Name = "labelFastestLap|" + run.RunID.ToString()
+                    };
+                    runInformationPanel.Controls.Add(fastestLapLabel);
 
-                    indexForDrawingYOffset++;
+                    //Button to open the details page of a run
+                    Button detailsButton = new()
+                    {
+                        Text = "Details ->",
+                        Location = new Point(104, 49), //Numbers from editor
+                        Size = new Size(85, 30), //Numbers from editor
+                        Name = "runDetailsButton|" + run.RunID.ToString(),                        
+                    };
+                    detailsButton.Click += (sender, EventArgs) => { OpenRunDetailsWindow(sender, EventArgs, run.RunID); };
+                    //Custom function for dynamic buttons
+
+                    runInformationPanel.Controls.Add(detailsButton);
+
+                    //CheckBox for selecting multiple runs
+                    CheckBox checkBox = new()
+                    {
+                        Text = "",
+                        Location = new Point(3, 25), //Numbers from editor
+                        Name = "checkboxrun|" + run.RunID.ToString()
+                    };
+                    runInformationPanel.Controls.Add(checkBox);
+
+                    Label runInfoLabel = new()
+                    {
+                        Text = "Car: " + run.CarName + "\r\n"
+                        + "Driver: " + run.DriverName + "\r\n"
+                        + "Info: " + run.RunDescription + "\r\n"
+                        + "Driven at: " + run.RunCreatedDateTime.ToString(),
+                        AutoSize = true,
+                        Location = new Point(195, 0),
+                        Name = "runInfoLabel|" + run.RunID.ToString()
+                    };
+                    runInformationPanel.Controls.Add(runInfoLabel);
+
+                    RunPanel.Controls.Add(runInformationPanel);
                 }
             }
 
@@ -264,19 +310,22 @@ namespace acc_hotrun_run_compare
             List<int> resultList = [];
 
             //Get all controls in the panel)
-            foreach (Control control in RunPanel.Controls)
+            foreach (Control controlPanel in RunPanel.Controls)
             {
-                //all checkboxes we need starts with "checkboxrun|"
-                if (control.Name.StartsWith("checkboxrun|"))
-                {
-                    CheckBox tempCheckBox = (CheckBox)control;
+                foreach (Control controlSpecific in controlPanel.Controls) {
 
-                    //Get only checked checkboxes
-                    if (tempCheckBox.Checked)
+                    //all checkboxes we need starts with "checkboxrun|"
+                    if (controlSpecific.Name.StartsWith("checkboxrun|"))
                     {
-                        //Extract the runID
-                        string[] controlNameElements = control.Name.Split('|');
-                        resultList.Add(Int32.Parse(controlNameElements[1]));
+                        CheckBox tempCheckBox = (CheckBox)controlSpecific;
+
+                        //Get only checked checkboxes
+                        if (tempCheckBox.Checked)
+                        {
+                            //Extract the runID
+                            string[] controlNameElements = controlSpecific.Name.Split('|');
+                            resultList.Add(Int32.Parse(controlNameElements[1]));
+                        }
                     }
                 }
             }
@@ -291,19 +340,19 @@ namespace acc_hotrun_run_compare
         /// <param name="panelWithRuns">The Panel which has the runs with IDs to be selected</param>
         public void ShowRuns(Panel panelWithRuns)
         {
-            List<int> selectedRuns = GetSelectedRunIDs();
+            List<int> selectedRunIDs = GetSelectedRunIDs();
 
 
-            if (selectedRuns.Count == 0)
+            if (selectedRunIDs.Count == 0)
             {
                 //Zero runs selected
                 return;
             }
-            if (selectedRuns.Count == 1)
+            if (selectedRunIDs.Count == 1)
             {
                 //One run selected, show details of one run
 
-                RunInformation run = StoredRunContext.RunInformationSet.First(r => r.RunID == selectedRuns[0]);
+                RunInformation run = StoredRunContext.RunInformationSet.First(r => r.RunID == selectedRunIDs[0]);
                 //Get a single run where the runID of the selected checkbox is being used to find the run in the StoredRunContext
 
                 Form singleRunForm = new FormSingleRun(run);
@@ -315,7 +364,7 @@ namespace acc_hotrun_run_compare
                 List<RunInformation> runs = [];
 
                 //Get the run for each provided runID and add it to the list to be used in the FormMultipleRuns
-                foreach (int runID in selectedRuns)
+                foreach (int runID in selectedRunIDs)
                 {
                     RunInformation singleRun = StoredRunContext.RunInformationSet.First(r => r.RunID == runID);
                     runs.Add(singleRun);
@@ -379,5 +428,19 @@ namespace acc_hotrun_run_compare
             }
 
         } //function ImportRunsEntryFunction
+
+        /// <summary>
+        /// This function opens a new form with the referenced run
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <param name="runID">RunID of the run</param>
+        private void OpenRunDetailsWindow(object sender, EventArgs e, long runID)
+        {
+            RunInformation singleRun = StoredRunContext.RunInformationSet.First(run => run.RunID == runID);
+
+            Form singleRunForm = new FormSingleRun(singleRun);
+            singleRunForm.Show();
+        }
     } //class
 } //namespace

@@ -18,7 +18,6 @@ namespace acc_hotrun_run_compare
 
 
         public StoredRunContext dbStoredRunsContext = StoredRunContext.GetInstance();
-        private readonly Random DebugRNGProvider = new();
         public Thread AccListenerThread { get; private set; }
         private ACCGameStateReader AccListener { get; set; }
         private readonly TabCompareRuns tabCompareRuns;
@@ -26,9 +25,11 @@ namespace acc_hotrun_run_compare
         private readonly TabDebug tabDebug;
         private readonly SettingsProvider settingsProvider;
 
+        //The following three queues get accessed by different threads, therefore the thread safe implementation
         public ConcurrentQueue<string> AccDebugMsgListenerQueue { get; private set; } = new();
         public ConcurrentQueue<string> AccGameStateControlQueue { get; private set; } = new();
         public ConcurrentQueue<string> AccCurrentRunInformationQueue { get; private set; } = new();
+        
 
         int tickCounter = 0;
 
@@ -202,8 +203,6 @@ namespace acc_hotrun_run_compare
             comboBoxTimeSelector.SelectedIndex = 0;
 
             settingsProvider.SettingsSetLastTrackName(comboBoxTrackSelector.Text);
-
-            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
         }
 
         /// <summary>
@@ -220,8 +219,6 @@ namespace acc_hotrun_run_compare
             comboBoxTimeSelector.SelectedIndex = 0;
 
             settingsProvider.SettingsSetLastCarName(comboBoxCarSelector.Text);
-
-            tabCompareRuns.RedrawPanelWithRunsToBeCompared();
             //After changing the car populate the session length selector
         }
 
