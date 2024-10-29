@@ -215,7 +215,7 @@ namespace acc_hotrun_run_compare
                         Font = new Font("Segoe UI", 14),
                         Name = "labelTotalTime|" + run.RunID.ToString(),
                         Location = new Point(20, 0), //Numbers from editor
-                        Size = new Size(178, 25), //Numbers from editor
+                        Size = new Size(185, 25), //Numbers from editor
                         ForeColor = totalTimeColor,
                     };
                     runInformationPanel.Controls.Add(totalTimeLabel);
@@ -259,7 +259,7 @@ namespace acc_hotrun_run_compare
                         + "Info: " + run.RunDescription + "\r\n"
                         + "Driven at: " + run.RunCreatedDateTime.ToString(),
                         AutoSize = true,
-                        Location = new Point(195, 0),
+                        Location = new Point(205, 0),
                         Name = "runInfoLabel|" + run.RunID.ToString()
                     };
                     runInformationPanel.Controls.Add(runInfoLabel);
