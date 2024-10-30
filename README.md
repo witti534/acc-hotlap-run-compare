@@ -2,12 +2,19 @@
 
 This tool is used to record and compare the own runs from the Hotlap gamemode in the game Assetto Corsa Competizione. It automatically gathers data while driving and saves them so one can compare the different runs at a later point.
 
+## Requirements
+
+- .NET runtime (program will tell you if it is not installed)
+
 ## How to use
 
 - Start this program
 - Start Assetto Corsa Competizione in the Hotlap game mode
 - Start driving, live data appears after crossing the first sector line
 - Run will automatically be saved when crossing the finish line
+- Compare runs with each other
+
+- For test purposes runs can be generated in the Debug tab
 
 ## Features
 
