@@ -268,6 +268,12 @@ namespace acc_hotrun_run_compare.GameListener
         /// <param name="sharedMemoryGraphic"></param>
         private void RunAnalyzerGraphics(SharedMemoryGraphics sharedMemoryGraphic)
         {
+            //Only read/analyze data when in the hotlap game mode, also not during replays
+            if (sharedMemoryGraphic.session != ACCEnums.AC_SESSION_TYPE.AC_HOTLAP && sharedMemoryGraphic.status != ACCEnums.AC_STATUS.AC_LIVE)
+            {
+                return;
+            }
+
             //Move needed data into the RunAnalyzer
             int currentSectorIndex = sharedMemoryGraphic.currentSectorIndex;
             int lastSectorTime = sharedMemoryGraphic.lastSectorTime;
@@ -276,6 +282,7 @@ namespace acc_hotrun_run_compare.GameListener
             ACCEnums.PenaltyShortcut currentPenaltyType = sharedMemoryGraphic.penalty;
             float remainingTime = sharedMemoryGraphic.sessionTimeLeft;
             int lastLapTime = sharedMemoryGraphic.iLastTime;
+
 
             runAnalyzerInstance.AnalyzeGraphics(currentSectorIndex, lastSectorTime, lastLapNumber, currentFlagType, currentPenaltyType, remainingTime, lastLapTime);
 

@@ -13,33 +13,50 @@ namespace acc_hotrun_run_compare
 {
     public partial class FormSingleRun : Form
     {
-        RunInformation providedRun;
-        StoredRunContext storedRunContext = StoredRunContext.GetInstance();
+        readonly RunInformation providedRun;
+        readonly StoredRunContext storedRunContext = StoredRunContext.GetInstance();
 
-        const int XOFFSETLAPNUMBER = 17;
-        const int XOFFSETLAPTIME = 124;
-        const int XOFFSETSSECTOR0 = 271;
-        const int XOFFSETLIMITER0 = 358;
-        const int XOFFSETSSECTOR1 = 385;
-        const int XOFFSETLIMITER1 = 472;
-        const int XOFFSETSSECTOR2 = 499;
+        private SectorInformation[] sortedSectorList;
+        private int[] lapTimes;
 
-        const int YOFFSETSTATIC = 200;
-        const int YOFFSETEACHLAP = 30;
+        private int bestSector1Time = Int32.MaxValue;
+        private Label bestSector1Label;
+        private int bestSector2Time = Int32.MaxValue;
+        private Label bestSector2Label;
+        private int bestSector3Time = Int32.MaxValue;
+        private Label bestSector3Label;
+        private int bestLapTime = Int32.MaxValue;
+        private Label bestLapTimeLabel;
 
-        const int SIZEXLABELTIME = 79;
-        const int SIZEXLABELLIMITER = 19;
-        const int SIZEXLABELLAPNUMBER = 99;
-        const int SIZEXLABELLAPTIME = 89;
+        const int XOFFSETLAPNUMBER = 3;
+        const int XOFFSETLAPTIME = 420;
+        const int XOFFSETSSECTOR0 = 99;
+        const int XOFFSETSSECTOR1 = 184;
+        const int XOFFSETSSECTOR2 = 269;
+        const int XOFFSETLAPPANEL = 13;
+
+        const int YOFFSETSTATIC = 213;
+        const int YOFFSETEACHLAP = 25;
+
+        const int SIZEXLAPPANEL = 512;
         const int SIZEYLABEL = 19;
 
         public FormSingleRun(RunInformation providedRun)
         {
+            if (providedRun == null)
+            {
+                MessageBox.Show("Something went wrong opening the single run information screen. Please contact the developer.");
+                Close();
+                return;
+            }
             InitializeComponent();
             this.providedRun = providedRun;
             DeleteDesignLabels();
             FillUpRunInformation();
-            FillUpSectorAndLapInformation();
+            PrepareTimeInformation();
+            CreateLapPanelsAndLabels();
+            ManipulateLabelsForFastestsTimes();
+            SetupAdditionalInfoPanel();
         }
 
         /// <summary>
@@ -74,97 +91,35 @@ namespace acc_hotrun_run_compare
         }
 
         /// <summary>
-        /// This function is used to fill up the panel with all lap times and sector times
+        /// This function is used to prepare the sector times and lap times which will be used later on. Information will be stored in class arrays.
         /// </summary>
-        private void FillUpSectorAndLapInformation()
+        private void PrepareTimeInformation()
         {
 
             //Retrieve all sectors for the given runID
-            var sectorList = from sector in storedRunContext.SectorInformationSet
+            var maybeUnsortedSectorList = from sector in storedRunContext.SectorInformationSet
                              where sector.RunID == providedRun.RunID
                              select sector;
 
-            int[] laptimes = new int[(sectorList.Count() / 3)]; //Each lap has exactly 3 sectors
+            lapTimes = new int[(maybeUnsortedSectorList.Count() / 3)]; //Each lap has exactly 3 sectors
             //Make an array for each lap
 
-            //First do sectors, then laptimes
-            foreach (SectorInformation sector in sectorList)
+            sortedSectorList = new SectorInformation[maybeUnsortedSectorList.Count()];
+
+            foreach (SectorInformation maybeUnsortedSector in maybeUnsortedSectorList)
             {
-                //Add curent sector time to lap time
-                laptimes[sector.LapNumber] = laptimes[sector.LapNumber] + sector.DrivenSectorTime;
-
-                Label sectorTimeLabel = new();
-
-                if (sector.SectorIndex == 0)
-                {
-                    //Create label sectorIndex 0                    
-                    sectorTimeLabel.Location = new Point(XOFFSETSSECTOR0, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP);
-
-                    //Create a label with the text "|" to seperate the sector times
-                    Label limiterLabelSector0 = new()
-                    {
-                        Text = "|",
-                        Size = new Size(SIZEXLABELLIMITER, SIZEYLABEL),
-                        Location = new Point(XOFFSETLIMITER0, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP),
-                        Visible = true
-                    };
-                    Controls.Add(limiterLabelSector0);
-
-                }
-                else if (sector.SectorIndex == 1)
-                {
-
-                    sectorTimeLabel.Location = new Point(XOFFSETSSECTOR1, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP);
-                    //Do stuff for sectorIndex 1
-
-                    //Create a label with the text "|" to seperate the sector times
-                    Label limiterLabelSector1 = new()
-                    {
-                        Text = "|",
-                        Size = new Size(SIZEXLABELLIMITER, SIZEYLABEL),
-                        Location = new Point(XOFFSETLIMITER1, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP),
-                        Visible = true
-                    };
-                    Controls.Add(limiterLabelSector1);
-                }
-                else
-                {
-
-                    sectorTimeLabel.Location = new Point(XOFFSETSSECTOR2, YOFFSETSTATIC + sector.LapNumber * YOFFSETEACHLAP);
-                    //Do stuff for sectorIndex 2
-                }
-
-                sectorTimeLabel.Name = "sectortimelabel|" + sector.LapNumber + "|" + sector.SectorIndex;
-                sectorTimeLabel.Text = TimeFormatter.CreateThreeFixedDigitsSecondsString(sector.DrivenSectorTime);
-                sectorTimeLabel.Size = new Size(SIZEXLABELTIME, SIZEYLABEL);
-                sectorTimeLabel.Visible = true;
-                Controls.Add(sectorTimeLabel);
+                //Make sure we have a sorted list of sector entries
+                int arraySectorIndex = maybeUnsortedSector.SectorIndex + maybeUnsortedSector.LapNumber * 3;
+                sortedSectorList[arraySectorIndex] = maybeUnsortedSector;
 
             }
 
-            //Add laps labels to form
-            for (int lap = 0; lap < laptimes.Length; lap++)
+            //Populate the list of laptimes with sector values
+            foreach (SectorInformation sortedSector in sortedSectorList)
             {
-                Label lapNumberLabel = new()
-                {
-                    Size = new Size(SIZEXLABELLAPNUMBER, SIZEYLABEL),
-                    Text = (lap < 9) ? "Lap   " + (lap + 1) + " | " : "Lap  " + (lap + 1) + " | ",
-                    Location = new Point(XOFFSETLAPNUMBER, YOFFSETSTATIC + lap * YOFFSETEACHLAP),
-                    Visible = true
-                };
-
-                Controls.Add(lapNumberLabel);
-
-                Label lapTimeLabel = new()
-                {
-                    Size = new Size(SIZEXLABELLAPTIME, SIZEYLABEL),
-                    Text = TimeFormatter.CreateMinutesString(laptimes[lap]),
-                    Location = new Point(XOFFSETLAPTIME, YOFFSETSTATIC + lap * YOFFSETEACHLAP),
-                    Visible = true
-                };
-
-                Controls.Add(lapTimeLabel);
+                lapTimes[sortedSector.LapNumber] += sortedSector.DrivenSectorTime;
             }
+
         }
 
         /// <summary>
@@ -172,13 +127,14 @@ namespace acc_hotrun_run_compare
         /// </summary>
         private void DeleteDesignLabels()
         {
-            Controls.Remove(labelLapDelete);
-            Controls.Remove(labelLapTimeDelete);
-            Controls.Remove(labelSector1Delete);
-            Controls.Remove(labelSector2Delete);
-            Controls.Remove(labelSector3Delete);
-            Controls.Remove(labelSeperator1Delete);
-            Controls.Remove(labelSeperator2Delete);
+            Controls.Remove(DesignerLabelL1S1);
+            Controls.Remove(DesignerLabelL1S2);
+            Controls.Remove(DesignerLabelL1S3);
+            Controls.Remove(DesignerLabelLap1);
+            Controls.Remove(DesignerLabelLap2);
+            Controls.Remove(DesignerPanel1);
+            Controls.Remove(DesignerPanel2);
+            Controls.Remove(DesignerLabelTotalLaptime);
         }
 
         /// <summary>
@@ -190,6 +146,167 @@ namespace acc_hotrun_run_compare
         {
             providedRun.DriverName = TextBoxDriverName.Text;
             storedRunContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// This function creates all the panels and labels for each single lap. Also the values and references for the fastest laps/sectors will be set here.
+        /// </summary>
+        private void CreateLapPanelsAndLabels()
+        {
+            //Create a panel for each lap
+            for (int lapNumber = 0; lapNumber < lapTimes.Length; lapNumber++)
+            {
+                //prepare laptimes for each sector of a lap, read them from the sorted sector list array
+                int timeSector1 = sortedSectorList[lapNumber * 3 + 0].DrivenSectorTime;
+                int timeSector2 = sortedSectorList[lapNumber * 3 + 1].DrivenSectorTime;
+                int timeSector3 = sortedSectorList[lapNumber * 3 + 2].DrivenSectorTime;
+                int lapTime = lapTimes[lapNumber];
+                string lapNumberString = (lapNumber < 9) ? "Lap  " + (lapNumber + 1) : "Lap " + (lapNumber + 1);
+                //Add an additional space if displayed lap number has only 1 digit
+
+                Color backgroundColor = (lapNumber % 2 == 0) ? Color.Silver : Color.LightGray;
+
+                // The panel has all information (labels) for a single lap
+                Panel lapInfoPanel = new()
+                {
+                    Size = new Size(SIZEXLAPPANEL, SIZEYLABEL),
+                    BackColor = backgroundColor,
+                    Location = new Point(XOFFSETLAPPANEL, YOFFSETSTATIC + lapNumber * SIZEYLABEL)
+                };
+
+                // Monospace font so it will look better above/below each other
+                Font timeFont = new("Noto Mono", 12);
+
+                // A few labels containing the sector values
+                Label sector1Label = new()
+                {
+                    Name = "sectorLabel|" + lapNumber + "|1",
+                    Text = TimeFormatter.CreateThreeFixedDigitsSecondsString(timeSector1),
+                    Location = new Point(XOFFSETSSECTOR0, 0),
+                    Font = timeFont,
+                };
+
+                Label sector2Label = new()
+                {
+                    Name = "sectorLabel|" + lapNumber + "|2",
+                    Text = TimeFormatter.CreateThreeFixedDigitsSecondsString(timeSector2),
+                    Location = new Point(XOFFSETSSECTOR1, 0),
+                    Font = timeFont,
+                };
+                Label sector3Label = new()
+                {
+                    Name = "sectorLabel|" + lapNumber + "|3",
+                    Text = TimeFormatter.CreateThreeFixedDigitsSecondsString(timeSector3),
+                    Location = new Point(XOFFSETSSECTOR2, 0),
+                    Font = timeFont,
+                };
+                Label lapTimeLabel = new()
+                {
+                    Name = "lapTimeLabel|" + lapNumber,
+                    Text = TimeFormatter.CreateMinutesString(lapTime),
+                    Location = new Point(XOFFSETLAPTIME, 0),
+                    Font = timeFont,
+                };
+                Label lapNumberLabel = new()
+                {
+                    Name = "lapNumberLabel|" + lapNumber,
+                    Text = lapNumberString,
+                    Font = timeFont,
+                };
+
+                // Update values for fastest sector times in case there was a faster sector (both the value itself and a reference to the label
+                // Label can be updated later with special font coloring 
+                if (timeSector1 < bestSector1Time)
+                {
+                    bestSector1Time = timeSector1;
+                    bestSector1Label = sector1Label;
+                }
+                if (timeSector2 < bestSector2Time)
+                {
+                    bestSector2Time = timeSector2;
+                    bestSector2Label = sector2Label;
+                }
+                if (timeSector3 < bestSector3Time)
+                {
+                    bestSector3Time = timeSector3;
+                    bestSector3Label = sector3Label;
+                }
+                if (lapTime < bestLapTime)
+                {
+                    bestLapTime = lapTime;
+                    bestLapTimeLabel = lapTimeLabel;
+                }
+
+                //Add each lap time to the panel, afterwards add the panel to the form
+                lapInfoPanel.Controls.Add(sector1Label);
+                lapInfoPanel.Controls.Add(sector2Label);
+                lapInfoPanel.Controls.Add(sector3Label);
+                lapInfoPanel.Controls.Add(lapTimeLabel);
+                lapInfoPanel.Controls.Add(lapNumberLabel);
+                Controls.Add(lapInfoPanel);
+
+
+            }
+        }
+
+        /// <summary>
+        /// This function sets all the labels for the additional run info panel
+        /// </summary>
+        private void SetupAdditionalInfoPanel()
+        {
+            string averageLapTimeString = "Average lap time: " + TimeFormatter.CreateMinutesString(CalculateAverageLapTime(lapTimes));
+
+            decimal standardDeviationSeconds = Math.Truncate(Convert.ToDecimal(CalculateMeanDeviation(lapTimes))) / 1000;
+            string standardDeviationString = "Standard deviation: " + standardDeviationSeconds;
+
+            string potentialFastestLapString = "Potential fastest lap: " + TimeFormatter.CreateMinutesString(bestSector1Time + bestSector2Time + bestSector3Time);
+
+            string finalText = averageLapTimeString + "\r\n" 
+                + standardDeviationString + "\r\n" 
+                + potentialFastestLapString;
+            LabelAdditionalRunInfo.Text = finalText;
+        }
+
+        /// <summary>
+        /// This function calculates the average lap time over an array consisting lap times. 
+        /// Output is an integer because a float output would not provide any beneficial accuracy. 
+        /// </summary>
+        /// <param name="lapTimes">An integer array consisting of all lap times of a run.</param>
+        /// <returns></returns>
+        private static int CalculateAverageLapTime(int[] lapTimes)
+        {
+            int sum = 0;
+            foreach (int lapTime in lapTimes)
+            {
+                sum += lapTime;
+            }
+
+            return sum / lapTimes.Length;
+        }
+
+        /// <summary>
+        /// This function calculates the standard deriviation for the data set of lap times.
+        /// </summary>
+        /// <param name="lapTimes">An integer array consisting of all lap times of a run.</param>
+        /// <returns></returns>
+        private static double CalculateMeanDeviation(int[] lapTimes)
+        {
+            int meanLapTime = CalculateAverageLapTime(lapTimes);
+            double squaredDifferencesSum = 0;
+            for (int i = 0; i < lapTimes.Length; i++)
+            {
+                squaredDifferencesSum += Math.Pow((lapTimes[i] - meanLapTime), 2);
+            }
+            double squaredDifferencesMean = squaredDifferencesSum / lapTimes.Length;
+            return Math.Sqrt(squaredDifferencesMean);
+        }
+
+        private void ManipulateLabelsForFastestsTimes()
+        {
+            bestSector1Label.ForeColor = Color.Purple;
+            bestSector2Label.ForeColor = Color.Purple;
+            bestSector3Label.ForeColor = Color.Purple;
+            bestLapTimeLabel.ForeColor = Color.Purple;
         }
     }
 }
