@@ -195,12 +195,20 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxTrackSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var oldSelectedCar = comboBoxCarSelector.SelectedItem;
             comboBoxCarSelector.Enabled = true;
             comboBoxTimeSelector.Enabled = true;
             tabCompareRuns.PopulateCarSelector();
 
-            comboBoxCarSelector.SelectedIndex = 0;
-            comboBoxTimeSelector.SelectedIndex = 0;
+            //Quality of life - retrain selected car item
+            if (comboBoxCarSelector.Items.Contains(oldSelectedCar))
+            {
+                comboBoxCarSelector.SelectedItem = oldSelectedCar;
+            }
+            else
+            {
+                comboBoxCarSelector.SelectedIndex = 0;
+            }
 
             settingsProvider.SettingsSetLastTrackName(comboBoxTrackSelector.Text);
         }
@@ -214,10 +222,21 @@ namespace acc_hotrun_run_compare
         /// <param name="e"></param>
         private void comboBoxCarSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var oldSelectedSessionTime = comboBoxTimeSelector.SelectedItem;
+
             checkBoxDisplayRunsWIthPenalties.Enabled = true;
             tabCompareRuns.PopulateSessionSelector();
-            comboBoxTimeSelector.SelectedIndex = 0;
 
+            //Quality of life - Retrain time selector
+            if (comboBoxTimeSelector.Items.Contains(oldSelectedSessionTime))
+            {
+                comboBoxTimeSelector.SelectedItem = oldSelectedSessionTime;
+            }
+            else
+            {
+                comboBoxTimeSelector.SelectedIndex = 0;
+            }
+            
             settingsProvider.SettingsSetLastCarName(comboBoxCarSelector.Text);
             //After changing the car populate the session length selector
         }
@@ -257,10 +276,6 @@ namespace acc_hotrun_run_compare
             tabCurrentRun.UpdateCurrentRunInfo(panelCurrentRunInfo, AccCurrentRunInformationQueue);
         }
 
-        private void labelChooseSessionTime_Click(object sender, EventArgs e)
-        {
-
-        }
 
         /// <summary>
         /// This function calls the function to delete selected runs in the tab "compareRuns". Afterwards it reruns the function to display all new runs
