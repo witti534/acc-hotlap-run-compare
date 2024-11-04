@@ -8,8 +8,10 @@ This tool is used to record and compare the own runs from the Hotlap gamemode in
 
 ## How to use
 
-- Start this program
-- Start Assetto Corsa Competizione in the Hotlap game mode
+- Download from releases page (release with a version number)
+- Unzip the downloaded zip file 
+- Start the program (acc-hotrun-run-compare.exe)
+- Start Assetto Corsa Competizione in the Hotstint game mode
 - Start driving, live data appears after crossing the first sector line
 - Run will automatically be saved when crossing the finish line
 - Compare runs with each other
