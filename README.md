@@ -1,4 +1,4 @@
-# ACC Hotlap Run Compare
+# ACC Hotrun Run Compare
 
 This tool is used to record and compare the own runs from the Hotlap gamemode in the game Assetto Corsa Competizione. It automatically gathers data while driving and saves them so one can compare the different runs at a later point.
 
