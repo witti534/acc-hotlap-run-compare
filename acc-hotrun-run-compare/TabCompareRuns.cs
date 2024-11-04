@@ -37,7 +37,9 @@ namespace acc_hotrun_run_compare
         /// This function reads all distinct Tracknames in the stored database and fills in the found track names in the ComboBoxTrackSelector
         /// </summary>
         public void PopulateTrackSelector()
-        {            
+        {
+            var lastSelectedTrackItem = ComboBoxTrackSelector.SelectedItem;
+
             ComboBoxTrackSelector.Items.Clear();
 
             //Retrieve all unique tracknames
@@ -50,6 +52,11 @@ namespace acc_hotrun_run_compare
             foreach (var trackName in trackNames)
             {
                 ComboBoxTrackSelector.Items.Add(trackName);
+            }
+
+            if (ComboBoxTrackSelector.Items.Contains(lastSelectedTrackItem))
+            {
+                ComboBoxTrackSelector.SelectedItem = lastSelectedTrackItem;
             }
         }
 
@@ -299,6 +306,8 @@ namespace acc_hotrun_run_compare
                 StoredRunContext.SaveChanges();
 
             }
+
+            PopulateTrackSelector();
         }
 
         /// <summary>
