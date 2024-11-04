@@ -601,7 +601,6 @@
             labelChooseSessionTime.Size = new Size(95, 20);
             labelChooseSessionTime.TabIndex = 5;
             labelChooseSessionTime.Text = "Session Time";
-            labelChooseSessionTime.Click += labelChooseSessionTime_Click;
             // 
             // labelChooseCar
             // 
