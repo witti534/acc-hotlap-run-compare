@@ -51,6 +51,7 @@
             LabelTabelDescription2 = new Label();
             LabelTabelDescription3 = new Label();
             LabelTabelDescription4 = new Label();
+            ButtonOpenLaptimesGraph = new Button();
             DesignerPanel1.SuspendLayout();
             DesignerPanel2.SuspendLayout();
             PanelAdditionalRunInfo.SuspendLayout();
@@ -224,9 +225,9 @@
             // 
             PanelAdditionalRunInfo.BackColor = Color.LightGray;
             PanelAdditionalRunInfo.Controls.Add(LabelAdditionalRunInfo);
-            PanelAdditionalRunInfo.Location = new Point(531, 186);
+            PanelAdditionalRunInfo.Location = new Point(531, 213);
             PanelAdditionalRunInfo.Name = "PanelAdditionalRunInfo";
-            PanelAdditionalRunInfo.Size = new Size(329, 310);
+            PanelAdditionalRunInfo.Size = new Size(329, 283);
             PanelAdditionalRunInfo.TabIndex = 28;
             // 
             // LabelAdditionalRunInfo
@@ -283,12 +284,24 @@
             LabelTabelDescription4.TabIndex = 32;
             LabelTabelDescription4.Text = "Lap time";
             // 
+            // ButtonOpenLaptimesGraph
+            // 
+            ButtonOpenLaptimesGraph.Font = new Font("Segoe UI", 11.25F);
+            ButtonOpenLaptimesGraph.Location = new Point(393, 147);
+            ButtonOpenLaptimesGraph.Name = "ButtonOpenLaptimesGraph";
+            ButtonOpenLaptimesGraph.Size = new Size(132, 36);
+            ButtonOpenLaptimesGraph.TabIndex = 33;
+            ButtonOpenLaptimesGraph.Text = "Lap times graph";
+            ButtonOpenLaptimesGraph.UseVisualStyleBackColor = true;
+            ButtonOpenLaptimesGraph.Click += ButtonOpenLaptimesGraph_Click;
+            // 
             // FormSingleRun
             // 
             AutoScaleDimensions = new SizeF(10F, 19F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(872, 508);
+            Controls.Add(ButtonOpenLaptimesGraph);
             Controls.Add(LabelTabelDescription4);
             Controls.Add(LabelTabelDescription3);
             Controls.Add(LabelTabelDescription2);
@@ -343,5 +356,6 @@
         private Label LabelTabelDescription3;
         private Label LabelTabelDescription4;
         private Label LabelAdditionalRunInfo;
+        private Button ButtonOpenLaptimesGraph;
     }
 }

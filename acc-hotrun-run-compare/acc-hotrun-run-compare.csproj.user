@@ -10,6 +10,12 @@
     <Compile Update="FormSingleRun.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Graphs\GraphLaptimes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Graphs\GraphTimedifference.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

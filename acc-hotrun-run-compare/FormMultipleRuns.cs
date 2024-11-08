@@ -41,6 +41,9 @@ namespace acc_hotrun_run_compare
         private readonly int OFFSET_X_FIRST_CUMLAPTIME = 197;
         private readonly int OFFSET_X_FIRST_TIMEDIFFERENCE = 132;
         private readonly int OFFSET_Y_FIRST_TIMEDIFFERENCE = 91;
+        private readonly int OFFSET_X_BUTTONS = 485;
+        private readonly int OFFSET_Y_BUTTON_LAPTIMES = 12;
+        private readonly int OFFSET_Y_BUTTON_TIMEDIFFERENCE = 47;
 
 
         // Section for all sizes 
@@ -57,6 +60,8 @@ namespace acc_hotrun_run_compare
         private readonly int SIZE_X_LAPTIME = 89;
         private readonly int SIZE_X_CUMLAPTIME = 99;
         private readonly int SIZE_X_TIMEDIFFERENCE = 109;
+        private readonly int SIZE_X_BUTTON = 175;
+        private readonly int SIZE_Y_BUTTON = 29;
 
 
         // Creating a list for comparisons 
@@ -67,12 +72,10 @@ namespace acc_hotrun_run_compare
         /// Constructer for the Form.
         /// </summary>
         /// <param name="providedRuns">A list of the runs to be compared. They must have the same track and session length</param>
-        /// <param name="storedRunContext">The context to load sector times.</param>
         public FormMultipleRuns(List<RunInformation> providedRuns)
         {
             this.providedRuns = providedRuns;
             InitializeComponent();
-            DeleteDesignerElements();
             CreateElementsForGeneralInformation();
 
             //Sort runs so the fastest run with most laps will always be first and the slowest run with least amount of laps will always be last.
@@ -92,13 +95,6 @@ namespace acc_hotrun_run_compare
             }
         }
 
-        /// <summary>
-        /// Delete all elements which were created in the designer
-        /// </summary>
-        private void DeleteDesignerElements()
-        {
-            Controls.Clear();
-        }
 
         /// <summary>
         /// Create all the elements which contain the general information about runs
@@ -339,6 +335,18 @@ namespace acc_hotrun_run_compare
                 + "\r\n" + providedRun.RunCreatedDateTime.ToString()
             };
             box.Controls.Add(runInformationLabel);
+        }
+
+        private void ButtonShowLaptimes_Click(object sender, EventArgs e)
+        {
+            Graphs.GraphLaptimes graphLaptimes = new(providedRuns);
+            graphLaptimes.Show();
+        }
+
+        private void ButtonShowTimeDifference_Click(object sender, EventArgs e)
+        {
+            Graphs.GraphTimedifference graphTimedifference = new(providedRuns);
+            graphTimedifference.Show();
         }
     }
 }

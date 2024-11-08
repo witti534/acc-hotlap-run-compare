@@ -23,7 +23,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NUnit" Version="4.1.0" />
-    <PackageReference Include="ScottPlot" Version="5.0.42" />
+    <PackageReference Include="ScottPlot" Version="5.0.43" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.43" />
   </ItemGroup>
 
 </Project>
