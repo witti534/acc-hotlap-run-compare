@@ -52,6 +52,7 @@ namespace acc_hotrun_run_compare
                 checkBoxDisplayRunsWIthPenalties,
                 ComboBoxSortRunsBy,
                 CheckBoxDisplayOwnRunsOnly);
+            TabCompareRuns.setInstance(tabCompareRuns);
             PrepareTabCompareRuns();
             tabDebug = new TabDebug();
             tabCurrentRun = new TabCurrentRun();

@@ -31,6 +31,8 @@ namespace acc_hotrun_run_compare
         readonly ComboBox ComboBoxComparer = comboBoxComparer;
 
         readonly SettingsProvider settingsProvider = SettingsProvider.GetInstance();
+
+        public static TabCompareRuns instance;
         
 
         /// <summary>
@@ -450,6 +452,11 @@ namespace acc_hotrun_run_compare
 
             Form singleRunForm = new FormSingleRun(singleRun);
             singleRunForm.Show();
+        }
+
+        public static void setInstance(TabCompareRuns newInstance)
+        {
+            instance = newInstance;
         }
     } //class
 } //namespace

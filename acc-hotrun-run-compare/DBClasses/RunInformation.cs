@@ -131,6 +131,22 @@ namespace acc_hotrun_run_compare.DBClasses
             };
             return comparer;
         }
+
+        /// <summary>
+        /// Returns an array of all laptimes sorted by lapnumber.
+        /// </summary>
+        /// <returns>An array of all laptimes sorted by lapnumber.</returns>
+        public int[] GetLaptimes()
+        {
+            int[] laptimes = new int[SectorList.Count / 3];
+            //Each lap has exactly three sectors
+
+            foreach (SectorInformation sector in SectorList)
+            {
+                laptimes[sector.LapNumber] += sector.DrivenSectorTime;
+            }
+            return laptimes;
+        }
     }
 
     public class RunInformationComparerFastestRunFirst : Comparer<RunInformation>

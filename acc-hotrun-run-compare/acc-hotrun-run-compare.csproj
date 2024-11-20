@@ -8,9 +8,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
 	<Version>0.2.0</Version>
+	<ApplicationIcon>ProgrammIcon.ico</ApplicationIcon>
   </PropertyGroup>
   
   <ItemGroup>
+	  <Content Include="ProgrammIcon.ico" />
 	  <Content Include="version.xml">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
@@ -23,7 +25,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NUnit" Version="4.1.0" />
-    <PackageReference Include="ScottPlot" Version="5.0.42" />
+    <PackageReference Include="ScottPlot" Version="5.0.43" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.43" />
   </ItemGroup>
 
 </Project>

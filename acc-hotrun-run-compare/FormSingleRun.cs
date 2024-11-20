@@ -68,6 +68,7 @@ namespace acc_hotrun_run_compare
         {
             providedRun.RunDescription = TextBoxRunDescription.Text;
             storedRunContext.SaveChanges();
+            TabCompareRuns.instance.RedrawPanelWithRunsToBeCompared();
         }
 
         /// <summary>
@@ -98,8 +99,8 @@ namespace acc_hotrun_run_compare
 
             //Retrieve all sectors for the given runID
             var maybeUnsortedSectorList = from sector in storedRunContext.SectorInformationSet
-                             where sector.RunID == providedRun.RunID
-                             select sector;
+                                          where sector.RunID == providedRun.RunID
+                                          select sector;
 
             lapTimes = new int[(maybeUnsortedSectorList.Count() / 3)]; //Each lap has exactly 3 sectors
             //Make an array for each lap
@@ -261,8 +262,8 @@ namespace acc_hotrun_run_compare
 
             string potentialFastestLapString = "Potential fastest lap: " + TimeFormatter.CreateMinutesString(bestSector1Time + bestSector2Time + bestSector3Time);
 
-            string finalText = averageLapTimeString + "\r\n" 
-                + standardDeviationString + "\r\n" 
+            string finalText = averageLapTimeString + "\r\n"
+                + standardDeviationString + "\r\n"
                 + potentialFastestLapString;
             LabelAdditionalRunInfo.Text = finalText;
         }
@@ -301,12 +302,30 @@ namespace acc_hotrun_run_compare
             return Math.Sqrt(squaredDifferencesMean);
         }
 
+        /// <summary>
+        /// Setting the colors for the labels for the fastest times to a purple color.
+        /// Purple is the standard color for the fastest time in the domain of motorsport.
+        /// </summary>
         private void ManipulateLabelsForFastestsTimes()
         {
             bestSector1Label.ForeColor = Color.Purple;
             bestSector2Label.ForeColor = Color.Purple;
             bestSector3Label.ForeColor = Color.Purple;
             bestLapTimeLabel.ForeColor = Color.Purple;
+        }
+
+        /// <summary>
+        /// Opens a new Frame containing the graph of a 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonOpenLaptimesGraph_Click(object sender, EventArgs e)
+        {
+            List<RunInformation> providedRunsList = [providedRun];
+            Graphs.GraphLaptimes _ = new(providedRunsList)
+            {
+                Visible = true
+            };
         }
     }
 }
