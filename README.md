@@ -35,7 +35,8 @@ This tool is used to record and compare the own runs from the Hotlap gamemode in
   - Direct comparison between multiple runs
 ![CompareMultipleRunsFrame](https://i.ibb.co/9VmmqXk/Screenshot-2024-10-30-165832.png)
 - Import/Export runs (compare with friends)
+- Graphs as a nice visualisation
 
-## Planned for the future
+## Support
 
-- Adding graphs to run comparison
+- Support and suggestions over this Discord server: https://discord.gg/qup6RxRmzD
