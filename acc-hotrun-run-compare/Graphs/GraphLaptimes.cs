@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ScottPlot.Plottables;
 
 namespace acc_hotrun_run_compare.Graphs
 {
@@ -18,6 +19,9 @@ namespace acc_hotrun_run_compare.Graphs
         readonly StoredRunContext storedRunContext = StoredRunContext.GetInstance();
         readonly FormsPlot lapTimesPlot = new() { Dock = DockStyle.Fill };
 
+        decimal slowestLapTime = 0m;
+        decimal fastestLapTime = 10000m; //larger than any possible lap time in this game mode, so guaranteed that laps will be faster
+        int mostLapsRun = 0;
 
         public GraphLaptimes(List<RunInformation> providedRuns)
         {
@@ -25,23 +29,6 @@ namespace acc_hotrun_run_compare.Graphs
             InitializeComponent();
 
             Controls.Add(lapTimesPlot);
-
-
-            PixelPadding padding = new(60, 15, 30, 15);
-            lapTimesPlot.Plot.Layout.Fixed(padding);
-            //Properly fill out the frame with space for axes
-
-            ScottPlot.TickGenerators.NumericFixedInterval xTicks = new()
-            {
-                Interval = 1
-            };
-            lapTimesPlot.Plot.Axes.Bottom.TickGenerator = xTicks;
-            //We want the x-axis ticks at only full laps
-
-            //Variables for limiting the axis
-            int mostLapsRun = 0;
-            decimal slowestLapTime = 0m;
-            decimal fastestLapTime = 10000m; //larger than any possible lap time in this game mode, so guaranteed that laps will be faster
 
             foreach (RunInformation providedRun in providedRuns)
             {
@@ -74,10 +61,63 @@ namespace acc_hotrun_run_compare.Graphs
                     lapnumbers[i] = i + 1; //X values in the graph
                 }
 
-                lapTimesPlot.Plot.Add.Scatter(lapnumbers, lapTimesInSeconds);
+                Scatter runPlot = lapTimesPlot.Plot.Add.Scatter(lapnumbers, lapTimesInSeconds);
+                runPlot.LegendText = "Car: " + providedRun.CarName + "\r\n" + "Info: " + providedRun.RunDescription;
             } //end foreach single run
 
+            SetupTickGenerators(lapTimesPlot);
+
+            lapTimesPlot.Plot.Grid.MinorLineWidth = 1;
+            lapTimesPlot.Plot.Grid.MinorLineColor = Colors.LightGray.WithAlpha(0.5);
+
+            lapTimesPlot.Plot.Grid.MajorLineWidth = 2;
+            lapTimesPlot.Plot.Grid.MajorLineColor = Colors.DarkGray.WithAlpha(0.5);
+
             lapTimesPlot.Plot.Axes.SetLimits(0.5, mostLapsRun + 0.5, (double)fastestLapTime * 0.995, (double)slowestLapTime * 1.005);
+
+            lapTimesPlot.Plot.ShowLegend(Edge.Right);
+        }
+
+        /// <summary>
+        /// This function sets up the ticks for the axes to be used in the graph
+        /// </summary>
+        /// <param name="timedifferencePlot"></param>
+        private void SetupTickGenerators(FormsPlot timedifferencePlot)
+        {
+            ScottPlot.TickGenerators.NumericManual xTicks = new();
+            for (int i = 1; i <= mostLapsRun; i++)
+            {
+                xTicks.AddMajor(i, i.ToString());
+            }
+            lapTimesPlot.Plot.Axes.Bottom.TickGenerator = xTicks;
+            //We want the x-axis ticks at only full laps
+
+            //Create yAxis ticks for values >= 0
+            ScottPlot.TickGenerators.NumericManual yTicks = new();
+            for (decimal d = 0.0m; d < slowestLapTime + 1; d += 0.1m)
+            {
+                if (Decimal.IsInteger(d))
+                {
+                    yTicks.AddMajor((double)d, d.ToString() + "s");
+                }
+                else
+                {
+                    yTicks.AddMinor((double)d);
+                }
+            }
+            //Create yAxis ticks for values < 0
+            for (decimal d = -0.1m; d > fastestLapTime - 1; d -= 0.1m)
+            {
+                if (Decimal.IsInteger(d))
+                {
+                    yTicks.AddMajor((double)d, d.ToString() + "s");
+                }
+                else
+                {
+                    yTicks.AddMinor((double)d);
+                }
+            }
+            lapTimesPlot.Plot.Axes.Left.TickGenerator = yTicks;
         }
     }
 }
