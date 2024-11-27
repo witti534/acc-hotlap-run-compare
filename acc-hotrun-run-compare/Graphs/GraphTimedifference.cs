@@ -91,7 +91,7 @@ namespace acc_hotrun_run_compare.Graphs
 
                     if (timedifferences[i + 1] < smallestTimeDifferenceValue)
                     {
-                        smallestTimeDifferenceValue = timedifferences[i - 1];
+                        smallestTimeDifferenceValue = timedifferences[i + 1];
                     }
 
                     lapNumbers[i + 1] = i + 1; //better display for humans for lap labels

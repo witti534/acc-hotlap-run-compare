@@ -315,54 +315,37 @@ namespace acc_hotrun_run_compare
         {
 
             //get runs with matching carname, trackname and sessionlength
-            List<RunInformation> listOfSelectedRuns;
+            List<RunInformation> listOfSelectedRuns = StoredRunContext.RunInformationSet.
+                Where(run => run.TrackName == trackName
+                && run.SessionTime == sessionLength)
+                .ToList();
+
+            //All following filters are based on the settings
+
+            //Filter based on username/drivername
+            if (settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
+            {
+                listOfSelectedRuns = listOfSelectedRuns
+                    .Where(run => run.DriverName == settingsProvider.Username)
+                    .ToList();
+            }
+
+            //Filter based on if a penalty occured in reference runs
+            if (settingsProvider.CurrentRunCompareAgainstRunsWithPenalties == false)
+            {
+                listOfSelectedRuns = listOfSelectedRuns
+                    .Where(run => run.PenaltyOccured == false)
+                    .ToList();
+            }
+
+            //Filter based on car name in reference runs
+            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR)
+            {
+                listOfSelectedRuns = listOfSelectedRuns
+                    .Where(run => run.CarName == carName)
+                    .ToList();
+            }
             
-            //get runs for following settings: Compare against current car only/compare against all drivers
-            if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
-                && settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
-            {
-                listOfSelectedRuns = StoredRunContext.RunInformationSet
-                    .Where(run => run.TrackName == trackName
-                    && run.SessionTime == sessionLength
-                    && run.CarName == carName)
-                    .ToList();
-            }
-            //get runs for following settings: Compare against all cars/compare against all drivers
-            else if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS
-                && settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_ALL_DRIVERS)
-            {
-                listOfSelectedRuns = StoredRunContext.RunInformationSet
-                    .Where(run => run.TrackName == trackName
-                    && run.SessionTime == sessionLength)
-                    .ToList();
-            } 
-            //get runs for the following settings: Compare against current car only/compare against current driver only
-            else if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR
-                && settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
-            {
-                listOfSelectedRuns = StoredRunContext.RunInformationSet
-                    .Where(run => run.TrackName == trackName
-                    && run.SessionTime == sessionLength
-                    && run.CarName == carName
-                    && run.DriverName == settingsProvider.Username)
-                    .ToList();
-            }
-            //get runs for the following settings: Compare against all cars/compare against current driver only
-            else if (settingsProvider.CurrentRunCompareRunsAgainstCars == SettingsProvider.CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_ALL_CARS &&
-                settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
-            {
-                listOfSelectedRuns = StoredRunContext.RunInformationSet
-                    .Where(run => run.TrackName == trackName
-                    && run.SessionTime == sessionLength
-                    && run.DriverName == settingsProvider.Username)
-                    .ToList();
-            }
-            //something went wrong with settings
-            else
-            {
-                listOfSelectedRuns = new List<RunInformation> ();
-                MessageBox.Show("Something went wrong with reading the settings for a live run.");
-            }
 
             foreach (RunInformation run in listOfSelectedRuns)
             {
