@@ -19,12 +19,14 @@ namespace acc_hotrun_run_compare
         public StoreRunsWithPenaltiesEnum CurrentRunStoreRunsWithPenalties { get; private set; }
         public CompareRunsAgainstCarsEnum CurrentRunCompareRunsAgainstCars { get; private set; }
         public CompareRunsAgainstDriversEnum CurrentRunCompareRunsAgainstDrivers { get; private set; }
+        public bool CurrentRunCompareAgainstRunsWithPenalties { get; private set; }
         public string CompareRunsLastTrackName { get; private set; }
         public string CompareRunsLastCarName { get; private set; }
         public string CompareRunsLastSessionTime { get; private set; }
         public bool CompareRunsDisplayRunsWithPenalties { get; private set; }
         public bool CompareRunsDisplayRunsFromOtherDrivers { get; private set; }
         public string CompareRunsSelectedComparerName { get; private set; }
+
 
         private readonly string settingsFilePath = "settings.xml";
         private readonly XElement rootXElement;
@@ -42,6 +44,7 @@ namespace acc_hotrun_run_compare
         private readonly static string XMLKeyDisplayRunsWithPenalties = "DisplayRunsWithPenalties";
         private readonly static string XMLKeyDisplayRunsFromOtherDrivers = "DisplayRunsFromOtherDrivers";
         private readonly static string XMLKeyComparerName = "ComparerName";
+        private readonly static string XMLKeyCompareRunsAgainstPenalties = "CompareRunsAgainstPenalties";
 
 
         public enum StoreRunsWithPenaltiesEnum
@@ -78,6 +81,7 @@ namespace acc_hotrun_run_compare
                         new XElement(XMLKeyStoreRunsWithPenalties, 1),
                         new XElement(XMLKeyCompareRunsAgainstCars, 1),
                         new XElement(XMLKeyCompareRunsAgainstDrivers, 1),
+                        new XElement(XMLKeyCompareRunsAgainstPenalties, false),
                         new XElement(XMLKeyUsername, "You"),
                         new XElement(XMLKeyLastTrackName, "-"),
                         new XElement(XMLKeyLastCarName, "-"),
@@ -133,6 +137,28 @@ namespace acc_hotrun_run_compare
                         else
                         {
                             CurrentRunCompareRunsAgainstCars = CompareRunsAgainstCarsEnum.COMPARE_RUNS_AGAINST_CURRENT_CAR; //default value
+                        }
+                    }
+
+                    //CompareRunsAgainstPenalites
+                    XElement compareRunsAgainstPenaltiesXElement = rootXElement.Element(XMLKeyCompareRunsAgainstPenalties);
+                    if (compareRunsAgainstPenaltiesXElement == null)
+                    {
+                        compareRunsAgainstPenaltiesXElement = new XElement(XMLKeyCompareRunsAgainstPenalties, false);
+                        CurrentRunCompareAgainstRunsWithPenalties = false;
+                        rootXElement.Add(compareRunsAgainstPenaltiesXElement);
+                    } 
+                    else
+                    {
+                        string XElementValue = compareRunsAgainstPenaltiesXElement.Value;
+                        bool readSuccessful = Boolean.TryParse(XElementValue, out bool compareRunsAgainstPenalties);
+                        if (readSuccessful)
+                        {
+                            CurrentRunCompareAgainstRunsWithPenalties = compareRunsAgainstPenalties;
+                        }
+                        else
+                        {
+                            CurrentRunCompareAgainstRunsWithPenalties = false;
                         }
                     }
 
@@ -287,6 +313,7 @@ namespace acc_hotrun_run_compare
                     new XElement(XMLKeyStoreRunsWithPenalties, 1),
                     new XElement(XMLKeyCompareRunsAgainstCars, 1),
                     new XElement(XMLKeyCompareRunsAgainstDrivers, 1),
+                    new XElement(XMLKeyCompareRunsAgainstPenalties, false),
                     new XElement(XMLKeyUsername, "You"),
                     new XElement(XMLKeyLastTrackName, "-"),
                     new XElement(XMLKeyLastCarName, "-"),
@@ -482,6 +509,22 @@ namespace acc_hotrun_run_compare
             XElement lastSelectorNameXElement = rootXElement.Element(XMLKeyComparerName);
             lastSelectorNameXElement.Value = selectorName;
             CompareRunsSelectedComparerName = selectorName;
+            SaveSettingsFile();
+        }
+
+        public void SettingsSetLiveRunsCompareAgainstPenalties()
+        {
+            XElement compareRunsAgainstPenaltiesXElement = rootXElement.Element(XMLKeyCompareRunsAgainstPenalties);
+            compareRunsAgainstPenaltiesXElement.Value = true.ToString();
+            CurrentRunCompareAgainstRunsWithPenalties = true;
+            SaveSettingsFile();
+        }
+
+        public void SettingsSetLiveRunsCompareNotAgainstPenalties()
+        {
+            XElement compareRunsAgainstPenaltiesXElement = rootXElement.Element(XMLKeyCompareRunsAgainstPenalties);
+            compareRunsAgainstPenaltiesXElement.Value = false.ToString();
+            CurrentRunCompareAgainstRunsWithPenalties = false;
             SaveSettingsFile();
         }
     }

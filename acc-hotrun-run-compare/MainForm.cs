@@ -29,7 +29,7 @@ namespace acc_hotrun_run_compare
         public ConcurrentQueue<string> AccDebugMsgListenerQueue { get; private set; } = new();
         public ConcurrentQueue<string> AccGameStateControlQueue { get; private set; } = new();
         public ConcurrentQueue<string> AccCurrentRunInformationQueue { get; private set; } = new();
-        
+
 
         int tickCounter = 0;
 
@@ -237,7 +237,7 @@ namespace acc_hotrun_run_compare
             {
                 comboBoxTimeSelector.SelectedIndex = 0;
             }
-            
+
             settingsProvider.SettingsSetLastCarName(comboBoxCarSelector.Text);
             //After changing the car populate the session length selector
         }
@@ -359,6 +359,14 @@ namespace acc_hotrun_run_compare
             if (settingsProvider.CurrentRunCompareRunsAgainstDrivers == SettingsProvider.CompareRunsAgainstDriversEnum.COMPARE_RUNS_AGAINST_OWN_RUNS_ONLY)
             {
                 radioButtonDriverCompareUserOnly.Checked = true;
+            }
+            if (settingsProvider.CurrentRunCompareAgainstRunsWithPenalties == true)
+            {
+                radioButtonCompareAgainstPenalties.Checked = true;
+            }
+            if (settingsProvider.CurrentRunCompareAgainstRunsWithPenalties == false)
+            {
+                radioButtonCompareCompareNotAgainstPenalties.Checked = true;
             }
         }
 
@@ -492,6 +500,22 @@ namespace acc_hotrun_run_compare
         {
             settingsProvider.SettingsSetLastSelector(ComboBoxSortRunsBy.Text);
             tabCompareRuns.RedrawPanelWithRunsToBeCompared();
+        }
+
+        private void radioButtonCompareAgainstPenalties_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCompareAgainstPenalties.Checked)
+            {
+                settingsProvider.SettingsSetLiveRunsCompareAgainstPenalties();
+            }
+        }
+
+        private void radioButtonCompareCompareNotAgainstPenalties_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButtonCompareCompareNotAgainstPenalties.Checked)
+            {
+                settingsProvider.SettingsSetLiveRunsCompareNotAgainstPenalties();
+            }
         }
     }
 }
