@@ -173,6 +173,13 @@ namespace acc_hotrun_run_compare
                     .ToList();
             }
 
+            //Filter out runs with penalties depending on checkbox for displaying runs with penalties
+            if (!displayRunsWithPenalties)
+            {
+                selectedRunsWithoutSectors = selectedRunsWithoutSectors.Where(r => r.PenaltyOccured == false)
+                    .ToList();
+            }
+
             //Add sector information lists to runs to be able to compare runs with different amounts of laps
             foreach (RunInformation runWithoutSectors in selectedRunsWithoutSectors)
             {
@@ -196,85 +203,81 @@ namespace acc_hotrun_run_compare
             for (int i = 0; i < selectedRunsWithoutSectors.Count; i++)
             {
                 RunInformation run = selectedRunsWithoutSectors[i];
-                if (displayRunsWithPenalties || (!displayRunsWithPenalties && !run.PenaltyOccured))
+
+                var amountOfSectors = StoredRunContext.SectorInformationSet
+                    .Where(s => s.RunID == run.RunID)
+                    .Count();
+
+                int amountOfLaps = amountOfSectors / 3;
+
+                Color backgroundColor = (i % 2 == 0) ? Color.Silver : Color.LightGray;
+
+                Panel runInformationPanel = new()
                 {
-                    //Do not display runs if a penalty occured and the checkbox is set to not show runs with penalties
+                    Size = new Size(900, 84), //Numbers taken from editor
+                    Name = "panelrun|" + run.RunID.ToString(),
+                    BackColor = backgroundColor,
+                    Location = new Point(0, i * 84)
+                };
 
-                    var amountOfSectors = StoredRunContext.SectorInformationSet
-                        .Where(s => s.RunID == run.RunID)
-                        .Count();
+                //Label for total run time and amount of laps
+                Color totalTimeColor = (run.PenaltyOccured) ? Color.DarkRed : Color.Black; //Red in case of penalty occured, black otherwise
+                Label totalTimeLabel = new()
+                {
+                    Text = TimeFormatter.CreateHoursString(run.DrivenTime) + " (" + amountOfLaps + " laps)",
+                    Font = new Font("Segoe UI", 14),
+                    Name = "labelTotalTime|" + run.RunID.ToString(),
+                    Location = new Point(20, 0), //Numbers from editor
+                    Size = new Size(185, 25), //Numbers from editor
+                    ForeColor = totalTimeColor,
+                };
+                runInformationPanel.Controls.Add(totalTimeLabel);
 
-                    int amountOfLaps = amountOfSectors / 3;
+                //Label for fastest lap
+                Label fastestLapLabel = new()
+                {
+                    Text = "FL: " + TimeFormatter.CreateMinutesString(run.FastestLap),
+                    Location = new Point(20, 25), //Numbers from editor
+                    Size = new Size(115,21), //Numbers from editor
+                    Name = "labelFastestLap|" + run.RunID.ToString()
+                };
+                runInformationPanel.Controls.Add(fastestLapLabel);
 
-                    Color backgroundColor = (i % 2 == 0) ? Color.Silver : Color.LightGray;
+                //Button to open the details page of a run
+                Button detailsButton = new()
+                {
+                    Text = "Details ->",
+                    Location = new Point(104, 49), //Numbers from editor
+                    Size = new Size(85, 30), //Numbers from editor
+                    Name = "runDetailsButton|" + run.RunID.ToString(),                        
+                };
+                detailsButton.Click += (sender, EventArgs) => { OpenRunDetailsWindow(sender, EventArgs, run.RunID); };
+                //Custom function for dynamic buttons
 
-                    Panel runInformationPanel = new()
-                    {
-                        Size = new Size(900, 84), //Numbers taken from editor
-                        Name = "panelrun|" + run.RunID.ToString(),
-                        BackColor = backgroundColor,
-                        Location = new Point(0, i * 84)
-                    };
+                runInformationPanel.Controls.Add(detailsButton);
 
-                    //Label for total run time and amount of laps
-                    Color totalTimeColor = (run.PenaltyOccured) ? Color.DarkRed : Color.Black; //Red in case of penalty occured, black otherwise
-                    Label totalTimeLabel = new()
-                    {
-                        Text = TimeFormatter.CreateHoursString(run.DrivenTime) + " (" + amountOfLaps + " laps)",
-                        Font = new Font("Segoe UI", 14),
-                        Name = "labelTotalTime|" + run.RunID.ToString(),
-                        Location = new Point(20, 0), //Numbers from editor
-                        Size = new Size(185, 25), //Numbers from editor
-                        ForeColor = totalTimeColor,
-                    };
-                    runInformationPanel.Controls.Add(totalTimeLabel);
+                //CheckBox for selecting multiple runs
+                CheckBox checkBox = new()
+                {
+                    Text = "",
+                    Location = new Point(3, 25), //Numbers from editor
+                    Name = "checkboxrun|" + run.RunID.ToString()
+                };
+                runInformationPanel.Controls.Add(checkBox);
 
-                    //Label for fastest lap
-                    Label fastestLapLabel = new()
-                    {
-                        Text = "FL: " + TimeFormatter.CreateMinutesString(run.FastestLap),
-                        Location = new Point(20, 25), //Numbers from editor
-                        Size = new Size(115,21), //Numbers from editor
-                        Name = "labelFastestLap|" + run.RunID.ToString()
-                    };
-                    runInformationPanel.Controls.Add(fastestLapLabel);
+                Label runInfoLabel = new()
+                {
+                    Text = "Car: " + run.CarName + "\r\n"
+                    + "Driver: " + run.DriverName + "\r\n"
+                    + "Info: " + run.RunDescription + "\r\n"
+                    + "Driven at: " + run.RunCreatedDateTime.ToString(),
+                    AutoSize = true,
+                    Location = new Point(205, 0),
+                    Name = "runInfoLabel|" + run.RunID.ToString()
+                };
+                runInformationPanel.Controls.Add(runInfoLabel);
 
-                    //Button to open the details page of a run
-                    Button detailsButton = new()
-                    {
-                        Text = "Details ->",
-                        Location = new Point(104, 49), //Numbers from editor
-                        Size = new Size(85, 30), //Numbers from editor
-                        Name = "runDetailsButton|" + run.RunID.ToString(),                        
-                    };
-                    detailsButton.Click += (sender, EventArgs) => { OpenRunDetailsWindow(sender, EventArgs, run.RunID); };
-                    //Custom function for dynamic buttons
-
-                    runInformationPanel.Controls.Add(detailsButton);
-
-                    //CheckBox for selecting multiple runs
-                    CheckBox checkBox = new()
-                    {
-                        Text = "",
-                        Location = new Point(3, 25), //Numbers from editor
-                        Name = "checkboxrun|" + run.RunID.ToString()
-                    };
-                    runInformationPanel.Controls.Add(checkBox);
-
-                    Label runInfoLabel = new()
-                    {
-                        Text = "Car: " + run.CarName + "\r\n"
-                        + "Driver: " + run.DriverName + "\r\n"
-                        + "Info: " + run.RunDescription + "\r\n"
-                        + "Driven at: " + run.RunCreatedDateTime.ToString(),
-                        AutoSize = true,
-                        Location = new Point(205, 0),
-                        Name = "runInfoLabel|" + run.RunID.ToString()
-                    };
-                    runInformationPanel.Controls.Add(runInfoLabel);
-
-                    RunPanel.Controls.Add(runInformationPanel);
-                }
+                RunPanel.Controls.Add(runInformationPanel);
             }
 
             return;

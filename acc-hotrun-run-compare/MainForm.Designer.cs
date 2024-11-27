@@ -98,6 +98,9 @@
             radioButtonStoreRunsWithPenaltiesEnabled = new RadioButton();
             tabPageDebug = new TabPage();
             timer1 = new System.Windows.Forms.Timer(components);
+            groupBoxLiveHotrunCompareAgainstPenalties = new GroupBox();
+            radioButtonCompareAgainstPenalties = new RadioButton();
+            radioButtonCompareCompareNotAgainstPenalties = new RadioButton();
             debugBox.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPageMainAddRun.SuspendLayout();
@@ -111,6 +114,7 @@
             groupBoxLiveRunCarCategory.SuspendLayout();
             groupBoxStoreInvalidRuns.SuspendLayout();
             tabPageDebug.SuspendLayout();
+            groupBoxLiveHotrunCompareAgainstPenalties.SuspendLayout();
             SuspendLayout();
             // 
             // debugBox
@@ -663,6 +667,7 @@
             // tabPageSettings
             // 
             tabPageSettings.AutoScroll = true;
+            tabPageSettings.Controls.Add(groupBoxLiveHotrunCompareAgainstPenalties);
             tabPageSettings.Controls.Add(groupBoxLiveRunDriverCompare);
             tabPageSettings.Controls.Add(groupBoxUsername);
             tabPageSettings.Controls.Add(groupBoxLiveRunCarCategory);
@@ -849,6 +854,41 @@
             timer1.Interval = 1000;
             timer1.Tick += ContinuousMainFormTick;
             // 
+            // groupBoxLiveHotrunCompareAgainstPenalties
+            // 
+            groupBoxLiveHotrunCompareAgainstPenalties.Controls.Add(radioButtonCompareCompareNotAgainstPenalties);
+            groupBoxLiveHotrunCompareAgainstPenalties.Controls.Add(radioButtonCompareAgainstPenalties);
+            groupBoxLiveHotrunCompareAgainstPenalties.Location = new Point(8, 425);
+            groupBoxLiveHotrunCompareAgainstPenalties.Name = "groupBoxLiveHotrunCompareAgainstPenalties";
+            groupBoxLiveHotrunCompareAgainstPenalties.Size = new Size(380, 100);
+            groupBoxLiveHotrunCompareAgainstPenalties.TabIndex = 4;
+            groupBoxLiveHotrunCompareAgainstPenalties.TabStop = false;
+            groupBoxLiveHotrunCompareAgainstPenalties.Text = "Live Hotrun: Compare against runs with penalties";
+            // 
+            // radioButtonCompareAgainstPenalties
+            // 
+            radioButtonCompareAgainstPenalties.AutoSize = true;
+            radioButtonCompareAgainstPenalties.Location = new Point(6, 24);
+            radioButtonCompareAgainstPenalties.Name = "radioButtonCompareAgainstPenalties";
+            radioButtonCompareAgainstPenalties.Size = new Size(73, 23);
+            radioButtonCompareAgainstPenalties.TabIndex = 0;
+            radioButtonCompareAgainstPenalties.TabStop = true;
+            radioButtonCompareAgainstPenalties.Text = "All runs";
+            radioButtonCompareAgainstPenalties.UseVisualStyleBackColor = true;
+            radioButtonCompareAgainstPenalties.CheckedChanged += radioButtonCompareAgainstPenalties_CheckedChanged;
+            // 
+            // radioButtonCompareCompareNotAgainstPenalties
+            // 
+            radioButtonCompareCompareNotAgainstPenalties.AutoSize = true;
+            radioButtonCompareCompareNotAgainstPenalties.Location = new Point(6, 53);
+            radioButtonCompareCompareNotAgainstPenalties.Name = "radioButtonCompareCompareNotAgainstPenalties";
+            radioButtonCompareCompareNotAgainstPenalties.Size = new Size(196, 23);
+            radioButtonCompareCompareNotAgainstPenalties.TabIndex = 1;
+            radioButtonCompareCompareNotAgainstPenalties.TabStop = true;
+            radioButtonCompareCompareNotAgainstPenalties.Text = "Only runs without penalties";
+            radioButtonCompareCompareNotAgainstPenalties.UseVisualStyleBackColor = true;
+            radioButtonCompareCompareNotAgainstPenalties.CheckedChanged += radioButtonCompareCompareNotAgainstPenalties_CheckedChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -882,6 +922,8 @@
             groupBoxStoreInvalidRuns.ResumeLayout(false);
             groupBoxStoreInvalidRuns.PerformLayout();
             tabPageDebug.ResumeLayout(false);
+            groupBoxLiveHotrunCompareAgainstPenalties.ResumeLayout(false);
+            groupBoxLiveHotrunCompareAgainstPenalties.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -980,5 +1022,8 @@
         private Label EditorPreviewLabel7;
         private Button button1;
         private Panel panel2;
+        private GroupBox groupBoxLiveHotrunCompareAgainstPenalties;
+        private RadioButton radioButtonCompareCompareNotAgainstPenalties;
+        private RadioButton radioButtonCompareAgainstPenalties;
     }
 }
